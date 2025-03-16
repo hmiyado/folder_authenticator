@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/folder/folder_view.dart';
 import 'package:totp_folder/settings/settings_page.dart';
-import 'package:totp_folder/home/tag/tag_view.dart';
 import 'package:totp_folder/home/home_page_viewmodel.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -16,26 +15,12 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(homePageViewModelProvider);
-    final viewMode = ref.watch(viewModeProvider);
     final currentFolderId = ref.watch(currentFolderProvider);
-    final selectedTag = ref.watch(selectedTagProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('TOTP Folder'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.folder),
-            onPressed: () {
-              viewModel.switchToFolderView();
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.tag),
-            onPressed: () {
-              viewModel.switchToTagView();
-            },
-          ),
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert),
             onSelected: (value) {
@@ -57,9 +42,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      body: viewMode == ViewMode.folder
-          ? FolderView(folderId: currentFolderId)
-          : TagView(tag: selectedTag),
+      body: FolderView(folderId: currentFolderId),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddDialog(context);
@@ -155,7 +138,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     final nameController = TextEditingController();
     final secretController = TextEditingController();
     final issuerController = TextEditingController();
-    final tagsController = TextEditingController();
     
     showDialog(
       context: context,
@@ -184,12 +166,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     labelText: 'Issuer (optional)',
                   ),
                 ),
-                TextField(
-                  controller: tagsController,
-                  decoration: const InputDecoration(
-                    labelText: 'Tags (comma separated)',
-                  ),
-                ),
               ],
             ),
           ),
@@ -200,13 +176,10 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             TextButton(
               onPressed: () {
-                final tags = viewModel.parseTagsFromString(tagsController.text);
-                
                 viewModel.createTotpEntry(
                   name: nameController.text,
                   secret: secretController.text,
                   issuer: issuerController.text,
-                  tags: tags,
                 );
                 Navigator.pop(context);
               },

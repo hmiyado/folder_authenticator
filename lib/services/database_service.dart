@@ -51,7 +51,6 @@ class DatabaseService {
         secret TEXT NOT NULL,
         issuer TEXT,
         folder_id INTEGER,
-        tags TEXT NOT NULL,
         digits INTEGER NOT NULL,
         period INTEGER NOT NULL,
         algorithm TEXT NOT NULL,
@@ -135,20 +134,13 @@ class DatabaseService {
     );
   }
 
-  Future<List<TotpEntry>> getTotpEntries({required int folderId, String? tag}) async {
+  Future<List<TotpEntry>> getTotpEntries({required int folderId}) async {
     final db = await database;
     String? whereClause;
     List<dynamic>? whereArgs;
 
-    if (tag != null) {
-      // This is a simple implementation. For a more robust solution,
-      // you might want to use a separate tags table with a many-to-many relationship
-      whereClause = 'tags LIKE ? AND folder_id = ?';
-      whereArgs = ['%"$tag"%', folderId];
-    } else {
-      whereClause = 'folder_id = ?';
-      whereArgs = [folderId];
-    }
+    whereClause = 'folder_id = ?';
+    whereArgs = [folderId];
 
     final List<Map<String, dynamic>> maps = await db.query(
       'totp_entries',
@@ -169,20 +161,5 @@ class DatabaseService {
       return TotpEntry.fromMap(maps.first);
     }
     return null;
-  }
-
-  // Get all unique tags from TOTP entries
-  Future<List<String>> getAllTags() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('totp_entries');
-    
-    Set<String> uniqueTags = {};
-    for (var map in maps) {
-      List<String> tags = List<String>.from(
-          jsonDecode(map['tags'] ?? '[]') as List);
-      uniqueTags.addAll(tags);
-    }
-    
-    return uniqueTags.toList()..sort();
   }
 }

@@ -18,7 +18,6 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
   late TextEditingController nameController;
   late TextEditingController secretController;
   late TextEditingController issuerController;
-  late TextEditingController tagsController;
   late TextEditingController digitsController;
   late TextEditingController periodController;
   late String algorithm;
@@ -34,7 +33,6 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
     nameController = TextEditingController(text: _viewModel.name);
     secretController = TextEditingController(text: _viewModel.secret);
     issuerController = TextEditingController(text: _viewModel.issuer);
-    tagsController = TextEditingController(text: _viewModel.tagsAsString);
     digitsController = TextEditingController(text: _viewModel.digits.toString());
     periodController = TextEditingController(text: _viewModel.period.toString());
     algorithm = _viewModel.algorithm;
@@ -59,7 +57,6 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
     nameController.dispose();
     secretController.dispose();
     issuerController.dispose();
-    tagsController.dispose();
     digitsController.dispose();
     periodController.dispose();
     _timer?.cancel();
@@ -137,7 +134,6 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
               _buildInfoRow('Digits', _viewModel.digits.toString()),
               _buildInfoRow('Period', '${_viewModel.period} seconds'),
               _buildInfoRow('Algorithm', _viewModel.algorithm),
-              _buildInfoRow('Tags', _viewModel.tagsAsString),
             ] else ...[
               TextField(
                 controller: nameController,
@@ -155,12 +151,6 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                 controller: issuerController,
                 decoration: const InputDecoration(
                   labelText: 'Issuer',
-                ),
-              ),
-              TextField(
-                controller: tagsController,
-                decoration: const InputDecoration(
-                  labelText: 'Tags (comma separated)',
                 ),
               ),
               TextField(
@@ -276,13 +266,10 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
   }
 
   void _saveChanges() {
-    final tags = _viewModel.parseTagsFromString(tagsController.text);
-
     _viewModel.updateTotpEntry(
       name: nameController.text,
       secret: secretController.text,
       issuer: issuerController.text,
-      tags: tags,
       digits: int.tryParse(digitsController.text) ?? 6,
       period: int.tryParse(periodController.text) ?? 30,
       algorithm: algorithm,

@@ -15,18 +15,6 @@ final totpEntriesByFolderProvider = FutureProvider.family<List<TotpEntry>, int>(
   return repository.getTotpEntriesByFolderId(folderId);
 });
 
-// Provider for TOTP entries by tag
-final totpEntriesByTagProvider = FutureProvider.family<List<TotpEntry>, String>((ref, tag) {
-  final repository = ref.watch(totpEntryRepositoryProvider);
-  return repository.getTotpEntriesByTag(tag);
-});
-
-// Provider for all tags
-final allTagsProvider = FutureProvider<List<String>>((ref) {
-  final repository = ref.watch(totpEntryRepositoryProvider);
-  return repository.getAllTags();
-});
-
 class TotpEntryRepository {
   final DatabaseService _databaseService;
 
@@ -36,10 +24,6 @@ class TotpEntryRepository {
     return await _databaseService.getTotpEntries(folderId: folderId);
   }
   
-  Future<List<TotpEntry>> getTotpEntriesByTag(String tag) async {
-    return await _databaseService.getTotpEntries(folderId: Folder.rootFolderId, tag: tag);
-  }
-
   Future<TotpEntry?> getTotpEntry(int id) async {
     return await _databaseService.getTotpEntry(id);
   }
@@ -57,9 +41,5 @@ class TotpEntryRepository {
   Future<bool> deleteTotpEntry(int id) async {
     final rowsAffected = await _databaseService.deleteTotpEntry(id);
     return rowsAffected > 0;
-  }
-
-  Future<List<String>> getAllTags() async {
-    return await _databaseService.getAllTags();
   }
 }

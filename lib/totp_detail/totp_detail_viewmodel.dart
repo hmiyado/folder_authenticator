@@ -38,7 +38,6 @@ class TotpDetailViewModel {
     String? secret,
     String? issuer,
     int? folderId,
-    List<String>? tags,
     int? digits,
     int? period,
     String? algorithm,
@@ -48,7 +47,6 @@ class TotpDetailViewModel {
       secret: secret,
       issuer: issuer,
       folderId: folderId,
-      tags: tags,
       digits: digits,
       period: period,
       algorithm: algorithm,
@@ -69,23 +67,12 @@ class TotpDetailViewModel {
     return _totpService.isValidSecret(secret);
   }
 
-  // Parse tags from comma-separated string
-  List<String> parseTagsFromString(String tagsString) {
-    return tagsString
-        .split(',')
-        .map((tag) => tag.trim())
-        .where((tag) => tag.isNotEmpty)
-        .toList();
-  }
-
   // Get entry properties
   String get name => entry.name;
   String get secret => entry.secret;
   String get issuer => entry.issuer;
   int? get folderId => entry.folderId;
-  List<String> get tags => entry.tags;
   int get digits => entry.digits;
   int get period => entry.period;
   String get algorithm => entry.algorithm;
-  String get tagsAsString => entry.tags.join(', ');
 }

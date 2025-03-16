@@ -6,7 +6,6 @@ class TotpEntry {
   final String secret;
   final String issuer;
   final int folderId;
-  final List<String> tags;
   final int digits;
   final int period;
   final String algorithm;
@@ -19,7 +18,6 @@ class TotpEntry {
     required this.secret,
     this.issuer = '',
     required this.folderId,
-    this.tags = const [],
     this.digits = 6,
     this.period = 30,
     this.algorithm = 'SHA1',
@@ -47,7 +45,6 @@ class TotpEntry {
       secret: secret ?? this.secret,
       issuer: issuer ?? this.issuer,
       folderId: folderId ?? this.folderId,
-      tags: tags ?? this.tags,
       digits: digits ?? this.digits,
       period: period ?? this.period,
       algorithm: algorithm ?? this.algorithm,
@@ -63,7 +60,6 @@ class TotpEntry {
       'secret': secret,
       'issuer': issuer,
       'folder_id': folderId,
-      'tags': jsonEncode(tags),
       'digits': digits,
       'period': period,
       'algorithm': algorithm,
@@ -79,7 +75,6 @@ class TotpEntry {
       secret: map['secret'],
       issuer: map['issuer'] ?? '',
       folderId: map['folder_id'],
-      tags: List<String>.from(jsonDecode(map['tags'] ?? '[]')),
       digits: map['digits'] ?? 6,
       period: map['period'] ?? 30,
       algorithm: map['algorithm'] ?? 'SHA1',
@@ -90,6 +85,6 @@ class TotpEntry {
 
   @override
   String toString() {
-    return 'TotpEntry(id: $id, name: $name, issuer: $issuer, folderId: $folderId, tags: $tags)';
+    return 'TotpEntry(id: $id, name: $name, issuer: $issuer, folderId: $folderId)';
   }
 }
