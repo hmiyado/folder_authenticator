@@ -1,18 +1,23 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/services/database_service.dart';
 
+part 'totp_entry_repository.g.dart';
+
 // Provider for the TotpEntryRepository
-final totpEntryRepositoryProvider = Provider<TotpEntryRepository>((ref) {
+@riverpod
+TotpEntryRepository totpEntryRepository(Ref ref) {
   final databaseService = ref.watch(databaseServiceProvider);
   return TotpEntryRepository(databaseService);
-});
+}
 
 // Provider for TOTP entries by folder
-final totpEntriesByFolderProvider = FutureProvider.family<List<TotpEntry>, int>((ref, folderId) {
+@riverpod
+Future<List<TotpEntry>> totpEntriesByFolder(Ref ref, {required int folderId}) async {
   final repository = ref.watch(totpEntryRepositoryProvider);
   return repository.getTotpEntriesByFolderId(folderId);
-});
+}
 
 class TotpEntryRepository {
   final DatabaseService _databaseService;

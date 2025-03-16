@@ -14,8 +14,7 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final viewModel = ref.watch(homePageViewModelProvider);
-    final currentFolderId = ref.watch(currentFolderProvider);
+    final currentFolder = ref.watch(currentFolderProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +41,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      body: FolderView(folderId: currentFolderId),
+      body: FolderView(folderId: currentFolder.id!),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddDialog(context);
@@ -86,7 +85,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void _showAddFolderDialog(BuildContext context) {
-    final viewModel = ref.read(homePageViewModelProvider);
+    final currentFolder = ref.watch(currentFolderProvider);
+    // final createSubFolder = ref.read(createSubFolderProvider);
     final nameController = TextEditingController();
     final colorController = TextEditingController(text: '#3498db');
     
@@ -119,10 +119,11 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             TextButton(
               onPressed: () {
-                viewModel.createFolder(
-                  nameController.text,
-                  colorController.text,
-                );
+                // createSubFolder(
+                //   currentFolder.id!,
+                //   nameController.text,
+                //   colorController.text,
+                // );
                 Navigator.pop(context);
               },
               child: const Text('Add'),
@@ -134,7 +135,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void _showAddTotpDialog(BuildContext context) {
-    final viewModel = ref.read(homePageViewModelProvider);
     final nameController = TextEditingController();
     final secretController = TextEditingController();
     final issuerController = TextEditingController();
@@ -176,11 +176,11 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             TextButton(
               onPressed: () {
-                viewModel.createTotpEntry(
-                  name: nameController.text,
-                  secret: secretController.text,
-                  issuer: issuerController.text,
-                );
+                // viewModel.createTotpEntry(
+                //   name: nameController.text,
+                //   secret: secretController.text,
+                //   issuer: issuerController.text,
+                // );
                 Navigator.pop(context);
               },
               child: const Text('Add'),

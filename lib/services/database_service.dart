@@ -1,13 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:totp_folder/models/folder.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 
+part 'database_service.g.dart';
+
 // Provider for the DatabaseService
-final databaseServiceProvider = Provider<DatabaseService>((ref) {
+@riverpod
+DatabaseService databaseService(Ref ref) {
   return DatabaseService();
-});
+}
 
 class DatabaseService {
   Database? _database;

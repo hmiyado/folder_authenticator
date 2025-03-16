@@ -1,25 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:totp_folder/models/folder.dart';
 import 'package:totp_folder/services/database_service.dart';
 
-// Provider for the FolderRepository
-final folderRepositoryProvider = Provider<FolderRepository>((ref) {
-  final databaseService = ref.watch(databaseServiceProvider);
-  return FolderRepository(databaseService);
-});
+part 'folder_repository.g.dart';
 
-// Provider for all folders
-final foldersProvider = FutureProvider.family<List<Folder>, int?>((ref, parentId) {
+// Provider for the FolderRepository
+@riverpod
+FolderRepository folderRepository(Ref ref) {
+  return FolderRepository(ref.watch(databaseServiceProvider));
+}
+
+@riverpod
+Future<List<Folder>> folders(Ref ref, {required int parentId}) async {
   final repository = ref.watch(folderRepositoryProvider);
   return repository.getFolders(parentId: parentId);
-});
-
-// Provider for a single folder
-final folderProvider = FutureProvider.family<Folder?, int>((ref, id) {
-  if (id == Folder.rootFolderId) return Future.value(Folder.rootFolder());
-  final repository = ref.watch(folderRepositoryProvider);
-  return repository.getFolder(id);
-});
+} 
 
 class FolderRepository {
   final DatabaseService _databaseService;
