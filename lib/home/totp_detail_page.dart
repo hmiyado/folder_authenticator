@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +24,8 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
   late TextEditingController periodController;
   late String algorithm;
   bool isEditing = false;
+  Timer? _timer;
+  int _remainingSeconds = 0;
 
   @override
   void initState() {
@@ -34,6 +37,21 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
     digitsController = TextEditingController(text: widget.entry.digits.toString());
     periodController = TextEditingController(text: widget.entry.period.toString());
     algorithm = widget.entry.algorithm;
+    
+    // Initialize remaining seconds
+    _updateRemainingSeconds();
+    
+    // Set up timer to update remaining seconds every second
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      _updateRemainingSeconds();
+    });
+  }
+  
+  void _updateRemainingSeconds() {
+    final totpService = ref.read(totpServiceProvider);
+    setState(() {
+      _remainingSeconds = totpService.getRemainingSeconds(widget.entry);
+    });
   }
 
   @override
@@ -44,6 +62,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
     tagsController.dispose();
     digitsController.dispose();
     periodController.dispose();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -51,7 +70,6 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
   Widget build(BuildContext context) {
     final totpService = ref.watch(totpServiceProvider);
     final totpCode = totpService.generateTotp(widget.entry);
-    final remainingSeconds = totpService.getRemainingSeconds(widget.entry);
 
     return Scaffold(
       appBar: AppBar(
@@ -96,9 +114,9 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                     ),
                     const SizedBox(height: 8),
                     LinearProgressIndicator(
-                      value: remainingSeconds / widget.entry.period,
+                      value: _remainingSeconds / widget.entry.period,
                     ),
-                    Text('Refreshes in $remainingSeconds seconds'),
+                    Text('Refreshes in $_remainingSeconds seconds'),
                     const SizedBox(height: 16),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.copy),
