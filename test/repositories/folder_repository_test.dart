@@ -129,12 +129,6 @@ void main() {
 
     test('getFolderPath should return path of folders', () async {
       // Arrange
-      final rootFolder = Folder(
-        id: 0,
-        name: 'Root',
-        parentId: null,
-      );
-      
       when(mockDatabaseService.getFolder(2)).thenAnswer((_) async => testChildFolder);
       when(mockDatabaseService.getFolder(1)).thenAnswer((_) async => testFolder);
 
