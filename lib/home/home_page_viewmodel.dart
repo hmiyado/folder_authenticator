@@ -24,7 +24,7 @@ final homePageViewModelProvider = Provider<HomePageViewModel>((ref) {
 });
 
 class HomePageViewModel {
-  final ProviderRef _ref;
+  final Ref _ref;
   final FolderRepository _folderRepository;
   final TotpEntryRepository _totpEntryRepository;
 
