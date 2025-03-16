@@ -4,9 +4,11 @@ import 'package:totp_folder/home/totp_entry_card.dart';
 import 'package:totp_folder/models/folder.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/home/folder/folder_view_viewmodel.dart';
+import 'package:totp_folder/repositories/totp_entry_repository.dart';
+import 'package:totp_folder/repositories/folder_repository.dart';
 
 class FolderView extends ConsumerWidget {
-  final int? folderId;
+  final int folderId;
 
   const FolderView({
     super.key,
@@ -16,28 +18,24 @@ class FolderView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(folderViewViewModelProvider(folderId));
-    final entriesAsyncValue = ref.watch(FutureProvider<List<TotpEntry>>((ref) => viewModel.getTotpEntries()));
-    final folderAsyncValue = folderId != null
-        ? ref.watch(FutureProvider<Folder?>((ref) => viewModel.getCurrentFolder()))
-        : const AsyncValue<Folder?>.data(null);
-    
+    final entriesAsyncValue = ref.watch(totpEntriesByFolderProvider(folderId));
+    final folderAsyncValue = ref.watch(folderProvider(folderId));    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (folderId != null)
-          folderAsyncValue.when(
-            data: (folder) => folder != null
-                ? Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Folder: ${folder.name}',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  )
-                : const SizedBox.shrink(),
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stack) => Center(child: Text('Error: $error')),
-          ),
+        folderAsyncValue.when(
+          data: (folder) => folder != null
+              ? Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Folder: ${folder.name}',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                )
+              : const SizedBox.shrink(),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('Error: $error')),
+        ),
         Expanded(
           child: entriesAsyncValue.when(
             data: (entries) {

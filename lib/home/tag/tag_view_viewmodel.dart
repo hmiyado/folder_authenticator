@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:totp_folder/models/folder.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/repositories/totp_entry_repository.dart';
 
@@ -17,10 +18,10 @@ class TagViewModel {
   // Get TOTP entries for the current tag
   Future<List<TotpEntry>> getTotpEntries() async {
     if (tag == null) {
-      // If no tag is selected, return all entries
-      return await _totpEntryRepository.getTotpEntries();
+      // If no tag is selected, return all entries from root folder
+      return await _totpEntryRepository.getTotpEntriesByFolderId(Folder.rootFolderId);
     } else {
-      return await _totpEntryRepository.getTotpEntries(tag: tag);
+      return await _totpEntryRepository.getTotpEntriesByTag(tag!);
     }
   }
 

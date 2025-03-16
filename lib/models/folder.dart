@@ -1,4 +1,6 @@
 class Folder {
+  // Special folder ID for the root folder
+  static const int rootFolderId = 0;
   final int? id;
   final String name;
   final String color;

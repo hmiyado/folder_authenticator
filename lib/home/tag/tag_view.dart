@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/totp_entry_card.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/home/tag/tag_view_viewmodel.dart';
+import 'package:totp_folder/repositories/totp_entry_repository.dart';
 
 class TagView extends ConsumerWidget {
   final String? tag;
@@ -15,7 +16,9 @@ class TagView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(tagViewViewModelProvider(tag));
-    final entriesAsyncValue = ref.watch(FutureProvider<List<TotpEntry>>((ref) => viewModel.getTotpEntries()));
+    final entriesAsyncValue = tag != null
+        ? ref.watch(totpEntriesByTagProvider(tag!))
+        : const AsyncValue<List<TotpEntry>>.data([]);
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

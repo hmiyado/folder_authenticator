@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:totp_folder/models/folder.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/services/database_service.dart';
 
@@ -9,15 +10,15 @@ final totpEntryRepositoryProvider = Provider<TotpEntryRepository>((ref) {
 });
 
 // Provider for TOTP entries by folder
-final totpEntriesByFolderProvider = FutureProvider.family<List<TotpEntry>, int?>((ref, folderId) {
+final totpEntriesByFolderProvider = FutureProvider.family<List<TotpEntry>, int>((ref, folderId) {
   final repository = ref.watch(totpEntryRepositoryProvider);
-  return repository.getTotpEntries(folderId: folderId);
+  return repository.getTotpEntriesByFolderId(folderId);
 });
 
 // Provider for TOTP entries by tag
 final totpEntriesByTagProvider = FutureProvider.family<List<TotpEntry>, String>((ref, tag) {
   final repository = ref.watch(totpEntryRepositoryProvider);
-  return repository.getTotpEntries(tag: tag);
+  return repository.getTotpEntriesByTag(tag);
 });
 
 // Provider for all tags
@@ -31,8 +32,12 @@ class TotpEntryRepository {
 
   TotpEntryRepository(this._databaseService);
 
-  Future<List<TotpEntry>> getTotpEntries({int? folderId, String? tag}) async {
-    return await _databaseService.getTotpEntries(folderId: folderId, tag: tag);
+  Future<List<TotpEntry>> getTotpEntriesByFolderId(int folderId) async {
+    return await _databaseService.getTotpEntries(folderId: folderId);
+  }
+  
+  Future<List<TotpEntry>> getTotpEntriesByTag(String tag) async {
+    return await _databaseService.getTotpEntries(folderId: Folder.rootFolderId, tag: tag);
   }
 
   Future<TotpEntry?> getTotpEntry(int id) async {

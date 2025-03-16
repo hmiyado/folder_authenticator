@@ -5,14 +5,14 @@ import 'package:totp_folder/repositories/folder_repository.dart';
 import 'package:totp_folder/repositories/totp_entry_repository.dart';
 
 // Provider for the FolderViewModel
-final folderViewViewModelProvider = Provider.family<FolderViewModel, int?>((ref, folderId) {
+final folderViewViewModelProvider = Provider.family<FolderViewModel, int>((ref, folderId) {
   final folderRepository = ref.watch(folderRepositoryProvider);
   final totpEntryRepository = ref.watch(totpEntryRepositoryProvider);
   return FolderViewModel(folderId, folderRepository, totpEntryRepository);
 });
 
 class FolderViewModel {
-  final int? folderId;
+  final int folderId;
   final FolderRepository _folderRepository;
   final TotpEntryRepository _totpEntryRepository;
 
@@ -20,23 +20,21 @@ class FolderViewModel {
 
   // Get the current folder
   Future<Folder?> getCurrentFolder() async {
-    if (folderId == null) return null;
-    return await _folderRepository.getFolder(folderId!);
+    return await _folderRepository.getFolder(folderId);
   }
 
   // Get TOTP entries for the current folder
   Future<List<TotpEntry>> getTotpEntries() async {
-    return await _totpEntryRepository.getTotpEntries(folderId: folderId);
+    return await _totpEntryRepository.getTotpEntriesByFolderId(folderId);
   }
 
   // Get folder path (breadcrumbs)
   Future<List<Folder>> getFolderPath() async {
-    if (folderId == null) return [];
-    return await _folderRepository.getFolderPath(folderId!);
+    return await _folderRepository.getFolderPath(folderId);
   }
 
   // Check if this is the root folder view
-  bool get isRootFolder => folderId == null;
+  bool get isRootFolder => folderId == Folder.rootFolderId;
 
   // Get folder name
   Future<String> getFolderName() async {

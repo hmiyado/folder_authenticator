@@ -5,7 +5,7 @@ class TotpEntry {
   final String name;
   final String secret;
   final String issuer;
-  final int? folderId;
+  final int folderId;
   final List<String> tags;
   final int digits;
   final int period;
@@ -18,7 +18,7 @@ class TotpEntry {
     required this.name,
     required this.secret,
     this.issuer = '',
-    this.folderId,
+    required this.folderId,
     this.tags = const [],
     this.digits = 6,
     this.period = 30,

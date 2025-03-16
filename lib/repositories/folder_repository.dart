@@ -14,6 +14,12 @@ final foldersProvider = FutureProvider.family<List<Folder>, int?>((ref, parentId
   return repository.getFolders(parentId: parentId);
 });
 
+// Provider for a single folder
+final folderProvider = FutureProvider.family<Folder?, int>((ref, id) {
+  final repository = ref.watch(folderRepositoryProvider);
+  return repository.getFolder(id);
+});
+
 class FolderRepository {
   final DatabaseService _databaseService;
 

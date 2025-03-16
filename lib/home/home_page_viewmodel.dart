@@ -11,7 +11,7 @@ enum ViewMode { folder, tag }
 final viewModeProvider = StateProvider<ViewMode>((ref) => ViewMode.folder);
 
 // Provider for the current folder ID
-final currentFolderProvider = StateProvider<int?>((ref) => null);
+final currentFolderProvider = StateProvider<int>((ref) => Folder.rootFolderId);
 
 // Provider for the selected tag
 final selectedTagProvider = StateProvider<String?>((ref) => null);
@@ -39,10 +39,10 @@ class HomePageViewModel {
   }
 
   // Get the current folder ID
-  int? get currentFolderId => _ref.read(currentFolderProvider);
+  int get currentFolderId => _ref.read(currentFolderProvider);
 
   // Set the current folder ID
-  void setCurrentFolder(int? folderId) {
+  void setCurrentFolder(int folderId) {
     _ref.read(currentFolderProvider.notifier).state = folderId;
   }
 

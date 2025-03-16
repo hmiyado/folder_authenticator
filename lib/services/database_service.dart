@@ -135,19 +135,19 @@ class DatabaseService {
     );
   }
 
-  Future<List<TotpEntry>> getTotpEntries({int? folderId, String? tag}) async {
+  Future<List<TotpEntry>> getTotpEntries({required int folderId, String? tag}) async {
     final db = await database;
     String? whereClause;
     List<dynamic>? whereArgs;
 
-    if (folderId != null) {
-      whereClause = 'folder_id = ?';
-      whereArgs = [folderId];
-    } else if (tag != null) {
+    if (tag != null) {
       // This is a simple implementation. For a more robust solution,
       // you might want to use a separate tags table with a many-to-many relationship
-      whereClause = 'tags LIKE ?';
-      whereArgs = ['%"$tag"%'];
+      whereClause = 'tags LIKE ? AND folder_id = ?';
+      whereArgs = ['%"$tag"%', folderId];
+    } else {
+      whereClause = 'folder_id = ?';
+      whereArgs = [folderId];
     }
 
     final List<Map<String, dynamic>> maps = await db.query(
