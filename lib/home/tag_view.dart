@@ -17,7 +17,7 @@ class TagView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final entriesAsyncValue = tag != null
         ? ref.watch(totpEntriesByTagProvider(tag!))
-        : ref.watch(FutureProvider((ref) => ref.watch(totpEntryRepositoryProvider).getTotpEntries()));
+        : ref.watch(FutureProvider<List<TotpEntry>>((ref) => ref.watch(totpEntryRepositoryProvider).getTotpEntries()));
     
     // Debug print to check if entries are being retrieved
     entriesAsyncValue.whenData((entries) {
