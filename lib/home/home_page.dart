@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/folder/folder_view.dart';
 import 'package:totp_folder/settings/settings_page.dart';
 import 'package:totp_folder/home/tag/tag_view.dart';
-import 'package:totp_folder/models/folder.dart';
-import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/home/home_page_viewmodel.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -59,11 +57,6 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: viewMode == ViewMode.folder
-            ? _buildFolderNavigationDrawer()
-            : _buildTagNavigationDrawer(),
-      ),
       body: viewMode == ViewMode.folder
           ? FolderView(folderId: currentFolderId)
           : TagView(tag: selectedTag),
@@ -73,156 +66,6 @@ class _HomePageState extends ConsumerState<HomePage> {
         },
         child: const Icon(Icons.add),
       ),
-    );
-  }
-
-  Widget _buildFolderNavigationDrawer() {
-    return Consumer(
-      builder: (context, ref, child) {
-        final viewModel = ref.watch(homePageViewModelProvider);
-        final foldersAsyncValue = ref.watch(FutureProvider<List<Folder>>((ref) => viewModel.getRootFolders()));
-        
-        return foldersAsyncValue.when(
-          data: (folders) {
-            return ListView(
-              children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  child: const Text(
-                    'Folders',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.home),
-                  title: const Text('All TOTPs'),
-                  onTap: () {
-                    viewModel.setCurrentFolder(null);
-                    Navigator.pop(context);
-                  },
-                ),
-                const Divider(),
-                ...folders.map((folder) => _buildFolderListTile(folder)),
-                ListTile(
-                  leading: const Icon(Icons.create_new_folder),
-                  title: const Text('Add Folder'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _showAddFolderDialog(context);
-                  },
-                ),
-              ],
-            );
-          },
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(child: Text('Error: $error')),
-        );
-      },
-    );
-  }
-
-  Widget _buildFolderListTile(Folder folder) {
-    return Consumer(
-      builder: (context, ref, child) {
-        final viewModel = ref.watch(homePageViewModelProvider);
-        final subFoldersAsyncValue = ref.watch(FutureProvider<List<Folder>>((ref) => viewModel.getSubfolders(folder.id!)));
-        
-        return subFoldersAsyncValue.when(
-          data: (subFolders) {
-            return ExpansionTile(
-              leading: Icon(
-                Icons.folder,
-                color: Color(int.parse(folder.color.substring(1, 7), radix: 16) + 0xFF000000),
-              ),
-              title: Text(folder.name),
-              children: [
-                ...subFolders.map((subFolder) => _buildFolderListTile(subFolder)),
-                if (subFolders.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text('No subfolders'),
-                  ),
-              ],
-              onExpansionChanged: (expanded) {
-                if (expanded) {
-                  viewModel.setCurrentFolder(folder.id);
-                  Navigator.pop(context);
-                }
-              },
-            );
-          },
-          loading: () => ListTile(
-            leading: Icon(
-              Icons.folder,
-              color: Color(int.parse(folder.color.substring(1, 7), radix: 16) + 0xFF000000),
-            ),
-            title: Text(folder.name),
-            trailing: const SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            ),
-          ),
-          error: (error, stack) => ListTile(
-            leading: const Icon(Icons.error),
-            title: Text('Error: $error'),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildTagNavigationDrawer() {
-    return Consumer(
-      builder: (context, ref, child) {
-        final viewModel = ref.watch(homePageViewModelProvider);
-        final tagsAsyncValue = ref.watch(FutureProvider<List<String>>((ref) => viewModel.getAllTags()));
-        
-        return tagsAsyncValue.when(
-          data: (tags) {
-            return ListView(
-              children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  child: const Text(
-                    'Tags',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.tag),
-                  title: const Text('All Tags'),
-                  onTap: () {
-                    viewModel.setSelectedTag(null);
-                    Navigator.pop(context);
-                  },
-                ),
-                const Divider(),
-                ...tags.map((tag) => ListTile(
-                  leading: const Icon(Icons.tag),
-                  title: Text(tag),
-                  onTap: () {
-                    viewModel.setSelectedTag(tag);
-                    Navigator.pop(context);
-                  },
-                )),
-              ],
-            );
-          },
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(child: Text('Error: $error')),
-        );
-      },
     );
   }
 
