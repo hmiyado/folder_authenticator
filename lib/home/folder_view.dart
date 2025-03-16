@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/home/totp_detail_page.dart';
+import 'package:totp_folder/home/totp_entry_card.dart';
 import 'package:totp_folder/models/folder.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/repositories/folder_repository.dart';
 import 'package:totp_folder/repositories/totp_entry_repository.dart';
-import 'package:totp_folder/services/totp_service.dart';
 
 class FolderView extends ConsumerWidget {
   final int? folderId;
@@ -59,7 +58,7 @@ class FolderView extends ConsumerWidget {
               return ListView.builder(
                 itemCount: entries.length,
                 itemBuilder: (context, index) {
-                  return _buildTotpEntryCard(context, ref, entries[index]);
+                  return TotpEntryCard(entry: entries[index]);
                 },
               );
             },
@@ -71,39 +70,4 @@ class FolderView extends ConsumerWidget {
     );
   }
 
-  Widget _buildTotpEntryCard(BuildContext context, WidgetRef ref, TotpEntry entry) {
-    final totpService = ref.watch(totpServiceProvider);
-    final totpCode = totpService.generateTotp(entry);
-    final remainingSeconds = totpService.getRemainingSeconds(entry);
-    
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: ListTile(
-        title: Text(entry.name),
-        subtitle: Text(entry.issuer),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              totpCode,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text('$remainingSeconds s'),
-          ],
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TotpDetailPage(entry: entry),
-            ),
-          );
-        },
-      ),
-    );
-  }
 }
