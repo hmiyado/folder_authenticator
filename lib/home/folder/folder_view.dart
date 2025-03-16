@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/totp_entry_card.dart';
-import 'package:totp_folder/models/folder.dart';
-import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/home/folder/folder_view_viewmodel.dart';
 import 'package:totp_folder/repositories/totp_entry_repository.dart';
 import 'package:totp_folder/repositories/folder_repository.dart';

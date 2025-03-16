@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class TotpEntry {
   final int? id;
   final String name;

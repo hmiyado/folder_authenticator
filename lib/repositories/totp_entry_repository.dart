@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/models/folder.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/services/database_service.dart';
 
