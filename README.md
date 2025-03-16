@@ -1,16 +1,28 @@
-# totp_folder
+# TOTP Folder
 
-A new Flutter project.
+TOTP Folder is a Flutter-based mobile application that allows you to manage your Time-based One-Time Passwords (TOTP) efficiently. Organize your TOTP entries into folders, tag them for better categorization, and utilize sorting and filtering options for quick access.
 
-## Getting Started
+## Features
+- **Folder Management**: Organize TOTP entries into folders.
+- **Tagging**: Assign tags to TOTP entries for easier categorization.
+- **Sorting & Filtering**: Quickly find the TOTP you need with sorting and filtering options.
 
-This project is a starting point for a Flutter application.
+## Requirements
+- Flutter SDK (latest stable version recommended)
+- Dart (compatible with the Flutter version in use)
+- A mobile device or emulator running Android or iOS
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/totp-folder.git
+   cd totp-folder
+   ```
+2. Install dependencies:
+   ```sh
+   flutter pub get
+   ```
+3. Run the application:
+   ```sh
+   flutter run
+   ```
