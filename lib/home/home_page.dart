@@ -85,7 +85,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void _showAddFolderDialog(BuildContext context) {
-    final currentFolder = ref.watch(currentFolderProvider);
+    // final currentFolder = ref.watch(currentFolderProvider);
     // final createSubFolder = ref.read(createSubFolderProvider);
     final nameController = TextEditingController();
     final colorController = TextEditingController(text: '#3498db');
