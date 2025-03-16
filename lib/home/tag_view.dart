@@ -18,14 +18,6 @@ class TagView extends ConsumerWidget {
         ? ref.watch(totpEntriesByTagProvider(tag!))
         : ref.watch(FutureProvider<List<TotpEntry>>((ref) => ref.watch(totpEntryRepositoryProvider).getTotpEntries()));
     
-    // Debug print to check if entries are being retrieved
-    entriesAsyncValue.whenData((entries) {
-      print('TOTP Entries for tag $tag: ${entries.length}');
-      for (var entry in entries) {
-        print('  - ${entry.name} (${entry.issuer})');
-      }
-    });
-    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

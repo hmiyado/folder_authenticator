@@ -21,14 +21,6 @@ class FolderView extends ConsumerWidget {
         ? ref.watch(FutureProvider<Folder?>((ref) => ref.watch(folderRepositoryProvider).getFolder(folderId!)))
         : const AsyncValue<Folder?>.data(null);
     
-    // Debug print to check if entries are being retrieved
-    entriesAsyncValue.whenData((entries) {
-      print('TOTP Entries for folder $folderId: ${entries.length}');
-      for (var entry in entries) {
-        print('  - ${entry.name} (${entry.issuer})');
-      }
-    });
-    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
