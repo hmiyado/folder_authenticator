@@ -7,7 +7,7 @@ class SettingsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.watch(settingsPageViewModelProvider);
+    ref.watch(settingsPageViewModelProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
