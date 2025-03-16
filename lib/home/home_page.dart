@@ -1,87 +1,530 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:totp_folder/home/settings_page.dart';
+import 'package:totp_folder/home/totp_detail_page.dart';
+import 'package:totp_folder/models/folder.dart';
+import 'package:totp_folder/models/totp_entry.dart';
+import 'package:totp_folder/repositories/folder_repository.dart';
+import 'package:totp_folder/repositories/totp_entry_repository.dart';
+import 'package:totp_folder/services/totp_service.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+// Current folder provider
+final currentFolderProvider = StateProvider<int?>((ref) => null);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+// Current view mode provider (folder or tag)
+final viewModeProvider = StateProvider<ViewMode>((ref) => ViewMode.folder);
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+// Selected tag provider
+final selectedTagProvider = StateProvider<String?>((ref) => null);
 
-  final String title;
+enum ViewMode { folder, tag }
+
+class HomePage extends ConsumerStatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
+class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final viewMode = ref.watch(viewModeProvider);
+    final currentFolderId = ref.watch(currentFolderProvider);
+    final selectedTag = ref.watch(selectedTagProvider);
+
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('TOTP Folder'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.folder),
+            onPressed: () {
+              ref.read(viewModeProvider.notifier).state = ViewMode.folder;
+              ref.read(selectedTagProvider.notifier).state = null;
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.tag),
+            onPressed: () {
+              ref.read(viewModeProvider.notifier).state = ViewMode.tag;
+            },
+          ),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) {
+              if (value == 'settings') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsPage(),
+                  ),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'settings',
+                child: Text('Settings'),
+              ),
+            ],
+          ),
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      drawer: Drawer(
+        child: viewMode == ViewMode.folder
+            ? _buildFolderNavigationDrawer()
+            : _buildTagNavigationDrawer(),
+      ),
+      body: viewMode == ViewMode.folder
+          ? _buildFolderView(currentFolderId)
+          : _buildTagView(selectedTag),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddDialog(context);
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildFolderNavigationDrawer() {
+    return Consumer(
+      builder: (context, ref, child) {
+        final foldersAsyncValue = ref.watch(foldersProvider(null));
+        
+        return foldersAsyncValue.when(
+          data: (folders) {
+            return ListView(
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  child: const Text(
+                    'Folders',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.home),
+                  title: const Text('All TOTPs'),
+                  onTap: () {
+                    ref.read(currentFolderProvider.notifier).state = null;
+                    Navigator.pop(context);
+                  },
+                ),
+                const Divider(),
+                ...folders.map((folder) => _buildFolderListTile(folder)),
+                ListTile(
+                  leading: const Icon(Icons.create_new_folder),
+                  title: const Text('Add Folder'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showAddFolderDialog(context);
+                  },
+                ),
+              ],
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('Error: $error')),
+        );
+      },
+    );
+  }
+
+  Widget _buildFolderListTile(Folder folder) {
+    return Consumer(
+      builder: (context, ref, child) {
+        final subFoldersAsyncValue = ref.watch(foldersProvider(folder.id));
+        
+        return subFoldersAsyncValue.when(
+          data: (subFolders) {
+            return ExpansionTile(
+              leading: Icon(
+                Icons.folder,
+                color: Color(int.parse(folder.color.substring(1, 7), radix: 16) + 0xFF000000),
+              ),
+              title: Text(folder.name),
+              children: [
+                ...subFolders.map((subFolder) => _buildFolderListTile(subFolder)),
+                if (subFolders.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text('No subfolders'),
+                  ),
+              ],
+              onExpansionChanged: (expanded) {
+                if (expanded) {
+                  ref.read(currentFolderProvider.notifier).state = folder.id;
+                  Navigator.pop(context);
+                }
+              },
+            );
+          },
+          loading: () => ListTile(
+            leading: Icon(
+              Icons.folder,
+              color: Color(int.parse(folder.color.substring(1, 7), radix: 16) + 0xFF000000),
+            ),
+            title: Text(folder.name),
+            trailing: const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+          ),
+          error: (error, stack) => ListTile(
+            leading: const Icon(Icons.error),
+            title: Text('Error: $error'),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildTagNavigationDrawer() {
+    return Consumer(
+      builder: (context, ref, child) {
+        final tagsAsyncValue = ref.watch(allTagsProvider);
+        
+        return tagsAsyncValue.when(
+          data: (tags) {
+            return ListView(
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  child: const Text(
+                    'Tags',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.tag),
+                  title: const Text('All Tags'),
+                  onTap: () {
+                    ref.read(selectedTagProvider.notifier).state = null;
+                    Navigator.pop(context);
+                  },
+                ),
+                const Divider(),
+                ...tags.map((tag) => ListTile(
+                  leading: const Icon(Icons.tag),
+                  title: Text(tag),
+                  onTap: () {
+                    ref.read(selectedTagProvider.notifier).state = tag;
+                    Navigator.pop(context);
+                  },
+                )),
+              ],
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('Error: $error')),
+        );
+      },
+    );
+  }
+
+  Widget _buildFolderView(int? folderId) {
+    return Consumer(
+      builder: (context, ref, child) {
+        final entriesAsyncValue = ref.watch(totpEntriesByFolderProvider(folderId));
+        final folderAsyncValue = folderId != null
+            ? ref.watch(FutureProvider((ref) => ref.watch(folderRepositoryProvider).getFolder(folderId)))
+            : const AsyncValue.data(null);
+        
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (folderId != null)
+              folderAsyncValue.when(
+                data: (folder) => folder != null
+                    ? Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Folder: ${folder.name}',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => Center(child: Text('Error: $error')),
+              ),
+            Expanded(
+              child: entriesAsyncValue.when(
+                data: (entries) {
+                  if (entries.isEmpty) {
+                    return const Center(
+                      child: Text('No TOTP entries found'),
+                    );
+                  }
+                  
+                  return ListView.builder(
+                    itemCount: entries.length,
+                    itemBuilder: (context, index) {
+                      return _buildTotpEntryCard(entries[index]);
+                    },
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => Center(child: Text('Error: $error')),
+              ),
             ),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        );
+      },
+    );
+  }
+
+  Widget _buildTagView(String? tag) {
+    return Consumer(
+      builder: (context, ref, child) {
+        final entriesAsyncValue = tag != null
+            ? ref.watch(totpEntriesByTagProvider(tag))
+            : ref.watch(FutureProvider((ref) => ref.watch(totpEntryRepositoryProvider).getTotpEntries()));
+        
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (tag != null)
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Tag: $tag',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+            Expanded(
+              child: entriesAsyncValue.when(
+                data: (entries) {
+                  if (entries.isEmpty) {
+                    return const Center(
+                      child: Text('No TOTP entries found'),
+                    );
+                  }
+                  
+                  return ListView.builder(
+                    itemCount: entries.length,
+                    itemBuilder: (context, index) {
+                      return _buildTotpEntryCard(entries[index]);
+                    },
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => Center(child: Text('Error: $error')),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildTotpEntryCard(TotpEntry entry) {
+    return Consumer(
+      builder: (context, ref, child) {
+        final totpService = ref.watch(totpServiceProvider);
+        final totpCode = totpService.generateTotp(entry);
+        final remainingSeconds = totpService.getRemainingSeconds(entry);
+        
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: ListTile(
+            title: Text(entry.name),
+            subtitle: Text(entry.issuer),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  totpCode,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text('$remainingSeconds s'),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TotpDetailPage(entry: entry),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAddDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Add New'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.key),
+                title: const Text('Add TOTP'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showAddTotpDialog(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.folder),
+                title: const Text('Add Folder'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showAddFolderDialog(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAddFolderDialog(BuildContext context) {
+    final nameController = TextEditingController();
+    final colorController = TextEditingController(text: '#3498db');
+    
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Add Folder'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Folder Name',
+                ),
+              ),
+              TextField(
+                controller: colorController,
+                decoration: const InputDecoration(
+                  labelText: 'Color (hex)',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                final currentFolderId = ref.read(currentFolderProvider);
+                final folder = Folder(
+                  name: nameController.text,
+                  color: colorController.text,
+                  parentId: currentFolderId,
+                );
+                
+                ref.read(folderRepositoryProvider).createFolder(folder);
+                Navigator.pop(context);
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAddTotpDialog(BuildContext context) {
+    final nameController = TextEditingController();
+    final secretController = TextEditingController();
+    final issuerController = TextEditingController();
+    final tagsController = TextEditingController();
+    
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Add TOTP'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                  ),
+                ),
+                TextField(
+                  controller: secretController,
+                  decoration: const InputDecoration(
+                    labelText: 'Secret',
+                  ),
+                ),
+                TextField(
+                  controller: issuerController,
+                  decoration: const InputDecoration(
+                    labelText: 'Issuer (optional)',
+                  ),
+                ),
+                TextField(
+                  controller: tagsController,
+                  decoration: const InputDecoration(
+                    labelText: 'Tags (comma separated)',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                final currentFolderId = ref.read(currentFolderProvider);
+                final tags = tagsController.text
+                    .split(',')
+                    .map((tag) => tag.trim())
+                    .where((tag) => tag.isNotEmpty)
+                    .toList();
+                
+                final entry = TotpEntry(
+                  name: nameController.text,
+                  secret: secretController.text,
+                  issuer: issuerController.text,
+                  folderId: currentFolderId,
+                  tags: tags,
+                );
+                
+                ref.read(totpEntryRepositoryProvider).createTotpEntry(entry);
+                Navigator.pop(context);
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

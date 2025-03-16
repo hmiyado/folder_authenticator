@@ -1,0 +1,60 @@
+import 'package:base32/base32.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:otp/otp.dart';
+import 'package:totp_folder/models/totp_entry.dart';
+
+// Provider for the TotpService
+final totpServiceProvider = Provider<TotpService>((ref) {
+  return TotpService();
+});
+
+class TotpService {
+  // Generate a TOTP code based on the entry's parameters
+  String generateTotp(TotpEntry entry) {
+    try {
+      // Generate the OTP directly from the base32 secret
+      return OTP.generateTOTPCodeString(
+        entry.secret.toUpperCase(),
+        DateTime.now().millisecondsSinceEpoch,
+        length: entry.digits,
+        interval: entry.period,
+        algorithm: _getAlgorithm(entry.algorithm),
+        isGoogle: true,
+      );
+    } catch (e) {
+      // Return error indicator if generation fails
+      return 'ERROR';
+    }
+  }
+
+  // Calculate the remaining time until the next TOTP refresh
+  int getRemainingSeconds(TotpEntry entry) {
+    final currentTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    final elapsedSeconds = currentTime % entry.period;
+    return entry.period - elapsedSeconds;
+  }
+
+  // Convert string algorithm to OTP.Algorithm enum
+  Algorithm _getAlgorithm(String algorithm) {
+    switch (algorithm.toUpperCase()) {
+      case 'SHA256':
+        return Algorithm.SHA256;
+      case 'SHA512':
+        return Algorithm.SHA512;
+      case 'SHA1':
+      default:
+        return Algorithm.SHA1;
+    }
+  }
+
+  // Validate a TOTP secret
+  bool isValidSecret(String secret) {
+    try {
+      // Try to decode the secret to check if it's valid base32
+      base32.decode(secret.toUpperCase());
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+}
