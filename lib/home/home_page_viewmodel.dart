@@ -29,16 +29,6 @@ class HomePageViewModel {
     _ref.read(currentFolderProvider.notifier).state = folderId;
   }
 
-  // Get root folders
-  Future<List<Folder>> getRootFolders() async {
-    return await _folderRepository.getFolders(parentId: null);
-  }
-
-  // Get subfolders for a folder
-  Future<List<Folder>> getSubfolders(int parentId) async {
-    return await _folderRepository.getFolders(parentId: parentId);
-  }
-
   // Create a new folder
   Future<Folder> createFolder(String name, String color, {int? parentId}) async {
     final folder = Folder(
