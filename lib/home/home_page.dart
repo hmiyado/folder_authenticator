@@ -176,11 +176,13 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             TextButton(
               onPressed: () {
-                // viewModel.createTotpEntry(
-                //   name: nameController.text,
-                //   secret: secretController.text,
-                //   issuer: issuerController.text,
-                // );
+                final currentFolder = ref.watch(currentFolderProvider);
+                ref.read(createTotpEntryProvider(
+                  currentFolder.id!,
+                  nameController.text,
+                  secretController.text,
+                  issuerController.text
+                ));
                 Navigator.pop(context);
               },
               child: const Text('Add'),
