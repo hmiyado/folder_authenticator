@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/totp_entry_card.dart';
-import 'package:totp_folder/home/folder/folder_view_viewmodel.dart';
 import 'package:totp_folder/repositories/totp_entry_repository.dart';
 import 'package:totp_folder/repositories/folder_repository.dart';
 
@@ -16,7 +14,6 @@ class FolderView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.watch(folderViewViewModelProvider(folderId));
     final entriesAsyncValue = ref.watch(totpEntriesByFolderProvider(folderId));
     final folderAsyncValue = ref.watch(folderProvider(folderId));    
     return Column(
