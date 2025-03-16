@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/totp_entry_card.dart';
@@ -22,15 +23,24 @@ class FolderView extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         folderAsyncValue.when(
-          data: (folder) => folder != null
-              ? Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'Folder: ${folder.name}',
-                    style: Theme.of(context).textTheme.titleLarge,
+          data: (folder) {
+            if (folder == null) {
+              return const SizedBox.shrink();
+            }
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+                child: Row(
+                children: [
+                  const Icon(Icons.folder, size: 24.0),
+                  const SizedBox(width: 8.0),
+                  Text(
+                  folder.name,
+                  style: Theme.of(context).textTheme.titleLarge,
                   ),
-                )
-              : const SizedBox.shrink(),
+                ],
+                ),
+            );
+          },
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stack) => Center(child: Text('Error: $error')),
         ),

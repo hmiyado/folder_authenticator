@@ -16,6 +16,7 @@ final foldersProvider = FutureProvider.family<List<Folder>, int?>((ref, parentId
 
 // Provider for a single folder
 final folderProvider = FutureProvider.family<Folder?, int>((ref, id) {
+  if (id == Folder.rootFolderId) return Future.value(Folder.rootFolder());
   final repository = ref.watch(folderRepositoryProvider);
   return repository.getFolder(id);
 });
