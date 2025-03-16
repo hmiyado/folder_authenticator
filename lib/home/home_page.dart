@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/folder/folder_view.dart';
 import 'package:totp_folder/settings/settings_page.dart';
-import 'package:totp_folder/home/home_page_viewmodel.dart';
+import 'package:totp_folder/home/home_page_providers.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
