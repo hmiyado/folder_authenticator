@@ -3,8 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/totp_entry_card.dart';
 import 'package:totp_folder/models/folder.dart';
 import 'package:totp_folder/models/totp_entry.dart';
-import 'package:totp_folder/repositories/folder_repository.dart';
-import 'package:totp_folder/repositories/totp_entry_repository.dart';
+import 'package:totp_folder/home/folder/folder_view_viewmodel.dart';
 
 class FolderView extends ConsumerWidget {
   final int? folderId;
@@ -16,9 +15,10 @@ class FolderView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final entriesAsyncValue = ref.watch(totpEntriesByFolderProvider(folderId));
+    final viewModel = ref.watch(folderViewViewModelProvider(folderId));
+    final entriesAsyncValue = ref.watch(FutureProvider<List<TotpEntry>>((ref) => viewModel.getTotpEntries()));
     final folderAsyncValue = folderId != null
-        ? ref.watch(FutureProvider<Folder?>((ref) => ref.watch(folderRepositoryProvider).getFolder(folderId!)))
+        ? ref.watch(FutureProvider<Folder?>((ref) => viewModel.getCurrentFolder()))
         : const AsyncValue<Folder?>.data(null);
     
     return Column(

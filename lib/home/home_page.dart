@@ -1,23 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/home/folder_view.dart';
-import 'package:totp_folder/home/settings_page.dart';
-import 'package:totp_folder/home/tag_view.dart';
+import 'package:totp_folder/home/folder/folder_view.dart';
+import 'package:totp_folder/settings/settings_page.dart';
+import 'package:totp_folder/home/tag/tag_view.dart';
 import 'package:totp_folder/models/folder.dart';
 import 'package:totp_folder/models/totp_entry.dart';
-import 'package:totp_folder/repositories/folder_repository.dart';
-import 'package:totp_folder/repositories/totp_entry_repository.dart';
-
-// Current folder provider
-final currentFolderProvider = StateProvider<int?>((ref) => null);
-
-// Current view mode provider (folder or tag)
-final viewModeProvider = StateProvider<ViewMode>((ref) => ViewMode.folder);
-
-// Selected tag provider
-final selectedTagProvider = StateProvider<String?>((ref) => null);
-
-enum ViewMode { folder, tag }
+import 'package:totp_folder/home/home_page_viewmodel.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -29,6 +17,7 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final viewModel = ref.watch(homePageViewModelProvider);
     final viewMode = ref.watch(viewModeProvider);
     final currentFolderId = ref.watch(currentFolderProvider);
     final selectedTag = ref.watch(selectedTagProvider);
@@ -40,14 +29,13 @@ class _HomePageState extends ConsumerState<HomePage> {
           IconButton(
             icon: const Icon(Icons.folder),
             onPressed: () {
-              ref.read(viewModeProvider.notifier).state = ViewMode.folder;
-              ref.read(selectedTagProvider.notifier).state = null;
+              viewModel.switchToFolderView();
             },
           ),
           IconButton(
             icon: const Icon(Icons.tag),
             onPressed: () {
-              ref.read(viewModeProvider.notifier).state = ViewMode.tag;
+              viewModel.switchToTagView();
             },
           ),
           PopupMenuButton<String>(
@@ -91,7 +79,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget _buildFolderNavigationDrawer() {
     return Consumer(
       builder: (context, ref, child) {
-        final foldersAsyncValue = ref.watch(foldersProvider(null));
+        final viewModel = ref.watch(homePageViewModelProvider);
+        final foldersAsyncValue = ref.watch(FutureProvider<List<Folder>>((ref) => viewModel.getRootFolders()));
         
         return foldersAsyncValue.when(
           data: (folders) {
@@ -113,7 +102,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   leading: const Icon(Icons.home),
                   title: const Text('All TOTPs'),
                   onTap: () {
-                    ref.read(currentFolderProvider.notifier).state = null;
+                    viewModel.setCurrentFolder(null);
                     Navigator.pop(context);
                   },
                 ),
@@ -140,7 +129,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget _buildFolderListTile(Folder folder) {
     return Consumer(
       builder: (context, ref, child) {
-        final subFoldersAsyncValue = ref.watch(foldersProvider(folder.id));
+        final viewModel = ref.watch(homePageViewModelProvider);
+        final subFoldersAsyncValue = ref.watch(FutureProvider<List<Folder>>((ref) => viewModel.getSubfolders(folder.id!)));
         
         return subFoldersAsyncValue.when(
           data: (subFolders) {
@@ -160,7 +150,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ],
               onExpansionChanged: (expanded) {
                 if (expanded) {
-                  ref.read(currentFolderProvider.notifier).state = folder.id;
+                  viewModel.setCurrentFolder(folder.id);
                   Navigator.pop(context);
                 }
               },
@@ -190,7 +180,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget _buildTagNavigationDrawer() {
     return Consumer(
       builder: (context, ref, child) {
-        final tagsAsyncValue = ref.watch(allTagsProvider);
+        final viewModel = ref.watch(homePageViewModelProvider);
+        final tagsAsyncValue = ref.watch(FutureProvider<List<String>>((ref) => viewModel.getAllTags()));
         
         return tagsAsyncValue.when(
           data: (tags) {
@@ -212,7 +203,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   leading: const Icon(Icons.tag),
                   title: const Text('All Tags'),
                   onTap: () {
-                    ref.read(selectedTagProvider.notifier).state = null;
+                    viewModel.setSelectedTag(null);
                     Navigator.pop(context);
                   },
                 ),
@@ -221,7 +212,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   leading: const Icon(Icons.tag),
                   title: Text(tag),
                   onTap: () {
-                    ref.read(selectedTagProvider.notifier).state = tag;
+                    viewModel.setSelectedTag(tag);
                     Navigator.pop(context);
                   },
                 )),
@@ -269,6 +260,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void _showAddFolderDialog(BuildContext context) {
+    final viewModel = ref.read(homePageViewModelProvider);
     final nameController = TextEditingController();
     final colorController = TextEditingController(text: '#3498db');
     
@@ -301,14 +293,10 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             TextButton(
               onPressed: () {
-                final currentFolderId = ref.read(currentFolderProvider);
-                final folder = Folder(
-                  name: nameController.text,
-                  color: colorController.text,
-                  parentId: currentFolderId,
+                viewModel.createFolder(
+                  nameController.text,
+                  colorController.text,
                 );
-                
-                ref.read(folderRepositoryProvider).createFolder(folder);
                 Navigator.pop(context);
               },
               child: const Text('Add'),
@@ -320,6 +308,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void _showAddTotpDialog(BuildContext context) {
+    final viewModel = ref.read(homePageViewModelProvider);
     final nameController = TextEditingController();
     final secretController = TextEditingController();
     final issuerController = TextEditingController();
@@ -368,22 +357,14 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             TextButton(
               onPressed: () {
-                final currentFolderId = ref.read(currentFolderProvider);
-                final tags = tagsController.text
-                    .split(',')
-                    .map((tag) => tag.trim())
-                    .where((tag) => tag.isNotEmpty)
-                    .toList();
+                final tags = viewModel.parseTagsFromString(tagsController.text);
                 
-                final entry = TotpEntry(
+                viewModel.createTotpEntry(
                   name: nameController.text,
                   secret: secretController.text,
                   issuer: issuerController.text,
-                  folderId: currentFolderId,
                   tags: tags,
                 );
-                
-                ref.read(totpEntryRepositoryProvider).createTotpEntry(entry);
                 Navigator.pop(context);
               },
               child: const Text('Add'),

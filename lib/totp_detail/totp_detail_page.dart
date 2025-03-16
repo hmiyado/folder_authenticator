@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/models/totp_entry.dart';
-import 'package:totp_folder/repositories/totp_entry_repository.dart';
-import 'package:totp_folder/services/totp_service.dart';
+import 'package:totp_folder/totp_detail/totp_detail_viewmodel.dart';
 
 class TotpDetailPage extends ConsumerStatefulWidget {
   final TotpEntry entry;
@@ -26,17 +25,19 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
   bool isEditing = false;
   Timer? _timer;
   int _remainingSeconds = 0;
+  late TotpDetailViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: widget.entry.name);
-    secretController = TextEditingController(text: widget.entry.secret);
-    issuerController = TextEditingController(text: widget.entry.issuer);
-    tagsController = TextEditingController(text: widget.entry.tags.join(', '));
-    digitsController = TextEditingController(text: widget.entry.digits.toString());
-    periodController = TextEditingController(text: widget.entry.period.toString());
-    algorithm = widget.entry.algorithm;
+    _viewModel = ref.read(totpDetailViewModelProvider(widget.entry));
+    nameController = TextEditingController(text: _viewModel.name);
+    secretController = TextEditingController(text: _viewModel.secret);
+    issuerController = TextEditingController(text: _viewModel.issuer);
+    tagsController = TextEditingController(text: _viewModel.tagsAsString);
+    digitsController = TextEditingController(text: _viewModel.digits.toString());
+    periodController = TextEditingController(text: _viewModel.period.toString());
+    algorithm = _viewModel.algorithm;
     
     // Initialize remaining seconds
     _updateRemainingSeconds();
@@ -48,9 +49,8 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
   }
   
   void _updateRemainingSeconds() {
-    final totpService = ref.read(totpServiceProvider);
     setState(() {
-      _remainingSeconds = totpService.getRemainingSeconds(widget.entry);
+      _remainingSeconds = _viewModel.getRemainingSeconds();
     });
   }
 
@@ -68,8 +68,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final totpService = ref.watch(totpServiceProvider);
-    final totpCode = totpService.generateTotp(widget.entry);
+    final totpCode = _viewModel.generateTotp();
 
     return Scaffold(
       appBar: AppBar(
@@ -114,7 +113,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                     ),
                     const SizedBox(height: 8),
                     LinearProgressIndicator(
-                      value: _remainingSeconds / widget.entry.period,
+                      value: _viewModel.getProgressValue(),
                     ),
                     Text('Refreshes in $_remainingSeconds seconds'),
                     const SizedBox(height: 16),
@@ -132,13 +131,13 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                 ),
               ),
               const Divider(height: 32),
-              _buildInfoRow('Name', widget.entry.name),
-              _buildInfoRow('Issuer', widget.entry.issuer),
-              _buildInfoRow('Secret', widget.entry.secret, obscure: true),
-              _buildInfoRow('Digits', widget.entry.digits.toString()),
-              _buildInfoRow('Period', '${widget.entry.period} seconds'),
-              _buildInfoRow('Algorithm', widget.entry.algorithm),
-              _buildInfoRow('Tags', widget.entry.tags.join(', ')),
+              _buildInfoRow('Name', _viewModel.name),
+              _buildInfoRow('Issuer', _viewModel.issuer),
+              _buildInfoRow('Secret', _viewModel.secret, obscure: true),
+              _buildInfoRow('Digits', _viewModel.digits.toString()),
+              _buildInfoRow('Period', '${_viewModel.period} seconds'),
+              _buildInfoRow('Algorithm', _viewModel.algorithm),
+              _buildInfoRow('Tags', _viewModel.tagsAsString),
             ] else ...[
               TextField(
                 controller: nameController,
@@ -254,7 +253,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Secret Key'),
-          content: Text(widget.entry.secret),
+          content: Text(_viewModel.secret),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -262,7 +261,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
             ),
             TextButton(
               onPressed: () {
-                Clipboard.setData(ClipboardData(text: widget.entry.secret));
+                Clipboard.setData(ClipboardData(text: _viewModel.secret));
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Secret copied to clipboard')),
                 );
@@ -277,13 +276,9 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
   }
 
   void _saveChanges() {
-    final tags = tagsController.text
-        .split(',')
-        .map((tag) => tag.trim())
-        .where((tag) => tag.isNotEmpty)
-        .toList();
+    final tags = _viewModel.parseTagsFromString(tagsController.text);
 
-    final updatedEntry = widget.entry.copyWith(
+    _viewModel.updateTotpEntry(
       name: nameController.text,
       secret: secretController.text,
       issuer: issuerController.text,
@@ -291,10 +286,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
       digits: int.tryParse(digitsController.text) ?? 6,
       period: int.tryParse(periodController.text) ?? 30,
       algorithm: algorithm,
-      updatedAt: DateTime.now(),
     );
-
-    ref.read(totpEntryRepositoryProvider).updateTotpEntry(updatedEntry);
     
     setState(() {
       isEditing = false;
@@ -311,7 +303,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Delete TOTP Entry'),
-          content: Text('Are you sure you want to delete "${widget.entry.name}"?'),
+          content: Text('Are you sure you want to delete "${_viewModel.name}"?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -319,7 +311,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
             ),
             TextButton(
               onPressed: () {
-                ref.read(totpEntryRepositoryProvider).deleteTotpEntry(widget.entry.id!);
+                _viewModel.deleteTotpEntry();
                 Navigator.pop(context); // Close dialog
                 Navigator.pop(context); // Return to previous screen
               },

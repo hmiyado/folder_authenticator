@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/home/totp_detail_page.dart';
+import 'package:totp_folder/totp_detail/totp_detail_page.dart';
 import 'package:totp_folder/models/totp_entry.dart';
-import 'package:totp_folder/services/totp_service.dart';
+import 'package:totp_folder/home/totp_entry_card_viewmodel.dart';
 
 class TotpEntryCard extends ConsumerStatefulWidget {
   final TotpEntry entry;
@@ -21,10 +21,12 @@ class _TotpEntryCardState extends ConsumerState<TotpEntryCard> {
   late String _totpCode;
   late int _remainingSeconds;
   Timer? _timer;
+  late TotpEntryCardViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
+    _viewModel = ref.read(totpEntryCardViewModelProvider(widget.entry));
     _updateTotpValues();
     
     // Set up timer to update values every second
@@ -40,10 +42,9 @@ class _TotpEntryCardState extends ConsumerState<TotpEntryCard> {
   }
 
   void _updateTotpValues() {
-    final totpService = ref.read(totpServiceProvider);
     setState(() {
-      _totpCode = totpService.generateTotp(widget.entry);
-      _remainingSeconds = totpService.getRemainingSeconds(widget.entry);
+      _totpCode = _viewModel.generateTotp();
+      _remainingSeconds = _viewModel.getRemainingSeconds();
     });
   }
 
@@ -52,8 +53,8 @@ class _TotpEntryCardState extends ConsumerState<TotpEntryCard> {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: ListTile(
-        title: Text(widget.entry.name),
-        subtitle: Text(widget.entry.issuer),
+        title: Text(_viewModel.name),
+        subtitle: Text(_viewModel.issuer),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
