@@ -11,12 +11,6 @@ FolderRepository folderRepository(Ref ref) {
   return FolderRepository(ref.watch(databaseServiceProvider));
 }
 
-@riverpod
-Future<List<Folder>> folders(Ref ref, {required int parentId}) async {
-  final repository = ref.watch(folderRepositoryProvider);
-  return repository.getFolders(parentId: parentId);
-} 
-
 class FolderRepository {
   final DatabaseService _databaseService;
 
