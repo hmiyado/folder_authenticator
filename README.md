@@ -30,3 +30,10 @@ TOTP Folder is a Flutter-based mobile application that allows you to manage your
    ```sh
    flutter run
    ```
+
+## Development
+
+```sh
+# test
+flutter test
+```
