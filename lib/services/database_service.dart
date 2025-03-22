@@ -53,9 +53,6 @@ class DatabaseService {
         secret TEXT NOT NULL,
         issuer TEXT,
         folder_id INTEGER,
-        digits INTEGER NOT NULL,
-        period INTEGER NOT NULL,
-        algorithm TEXT NOT NULL,
         created_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL,
         FOREIGN KEY (folder_id) REFERENCES folders (id) ON DELETE SET NULL
@@ -112,9 +109,22 @@ class DatabaseService {
   }
 
   // TOTP entry operations
-  Future<int> insertTotpEntry(TotpEntry entry) async {
+  Future<int> insertTotpEntry(
+    String name,
+    String secret,
+    String issuer,
+    int folderId,
+  ) async {
     final db = await database;
-    return await db.insert('totp_entries', entry.toMap());
+    final map = {
+      'name': name,
+      'secret': secret,
+      'issuer': issuer,
+      'folder_id': folderId,
+      'created_at': DateTime.now().millisecondsSinceEpoch,
+      'updated_at': DateTime.now().millisecondsSinceEpoch,
+    };
+    return await db.insert('totp_entries', map);
   }
 
   Future<int> updateTotpEntry(TotpEntry entry) async {

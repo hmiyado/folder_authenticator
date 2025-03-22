@@ -27,11 +27,13 @@ Future<Folder> createSubFolder(Ref ref, int parentId,String folderName, String c
 }
 
 @riverpod
-Future<TotpEntry> createTotpEntry(Ref ref, int folderId, String totpName, String secret, String issuer) async {
-  return await ref.watch(totpEntryRepositoryProvider).createTotpEntry(TotpEntry(
-    name: totpName,
-    secret: secret,
-    issuer: issuer,
-    folderId: folderId,
-  ));
+Future<int> createTotpEntry(Ref ref, int folderId, String totpName, String secret, String issuer) async {
+  final id = await ref.watch(totpEntryRepositoryProvider).createTotpEntry(
+    totpName,
+    secret,
+    issuer,
+    folderId,
+  );
+  ref.invalidate(totpEntriesByFolderProvider);
+  return id;
 }

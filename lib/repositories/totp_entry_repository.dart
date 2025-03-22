@@ -32,9 +32,21 @@ class TotpEntryRepository {
     return await _databaseService.getTotpEntry(id);
   }
 
-  Future<TotpEntry> createTotpEntry(TotpEntry entry) async {
-    final id = await _databaseService.insertTotpEntry(entry);
-    return entry.copyWith(id: id);
+  /// Creates a new TOTP entry in the database.
+  /// @retun The ID of the newly created entry.
+  Future<int> createTotpEntry(
+    String name,
+    String secret,
+    String issuer,
+    int folderId,
+  ) async {
+    final id = await _databaseService.insertTotpEntry(
+      name,
+      secret,
+      issuer,
+      folderId,
+    );
+    return id;
   }
 
   Future<bool> updateTotpEntry(TotpEntry entry) async {

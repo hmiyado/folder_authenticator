@@ -60,19 +60,24 @@ void main() {
         issuer: 'New Issuer',
         folderId: 2,
       );
-      when(mockDatabaseService.insertTotpEntry(entryToCreate))
+      when(mockDatabaseService.insertTotpEntry(any, any, any, any))
           .thenAnswer((_) async => 3);
 
       // Act
-      final result = await totpEntryRepository.createTotpEntry(entryToCreate);
+      await totpEntryRepository.createTotpEntry(
+        entryToCreate.name,
+        entryToCreate.secret,
+        entryToCreate.issuer,
+        entryToCreate.folderId,
+      );
 
       // Assert
-      expect(result.id, 3);
-      expect(result.name, 'New Entry');
-      expect(result.secret, 'QRSTUVWXYZ123456');
-      expect(result.issuer, 'New Issuer');
-      expect(result.folderId, 2);
-      verify(mockDatabaseService.insertTotpEntry(entryToCreate)).called(1);
+      verify(mockDatabaseService.insertTotpEntry(
+        entryToCreate.name,
+        entryToCreate.secret,
+        entryToCreate.issuer,
+        entryToCreate.folderId,
+      )).called(1);
     });
 
     test('updateTotpEntry should update entry and return success', () async {
