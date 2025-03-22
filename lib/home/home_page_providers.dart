@@ -33,6 +33,6 @@ Future<int> createTotpEntry(Ref ref, int folderId, String totpName, String secre
     issuer,
     folderId,
   );
-  ref.invalidate(totpEntriesByFolderProvider);
+  ref.invalidate(totpEntriesByFolderProvider(folderId: folderId));
   return id;
 }
