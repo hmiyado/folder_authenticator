@@ -4,9 +4,12 @@ import 'package:totp_folder/home/add_dialog/add_folder_dialog.dart';
 import 'package:totp_folder/home/add_dialog/add_totp_entry_dialog.dart';
 import 'package:totp_folder/home/home_page_providers.dart';
 import 'package:totp_folder/home/qr_scanner_page.dart';
+import 'package:totp_folder/models/folder.dart';
 
 class AddDialog extends ConsumerStatefulWidget {
-  const AddDialog({super.key});
+
+  final Folder folder;
+  const AddDialog({super.key, required this.folder});
 
   @override
   ConsumerState<AddDialog> createState() => _AddDialogState();
@@ -51,7 +54,7 @@ class _AddDialogState extends ConsumerState<AddDialog> {
 
   void _showAddTotpDialog(BuildContext context) {
     showDialog(context: context, builder: (context) {
-      return const AddTotpEntryDialog();
+      return AddTotpEntryDialog(folderId: widget.folder.id);
     });
   }
   void _showAddFolderDialog(BuildContext context) {

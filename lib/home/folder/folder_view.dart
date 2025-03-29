@@ -46,7 +46,7 @@ class FolderView extends ConsumerWidget {
         onPressed: () {
         showDialog(
           context: context,
-          builder: (context) => const AddDialog(),
+          builder: (context) => AddDialog(folder: folderPath.last),
         );
         },
       ),
