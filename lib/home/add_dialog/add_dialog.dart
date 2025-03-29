@@ -1,0 +1,73 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:totp_folder/home/add_dialog/add_folder_dialog.dart';
+import 'package:totp_folder/home/add_dialog/add_totp_entry_dialog.dart';
+import 'package:totp_folder/home/home_page_providers.dart';
+import 'package:totp_folder/home/qr_scanner_page.dart';
+
+class AddDialog extends ConsumerStatefulWidget {
+  const AddDialog({super.key});
+
+  @override
+  ConsumerState<AddDialog> createState() => _AddDialogState();
+}
+
+class _AddDialogState extends ConsumerState<AddDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+          title: const Text('Add New'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.key),
+                title: const Text('Add TOTP Manually'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showAddTotpDialog(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.qr_code_scanner),
+                title: const Text('Scan QR Code'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _openQrScanner(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.folder),
+                title: const Text('Add Folder'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showAddFolderDialog(context);
+                },
+              ),
+            ],
+          ),
+        );
+  }
+
+  void _showAddTotpDialog(BuildContext context) {
+    showDialog(context: context, builder: (context) {
+      return const AddTotpEntryDialog();
+    });
+  }
+  void _showAddFolderDialog(BuildContext context) {
+    showDialog(context: context, builder: (context) {
+      return const AddFolderDialog();
+    });
+  }
+
+  void _openQrScanner(BuildContext context) {
+    final currentFolder = ref.watch(currentFolderProvider);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QrScannerPage(folderId: currentFolder.id),
+      ),
+    );
+  }
+}
+
