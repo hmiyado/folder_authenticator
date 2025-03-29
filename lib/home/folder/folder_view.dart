@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/folder/folder_entries_provider.dart';
 import 'package:totp_folder/home/folder/folder_path_provider.dart';
-import 'package:totp_folder/home/folder/subfolders_provider.dart';
 import 'package:totp_folder/home/home_page_providers.dart';
 import 'package:totp_folder/home/totp_entry_card.dart';
 import 'package:totp_folder/models/folder.dart';
@@ -81,8 +80,7 @@ class FolderView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final folderPathAsyncValue = ref.watch(folderPathProvider(folderId: folderId));
-    final subfoldersAsyncValue = ref.watch(subfoldersProvider(parentId: folderId));
-    final allFolderEntriesAsyncValue = ref.watch(allFolderEntriesProvider(folderId));
+    final allFolderEntries = ref.watch(allFolderEntriesProvider(folderId));
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,57 +102,31 @@ class FolderView extends ConsumerWidget {
         ),
         const Divider(),
         Expanded(
-          child: allFolderEntriesAsyncValue.when(
-            data: (folderEntries) {
-              // Show subfolders first
-              return subfoldersAsyncValue.when(
-                data: (subfolders) {
-                  if (folderEntries.isEmpty && subfolders.isEmpty) {
-                    return const Center(
-                      child: Text('No TOTP entries or subfolders found'),
-                    );
-                  }
-                  
-                  final List<Widget> listItems = [];
-                  
-                  // Add subfolders
-                  for (final folder in subfolders) {
-                    listItems.add(_buildFolderItem(context, folder, ref));
-                  }
-                  
-                  if (subfolders.isNotEmpty && folderEntries.isNotEmpty) {
-                    listItems.add(const Divider());
-                  }
-                  
-                  // Add folder entries with headers
-                  for (final folderEntry in folderEntries) {
-                    // Add folder path header
-                    listItems.add(
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 8.0),
-                        child: _buildFolderPathText(folderEntry.folderPath),
-                      ),
-                    );
-                    
-                    // Add entries
-                    for (final entry in folderEntry.entries) {
-                      listItems.add(TotpEntryCard(entry: entry));
-                    }
-                  }
-                  
-                  return ListView(
-                    children: listItems,
-                  );
-                },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => Center(child: Text('Error loading subfolders: $error')),
-              );
-            },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stack) => Center(child: Text('Error loading entries: $error')),
-          ),
+          child: ListView(
+            children: allFolderEntries.map((folderEntries){
+              if (folderEntries.entries.isEmpty) {
+                return [const Center(
+                  child: Text('No TOTP entries or subfolders found'),
+                )];
+              }
+
+              final header = Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 8.0),
+                  child: _buildFolderPathText(folderEntries.folderPath),
+                );
+
+              final totpEntries = folderEntries.entries.map(
+                  (entry) => TotpEntryCard(entry: entry),
+                ).toList();
+
+              return [
+                header,
+                ...totpEntries,
+              ];
+            }).reduce((allFolderEntries, folderEntries) => allFolderEntries + folderEntries)
+          )
         ),
-      ],
+        ],
     );
   }
 }
