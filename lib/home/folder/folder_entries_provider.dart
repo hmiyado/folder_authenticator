@@ -36,10 +36,12 @@ Future<FolderEntries> folderEntries(Ref ref, int folderId) async {
 Future<List<FolderEntries>> allFolderEntries(Ref ref,int folderId) async {
   final folderEntries = await ref.watch(folderEntriesProvider(folderId).future);
   final subfolders = await ref.watch(subfoldersProvider(parentId: folderId).future);
+  final subFolderEntries = await Future.wait(
+    subfolders.map((folder) => ref.watch(folderEntriesProvider(folder.id).future)),
+  );
     
   return [
     folderEntries,
-    for (final folder in subfolders) 
-      await ref.read(folderEntriesProvider(folder.id).future),
+    ...subFolderEntries,
   ];
 }
