@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/folder/folder_view.dart';
+import 'package:totp_folder/home/folder/subfolders_provider.dart';
 import 'package:totp_folder/home/qr_scanner_page.dart';
 import 'package:totp_folder/settings/settings_page.dart';
 import 'package:totp_folder/home/home_page_providers.dart';
@@ -104,8 +105,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void _showAddFolderDialog(BuildContext context) {
-    // final currentFolder = ref.watch(currentFolderProvider);
-    // final createSubFolder = ref.read(createSubFolderProvider);
+    final currentFolder = ref.watch(currentFolderProvider);
     final nameController = TextEditingController();
     final colorController = TextEditingController(text: '#3498db');
     
@@ -137,12 +137,35 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                // createSubFolder(
-                //   currentFolder.id!,
-                //   nameController.text,
-                //   colorController.text,
-                // );
+              onPressed: () async {
+                if (nameController.text.isNotEmpty) {
+                  // Create the subfolder
+                  final folderFuture = ref.read(createSubFolderProvider(
+                    currentFolder.id!,
+                    nameController.text,
+                    colorController.text,
+                  ));
+                  
+                  // Wait for the folder to be created
+                  folderFuture.when(
+                    data: (folder) {
+                      // Invalidate the subfolders provider to refresh the UI
+                      ref.invalidate(subfoldersProvider(parentId: currentFolder.id!));
+                      
+                      // Show success message
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Folder "${nameController.text}" created')),
+                      );
+                    },
+                    loading: () => null,
+                    error: (error, stack) {
+                      // Show error message
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error creating folder: $error')),
+                      );
+                    },
+                  );
+                }
                 Navigator.pop(context);
               },
               child: const Text('Add'),
