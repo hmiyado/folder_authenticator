@@ -22,8 +22,8 @@ class CurrentFolder extends _$CurrentFolder {
 }
 
 @riverpod
-Future<int?> createSubFolder(Ref ref, int parentId,String folderName, String color) async {
-  final i = await ref.watch(folderRepositoryProvider).createFolder(folderName,color, parentId);
+Future<int?> createSubFolder(Ref ref, int parentId, String folderName, String color) async {
+  final i = await ref.watch(folderRepositoryProvider).createFolder(folderName, color, parentId);
   ref.invalidate(subfoldersProvider(parentId: parentId));
   return i;
 }
