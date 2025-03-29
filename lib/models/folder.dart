@@ -64,4 +64,20 @@ class Folder {
   String toString() {
     return 'Folder(id: $id, name: $name, parentId: $parentId, color: $color)';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Folder &&
+        other.id == id &&
+        other.name == name &&
+        other.parentId == parentId &&
+        other.color == color;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^ name.hashCode ^ parentId.hashCode ^ color.hashCode;
+  }
 }

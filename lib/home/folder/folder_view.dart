@@ -46,6 +46,23 @@ class FolderView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final allFolderEntries = ref.watch(allFolderEntriesProvider(folderId));
+
+    return allFolderEntries.when(
+      data: (allFolderEntries) {
+        return _buildFolderEntries(allFolderEntries);
+      },
+      error: (error, stack) {
+        return Center(
+          child: Text('Error loading folder entries: $error'),
+        );
+      },
+      loading: () {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget _buildFolderEntries(List<FolderEntries> allFolderEntries) {
     if (allFolderEntries.isEmpty) {
       return const Center(
         child: Text('No TOTP entries or subfolders found'),

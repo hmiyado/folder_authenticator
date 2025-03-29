@@ -33,25 +33,13 @@ Future<FolderEntries> folderEntries(Ref ref, int folderId) async {
 
 // Provider for all folder entries (current folder + subfolders)
 @riverpod
-List<FolderEntries> allFolderEntries(Ref ref,int parentFolderId) {
-  final result = <FolderEntries>[];
-  
-  // Get the parent folder entries
-  final parentEntries = ref.watch(folderEntriesProvider(parentFolderId)).valueOrNull ?? FolderEntries(folderPath: [], entries: []);
-  if (parentEntries.entries.isNotEmpty) {
-    result.add(parentEntries);
-  }
-  
-  // Get all subfolders
-  final subfolders = ref.watch(subfoldersProvider(parentId: parentFolderId)).valueOrNull ?? [];
-  
-  // Get entries for each subfolder
-  for (final folder in subfolders) {
-    final subfolderEntries = ref.read(folderEntriesProvider(folder.id)).valueOrNull ?? FolderEntries(folderPath: [], entries: []);
-    if (subfolderEntries.entries.isNotEmpty) {
-      result.add(subfolderEntries);
-    }
-  }
-  
-  return result;
+Future<List<FolderEntries>> allFolderEntries(Ref ref,int folderId) async {
+  final folderEntries = await ref.watch(folderEntriesProvider(folderId).future);
+  final subfolders = await ref.watch(subfoldersProvider(parentId: folderId).future);
+    
+  return [
+    folderEntries,
+    for (final folder in subfolders) 
+      await ref.read(folderEntriesProvider(folder.id).future),
+  ];
 }
