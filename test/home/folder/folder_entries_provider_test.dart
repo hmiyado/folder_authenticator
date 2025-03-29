@@ -182,6 +182,105 @@ void main() {
       expect(result[1].entries, subfolderEntries);
     });
 
+    test('should return entries recursively from nested subfolders', () async {
+      // Arrange
+      // Folder tree
+      // Root
+      // ├── Subfolder 1
+      // │   ├── Subfolder 2
+      // │   │   └── Nested Entry
+      // │   └── Subfolder1 Entry
+      // └── Root Entry
+      // Setup root folder
+      final rootFolder = Folder.rootFolder();
+      final rootFolderPath = [rootFolder];
+      final rootEntries = [
+        TotpEntry(
+          id: 1,
+          name: 'Root Entry',
+          secret: 'SECRET1',
+          issuer: 'Test Issuer',
+          folderId: 0,
+        ),
+      ];
+
+      // Setup first level subfolder
+      final subfolder1 = Folder(
+        id: 1,
+        name: 'Subfolder 1',
+        parentId: Folder.rootFolderId,
+      );
+      final subfolder1Path = [rootFolder, subfolder1];
+      final subfolder1Entries = [
+        TotpEntry(
+          id: 2,
+          name: 'Subfolder1 Entry',
+          secret: 'SECRET2',
+          issuer: 'Test Issuer',
+          folderId: 1,
+        ),
+      ];
+
+      // Setup second level subfolder (nested)
+      final subfolder2 = Folder(
+        id: 2,
+        name: 'Subfolder 2',
+        parentId: 1,
+      );
+      final subfolder2Path = [rootFolder, subfolder1, subfolder2];
+      final subfolder2Entries = [
+        TotpEntry(
+          id: 3,
+          name: 'Nested Entry',
+          secret: 'SECRET3',
+          issuer: 'Test Issuer',
+          folderId: 2,
+        ),
+      ];
+
+      // Mock root folder data
+      when(mockFolderRepository.getFolderPath(0))
+        .thenAnswer((_) async => rootFolderPath);
+      when(mockFolderRepository.getFolders(0))
+        .thenAnswer((_) async => [subfolder1]);
+      when(mockTotpEntryRepository.getTotpEntriesByFolderId(0))
+        .thenAnswer((_) async => rootEntries);
+
+      // Mock first level subfolder data
+      when(mockFolderRepository.getFolderPath(1))
+        .thenAnswer((_) async => subfolder1Path);
+      when(mockFolderRepository.getFolders(1))
+        .thenAnswer((_) async => [subfolder2]);
+      when(mockTotpEntryRepository.getTotpEntriesByFolderId(1))
+        .thenAnswer((_) async => subfolder1Entries);
+
+      // Mock second level subfolder data
+      when(mockFolderRepository.getFolderPath(2))
+        .thenAnswer((_) async => subfolder2Path);
+      when(mockFolderRepository.getFolders(2))
+        .thenAnswer((_) async => []);
+      when(mockTotpEntryRepository.getTotpEntriesByFolderId(2))
+        .thenAnswer((_) async => subfolder2Entries);
+
+      // Act
+      final result = await container.read(allFolderEntriesProvider(0).future);
+
+      // Assert
+      expect(result.length, 3);
+      
+      // Check root folder entries
+      expect(result[0].folderPath, rootFolderPath);
+      expect(result[0].entries, rootEntries);
+      
+      // Check first level subfolder entries
+      expect(result[1].folderPath, subfolder1Path);
+      expect(result[1].entries, subfolder1Entries);
+      
+      // Check second level (nested) subfolder entries
+      expect(result[2].folderPath, subfolder2Path);
+      expect(result[2].entries, subfolder2Entries);
+    });
+
     test('should not skip folders with no entries', () async {
       // Arrange
       // Setup parent folder with entries
