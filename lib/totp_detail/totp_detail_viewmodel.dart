@@ -17,11 +17,6 @@ class TotpDetailViewModel {
 
   TotpDetailViewModel(this.entry, this._totpEntryRepository, this._totpService);
 
-  // Generate TOTP code
-  String generateTotp() {
-    return _totpService.generateTotp(entry);
-  }
-
   // Get remaining seconds until the next TOTP refresh
   int getRemainingSeconds() {
     return _totpService.getRemainingSeconds(entry);
