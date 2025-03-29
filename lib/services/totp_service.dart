@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:base32/base32.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp/otp.dart';
@@ -5,6 +6,16 @@ import 'package:totp_folder/models/totp_entry.dart';
 
 // Provider for the TotpService
 final totpServiceProvider = Provider<TotpService>((ref) {
+  // Set up timer to update values every 500ms
+  final timer = Timer.periodic(const Duration(milliseconds: 500), (_) {
+    ref.invalidateSelf(); // Invalidate the provider to trigger a rebuild
+  });
+  
+  // Clean up when the provider is disposed
+  ref.onDispose(() {
+    timer.cancel();
+  });
+
   return TotpService();
 });
 
