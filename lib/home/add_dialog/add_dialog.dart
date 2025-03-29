@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/add_dialog/add_folder_dialog.dart';
 import 'package:totp_folder/home/add_dialog/add_totp_entry_dialog.dart';
-import 'package:totp_folder/home/home_page_providers.dart';
 import 'package:totp_folder/home/add_dialog/qr_scanner_page.dart';
 import 'package:totp_folder/models/folder.dart';
 
@@ -70,11 +69,10 @@ class _AddDialogState extends ConsumerState<AddDialog> {
   }
 
   void _openQrScanner(BuildContext context) {
-    final currentFolder = ref.watch(currentFolderProvider);
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QrScannerPage(folderId: currentFolder.id),
+        builder: (context) => QrScannerPage(folderId: widget.folder.id),
       ),
     );
   }
