@@ -1,19 +1,20 @@
 class Folder {
-  // Special folder ID for the root folder
+  /// Special folder ID for the root folder
   static const int rootFolderId = 0;
-  static Folder rootFolder() => Folder(id: rootFolderId, name: '(root)');
-  final int? id;
+  static Folder rootFolder() => Folder(id: rootFolderId, name: '(root)', parentId: rootFolderId);
+  final int id;
+  /// Reference to parent folder, 0 if it's a root folder. Parent folder for the root folder is itself.
+  final int parentId; 
   final String name;
   final String color;
-  final int? parentId; // Reference to parent folder, null for root folders
   final DateTime createdAt;
   final DateTime updatedAt;
 
   Folder({
-    this.id,
+    required this.id,
     required this.name,
+    required this.parentId,
     this.color = '#3498db', // Default blue color
-    this.parentId, // null means it's a root folder
     DateTime? createdAt,
     DateTime? updatedAt,
   })  : createdAt = createdAt ?? DateTime.now(),
@@ -58,9 +59,6 @@ class Folder {
       updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updated_at']),
     );
   }
-
-  // Check if this folder is a root folder
-  bool get isRoot => parentId == null;
 
   @override
   String toString() {

@@ -36,7 +36,7 @@ class DatabaseService {
     await db.execute('''
       CREATE TABLE folders(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
+        name TEXT NOT NULL UNIQUE,
         color TEXT NOT NULL,
         parent_id INTEGER,
         created_at INTEGER NOT NULL,
@@ -61,9 +61,21 @@ class DatabaseService {
   }
 
   // Folder operations
-  Future<int> insertFolder(Folder folder) async {
+  Future<int> insertFolder(
+    String  name ,
+    String color,
+    int parentId,
+    int createdAt,
+    int updatedAt,
+  ) async {
     final db = await database;
-    return await db.insert('folders', folder.toMap());
+    return await db.insert('folders', {
+      'name': name,
+      'color': color,
+      'parent_id': parentId,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+    });
   }
 
   Future<int> updateFolder(Folder folder) async {

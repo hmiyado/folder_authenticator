@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:totp_folder/home/folder/subfolders_provider.dart';
 import 'package:totp_folder/models/folder.dart';
 import 'package:totp_folder/repositories/folder_repository.dart';
 import 'package:totp_folder/repositories/totp_entry_repository.dart';
@@ -21,8 +22,10 @@ class CurrentFolder extends _$CurrentFolder {
 }
 
 @riverpod
-Future<Folder> createSubFolder(Ref ref, int parentId,String folderName, String color) async {
-  return await ref.watch(folderRepositoryProvider).createFolder(Folder(name: folderName,color: color, parentId: parentId));
+Future<int?> createSubFolder(Ref ref, int parentId,String folderName, String color) async {
+  final i = await ref.watch(folderRepositoryProvider).createFolder(folderName,color, parentId);
+  ref.invalidate(subfoldersProvider(parentId: parentId));
+  return i;
 }
 
 @riverpod

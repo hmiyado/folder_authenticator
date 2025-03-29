@@ -24,9 +24,18 @@ class FolderRepository {
     return await _databaseService.getFolder(id);
   }
 
-  Future<Folder> createFolder(Folder folder) async {
-    final id = await _databaseService.insertFolder(folder);
-    return folder.copyWith(id: id);
+  Future<int?> createFolder(
+    String name,
+    String color,
+    int parentId,
+  ) async {
+    return await _databaseService.insertFolder(
+      name,
+      color,
+      parentId,
+      DateTime.now().millisecondsSinceEpoch,
+      DateTime.now().millisecondsSinceEpoch,
+    );
   }
 
   Future<bool> updateFolder(Folder folder) async {
