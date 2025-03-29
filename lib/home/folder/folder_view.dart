@@ -35,6 +35,11 @@ class FolderView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final allFolderEntries = ref.watch(allFolderEntriesProvider(folderId));
+    if (allFolderEntries.isEmpty) {
+      return const Center(
+        child: Text('No TOTP entries or subfolders found'),
+      );
+    }
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
