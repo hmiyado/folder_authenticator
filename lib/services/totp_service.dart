@@ -10,7 +10,6 @@ part 'totp_service.g.dart';
 // Provider for the TotpService
 @riverpod
 TotpService totpService(Ref ref) {
-  // Set up timer to update values every 500ms
   final timer = Timer.periodic(const Duration(milliseconds: 500), (_) {
     ref.invalidateSelf(); // Invalidate the provider to trigger a rebuild
   });
@@ -43,10 +42,11 @@ class TotpService {
   }
 
   // Calculate the remaining time until the next TOTP refresh
-  int getRemainingSeconds(TotpEntry entry) {
-    final currentTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    final elapsedSeconds = currentTime % entry.period;
-    return entry.period - elapsedSeconds;
+  int getRemainingMilliSeconds(TotpEntry entry) {
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
+    final entryPeriodMillis = entry.period * 1000;
+    final elapsedSeconds = currentTime % entryPeriodMillis;
+    return entryPeriodMillis - elapsedSeconds;
   }
 
   // Convert string algorithm to OTP.Algorithm enum

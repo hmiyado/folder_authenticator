@@ -30,14 +30,14 @@ String generateTotp(Ref ref, TotpEntry entry) {
 int remainingSeconds(Ref ref, TotpEntry entry) {
   final totpService = ref.watch(totpServiceProvider);
     
-  return totpService.getRemainingSeconds(entry);
+  return totpService.getRemainingMilliSeconds(entry) ~/ 1000;
 }
 
 /// Provider for calculating progress value for the progress indicator (0.0 to 1.0)
 @riverpod
 double progressValue(Ref ref, TotpEntry entry) {
-  final remainingSecs = ref.watch(remainingSecondsProvider(entry));
-  return remainingSecs / entry.period;
+  final totpService = ref.watch(totpServiceProvider);
+  return totpService.getRemainingMilliSeconds(entry) / (entry.period * 1000);
 }
 
 @riverpod
