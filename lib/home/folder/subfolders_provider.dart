@@ -10,5 +10,5 @@ part 'subfolders_provider.g.dart';
 Future<List<Folder>> subfolders(Ref ref, {required int parentId}) async {
   final folderRepository = ref.watch(folderRepositoryProvider);
   ref.invalidate(folderPathProvider);
-  return folderRepository.getFolders(parentId: parentId);
+  return folderRepository.getFolders(parentId);
 }

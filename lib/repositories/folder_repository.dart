@@ -16,8 +16,8 @@ class FolderRepository {
 
   FolderRepository(this._databaseService);
 
-  Future<List<Folder>> getFolders({int? parentId}) async {
-    return await _databaseService.getFolders(parentId: parentId);
+  Future<List<Folder>> getFolders(int parentId) async {
+    return await _databaseService.getFolders(parentId);
   }
 
   Future<Folder?> getFolder(int id) async {

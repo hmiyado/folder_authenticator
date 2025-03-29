@@ -97,12 +97,12 @@ class DatabaseService {
     );
   }
 
-  Future<List<Folder>> getFolders({int? parentId}) async {
+  Future<List<Folder>> getFolders(int parentId) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'folders',
-      where: parentId != null ? 'parent_id = ?' : 'parent_id IS NULL',
-      whereArgs: parentId != null ? [parentId] : null,
+      where: 'parent_id = ?',
+      whereArgs: [parentId],
     );
     return List.generate(maps.length, (i) => Folder.fromMap(maps[i]));
   }
