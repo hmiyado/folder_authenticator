@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/home/totp_entry_card_providers.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/totp_detail/totp_detail_providers.dart';
 import 'package:totp_folder/totp_detail/totp_edit_page.dart';
