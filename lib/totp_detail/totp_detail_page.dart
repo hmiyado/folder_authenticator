@@ -51,6 +51,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
   Widget build(BuildContext context) {
     final totpCode = ref.read(generateTotpProvider(widget.entry));
     final remainingSeconds = ref.read(remainingSecondsProvider(widget.entry));
+    final progressValue = ref.read(progressValueProvider(widget.entry));
 
     return Scaffold(
       appBar: AppBar(
@@ -95,7 +96,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                     ),
                     const SizedBox(height: 8),
                     LinearProgressIndicator(
-                      value: _viewModel.getProgressValue(),
+                      value: progressValue,
                     ),
                     Text('Refreshes in $remainingSeconds seconds'),
                     const SizedBox(height: 16),

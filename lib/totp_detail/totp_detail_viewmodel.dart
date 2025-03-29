@@ -17,16 +17,6 @@ class TotpDetailViewModel {
 
   TotpDetailViewModel(this.entry, this._totpEntryRepository, this._totpService);
 
-  // Get remaining seconds until the next TOTP refresh
-  int getRemainingSeconds() {
-    return _totpService.getRemainingSeconds(entry);
-  }
-
-  // Calculate progress value for the progress indicator (0.0 to 1.0)
-  double getProgressValue() {
-    return getRemainingSeconds() / entry.period;
-  }
-
   // Update the TOTP entry
   Future<bool> updateTotpEntry({
     String? name,
