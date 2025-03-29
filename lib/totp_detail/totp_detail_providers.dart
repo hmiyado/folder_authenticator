@@ -9,7 +9,7 @@ part 'totp_detail_providers.g.dart';
 
 @riverpod
 Future<TotpEntry> totpEntry(Ref ref, TotpEntry entry) {
-  return ref.watch(totpEntryRepositoryProvider).getTotpEntry(entry.id!).then((
+  return ref.watch(totpEntryRepositoryProvider).getTotpEntry(entry.id).then((
     fetchedEntry,
   ) {
     return fetchedEntry ?? entry;
@@ -49,7 +49,7 @@ Future<bool> updateTotpEntry(
 }) async {
   final totpEntryRepository = ref.watch(totpEntryRepositoryProvider);
   final updated = await totpEntryRepository.updateTotpEntry(
-    entry.id!,
+    entry.id,
     entryName,
     issuer,
     folderId,
@@ -63,5 +63,5 @@ Future<bool> updateTotpEntry(
 Future<bool> deleteTotpEntry(Ref ref, TotpEntry entry) {
   final totpEntryRepository = ref.watch(totpEntryRepositoryProvider);
   ref.invalidate(folderEntriesProvider(entry.folderId));
-  return totpEntryRepository.deleteTotpEntry(entry.id!);
+  return totpEntryRepository.deleteTotpEntry(entry.id);
 }

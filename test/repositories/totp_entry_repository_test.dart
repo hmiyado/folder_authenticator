@@ -63,6 +63,7 @@ void main() {
       () async {
         // Arrange
         final entryToCreate = TotpEntry(
+          id: 1,
           name: 'New Entry',
           secret: 'QRSTUVWXYZ123456',
           issuer: 'New Issuer',
@@ -96,7 +97,7 @@ void main() {
       // Arrange
       when(
         mockDatabaseService.updateTotpEntry(
-          testTotpEntry.id!,
+          testTotpEntry.id,
           testTotpEntry.name,
           testTotpEntry.issuer,
           testTotpEntry.folderId,
@@ -106,7 +107,7 @@ void main() {
 
       // Act
       final result = await totpEntryRepository.updateTotpEntry(
-        testTotpEntry.id!,
+        testTotpEntry.id,
         testTotpEntry.name,
         testTotpEntry.issuer,
         testTotpEntry.folderId,
@@ -116,7 +117,7 @@ void main() {
       expect(result, true);
       verify(
         mockDatabaseService.updateTotpEntry(
-          testTotpEntry.id!,
+          testTotpEntry.id,
           testTotpEntry.name,
           testTotpEntry.issuer,
           testTotpEntry.folderId,
@@ -129,7 +130,7 @@ void main() {
       // Arrange
       when(
         mockDatabaseService.updateTotpEntry(
-          testTotpEntry.id!,
+          testTotpEntry.id,
           testTotpEntry.name,
           testTotpEntry.issuer,
           testTotpEntry.folderId,
@@ -139,7 +140,7 @@ void main() {
 
       // Act
       final result = await totpEntryRepository.updateTotpEntry(
-        testTotpEntry.id!,
+        testTotpEntry.id,
         testTotpEntry.name,
         testTotpEntry.issuer,
         testTotpEntry.folderId,
@@ -149,7 +150,7 @@ void main() {
       expect(result, false);
       verify(
         mockDatabaseService.updateTotpEntry(
-          testTotpEntry.id!,
+          testTotpEntry.id,
           testTotpEntry.name,
           testTotpEntry.issuer,
           testTotpEntry.folderId,

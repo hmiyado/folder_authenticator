@@ -32,6 +32,7 @@ void main() {
     test('createTotpEntry should update totpEntriesByFolder', () async {
       // Test data
       final totpEntry = TotpEntry(
+        id: 1,
         name: 'Existing Entry 1',
         secret: 'SECRET1',
         issuer: 'Issuer 1',

@@ -1,5 +1,5 @@
 class TotpEntry {
-  final int? id;
+  final int id;
   final String name;
   final String secret;
   final String issuer;
@@ -11,7 +11,7 @@ class TotpEntry {
   final DateTime updatedAt;
 
   TotpEntry({
-    this.id,
+    required this.id,
     required this.name,
     required this.secret,
     this.issuer = '',
