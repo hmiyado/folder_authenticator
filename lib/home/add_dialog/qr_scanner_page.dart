@@ -128,12 +128,9 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
                   .getTotpEntry(entryId);
               if (entry != null) {
                 // Update with additional parameters
-                await ref.read(
+                ref.read(
                   updateTotpEntryProvider(
                     entry,
-                    digits: totpData['digits'],
-                    period: totpData['period'],
-                    algorithm: totpData['algorithm'],
                   ),
                 );
               }

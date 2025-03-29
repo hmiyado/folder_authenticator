@@ -44,25 +44,19 @@ Future<bool> updateTotpEntry(
   Ref ref,
   TotpEntry entry, {
   String? entryName,
-  String? secret,
   String? issuer,
   int? folderId,
-  int? digits,
-  int? period,
-  String? algorithm,
-}) {
+}) async {
   final totpEntryRepository = ref.watch(totpEntryRepositoryProvider);
-  return totpEntryRepository.updateTotpEntry(
-    entry.copyWith(
-      name: entryName,
-      secret: secret,
-      issuer: issuer,
-      folderId: folderId,
-      digits: digits,
-      period: period,
-      algorithm: algorithm,
-    ),
+  final updated = await totpEntryRepository.updateTotpEntry(
+      entry.id!,
+      entryName,
+      issuer,
+      folderId,
   );
+  ref.invalidate(totpEntryProvider(entry));
+  ref.invalidate(folderEntriesProvider(entry.folderId));
+  return updated;
 }
 
 @riverpod

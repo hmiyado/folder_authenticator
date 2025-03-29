@@ -134,13 +134,25 @@ class DatabaseService {
     return await db.insert('totp_entries', map);
   }
 
-  Future<int> updateTotpEntry(TotpEntry entry) async {
+  Future<int> updateTotpEntry(
+    int id,
+    String? name,
+    String? issuer,
+    int? folderId,
+    DateTime updatedAt,
+  ) async {
     final db = await database;
+    final Map<String, dynamic> map = {
+      'updated_at': updatedAt.millisecondsSinceEpoch,
+    };
+    if (name != null) map['name'] = name;
+    if (issuer != null) map['issuer'] = issuer;
+    if (folderId != null) map['folder_id'] = folderId;
     return await db.update(
       'totp_entries',
-      entry.toMap(),
+      map,
       where: 'id = ?',
-      whereArgs: [entry.id],
+      whereArgs: [id],
     );
   }
 

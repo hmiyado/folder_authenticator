@@ -52,8 +52,19 @@ class TotpEntryRepository {
     return id;
   }
 
-  Future<bool> updateTotpEntry(TotpEntry entry) async {
-    final rowsAffected = await _databaseService.updateTotpEntry(entry);
+  Future<bool> updateTotpEntry(
+    int id,
+    String? name,
+    String? issuer,
+    int? folderId,
+  ) async {
+    final rowsAffected = await _databaseService.updateTotpEntry(
+      id,
+      name,
+      issuer,
+      folderId,
+      DateTime.now(),
+    );
     return rowsAffected > 0;
   }
 

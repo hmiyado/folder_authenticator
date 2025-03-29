@@ -95,29 +95,63 @@ void main() {
     test('updateTotpEntry should update entry and return success', () async {
       // Arrange
       when(
-        mockDatabaseService.updateTotpEntry(testTotpEntry),
+        mockDatabaseService.updateTotpEntry(
+          testTotpEntry.id!,
+          testTotpEntry.name,
+          testTotpEntry.issuer,
+          testTotpEntry.folderId,
+          any,
+        ),
       ).thenAnswer((_) async => 1);
 
       // Act
-      final result = await totpEntryRepository.updateTotpEntry(testTotpEntry);
+      final result = await totpEntryRepository.updateTotpEntry(
+        testTotpEntry.id!,
+        testTotpEntry.name,
+        testTotpEntry.issuer,
+        testTotpEntry.folderId,
+      );
 
       // Assert
       expect(result, true);
-      verify(mockDatabaseService.updateTotpEntry(testTotpEntry)).called(1);
+      verify(mockDatabaseService.updateTotpEntry(
+        testTotpEntry.id!,
+        testTotpEntry.name,
+        testTotpEntry.issuer,
+        testTotpEntry.folderId,
+        any,
+      )).called(1);
     });
 
     test('updateTotpEntry should return false when no rows affected', () async {
       // Arrange
       when(
-        mockDatabaseService.updateTotpEntry(testTotpEntry),
+        mockDatabaseService.updateTotpEntry(
+        testTotpEntry.id!,
+        testTotpEntry.name,
+        testTotpEntry.issuer,
+        testTotpEntry.folderId,
+        any,
+        ),
       ).thenAnswer((_) async => 0);
 
       // Act
-      final result = await totpEntryRepository.updateTotpEntry(testTotpEntry);
+      final result = await totpEntryRepository.updateTotpEntry(
+        testTotpEntry.id!,
+        testTotpEntry.name,
+        testTotpEntry.issuer,
+        testTotpEntry.folderId,
+      );
 
       // Assert
       expect(result, false);
-      verify(mockDatabaseService.updateTotpEntry(testTotpEntry)).called(1);
+      verify(mockDatabaseService.updateTotpEntry(
+                testTotpEntry.id!,
+        testTotpEntry.name,
+        testTotpEntry.issuer,
+        testTotpEntry.folderId,
+        any,
+      )).called(1);
     });
 
     test('deleteTotpEntry should delete entry and return success', () async {
