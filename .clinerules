@@ -1,0 +1,167 @@
+# TOTP Folder - Cline Rules
+
+## Role Description
+
+TOTP Folder is a Flutter-based mobile application that allows users to manage their Time-based One-Time Passwords (TOTP) efficiently. The application provides the following key features:
+
+- **Folder Management**: Organize TOTP entries into folders for better organization
+- **Tagging**: Assign tags to TOTP entries for easier categorization
+- **Sorting & Filtering**: Quickly find the TOTP you need with sorting and filtering options
+- **Secure Storage**: Store TOTP secrets securely on the device
+- **User-friendly Interface**: Clean and intuitive UI for managing TOTP entries
+
+The application aims to provide a convenient and secure way for users to manage their two-factor authentication tokens in one place.
+
+## Technical Stacks
+
+### Core Framework
+- **Flutter**: UI toolkit for building natively compiled applications
+- **Dart**: Programming language used with Flutter
+
+### State Management
+- **flutter_riverpod**: State management solution
+- **riverpod_annotation**: Annotations for Riverpod
+- **riverpod_generator**: Code generation for Riverpod
+
+### Database
+- **sqflite**: SQLite plugin for Flutter
+- **path**: File system path manipulation
+
+### TOTP Generation
+- **otp**: Library for generating one-time passwords
+- **base32**: Base32 encoding/decoding
+
+### UI Components
+- **flutter_slidable**: Slidable list items with actions
+- **flutter_staggered_grid_view**: Grid layouts with varying sizes
+- **cupertino_icons**: iOS-style icons
+
+### Testing
+- **flutter_test**: Testing framework for Flutter
+- **mockito**: Mocking library for tests
+- **test**: Dart testing library
+
+### Development Tools
+- **build_runner**: Code generation tool
+- **custom_lint**: Custom lint rules
+- **riverpod_lint**: Lint rules for Riverpod
+- **flutter_lints**: Recommended lint rules for Flutter
+
+## Coding Conventions
+
+### Code Style
+- Use `const` constructors when possible
+- Prefer final fields for class properties
+- Use single quotes for strings
+- Follow Flutter's style guide for widget structure
+
+### Linting Rules
+- Follow the rules defined in `analysis_options.yaml`
+- Key rules include:
+  - `prefer_const_constructors: true`
+  - `prefer_final_fields: true`
+  - `prefer_const_literals_to_create_immutables: true`
+  - `prefer_const_constructors_in_immutables: true`
+  - `prefer_single_quotes: true`
+
+### Naming Conventions
+- **Classes**: PascalCase (e.g., `TotpEntry`, `FolderRepository`)
+- **Variables/Functions**: camelCase (e.g., `totpEntry`, `generateCode()`)
+- **Constants**: camelCase (e.g., `defaultDigits`)
+- **Files**: snake_case (e.g., `totp_entry.dart`, `database_service.dart`)
+
+### Documentation
+- Add comments for complex logic
+- Use dartdoc comments for public APIs
+- Include examples in documentation when helpful
+
+### Architecture Patterns
+- Follow the Repository pattern for data access
+- Use Riverpod providers for state management instead of ViewModels
+- Separate business logic from UI components
+
+## How to Commit
+
+### Development Workflow
+This application is currently in pre-release stage and developed locally.
+
+### Commit Message Format
+Follow the conventional commits format:
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer]
+```
+
+Types:
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code changes that neither fix bugs nor add features
+- `test`: Adding or modifying tests
+- `chore`: Changes to the build process or auxiliary tools
+
+Example:
+```
+feat(auth): add TOTP entry validation
+
+- Add validation for secret format
+- Ensure issuer is properly formatted
+- Add unit tests for validation logic
+
+Closes #123
+```
+
+### Files to Exclude from Version Control
+Refer to `.gitignore` for the complete list. Key exclusions:
+- Generated files (`*.g.dart`, `*.mocks.dart`)
+- Build outputs (`/build/`)
+- IDE-specific files (`.idea/`, `*.iml`)
+- Flutter/Dart generated files (`.dart_tool/`, `.flutter-plugins`)
+
+## Project Structure
+
+### Main Directories
+- `lib/`: Source code
+- `test/`: Test files
+- `android/`: Android-specific code
+- `ios/`: iOS-specific code
+
+### Code Organization
+The codebase is organized by feature:
+
+```
+lib/
+├── home/               # Home screen and related components
+│   ├── folder/         # Folder-related UI components
+│   └── ...
+├── models/             # Data models
+├── repositories/       # Data access layer
+├── services/           # Business logic services
+├── settings/           # Settings screen and related components
+├── totp_detail/        # TOTP detail screen and related components
+└── main.dart           # Application entry point
+```
+
+### Architecture Components
+- **Models**: Data classes (e.g., `TotpEntry`, `Folder`)
+- **Repositories**: Data access layer (e.g., `TotpEntryRepository`, `FolderRepository`)
+- **Services**: Business logic (e.g., `TotpService`, `DatabaseService`)
+- **Providers**: State management (e.g., `homePageProviders`, `totpEntryProviders`)
+- **UI Components**: Widgets and screens (e.g., `HomePage`, `TotpDetailPage`)
+
+### Testing Structure
+Tests mirror the structure of the source code:
+
+```
+test/
+├── home/               # Tests for home feature
+├── repositories/       # Tests for repositories
+└── ...
+```
+
+Each test file should focus on a single component and follow the naming convention `<component_name>_test.dart`.
