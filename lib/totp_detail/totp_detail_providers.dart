@@ -6,6 +6,17 @@ import 'package:totp_folder/repositories/totp_entry_repository.dart';
 part 'totp_detail_providers.g.dart';
 
 @riverpod
+Future<TotpEntry> totpEntry(
+  Ref ref,
+  TotpEntry entry,
+) {
+  return ref.watch(totpEntryRepositoryProvider).getTotpEntry(entry.id!)
+  .then((fetchedEntry) {
+    return fetchedEntry ?? entry;
+  }); 
+}
+
+@riverpod
 Future<bool> updateTotpEntry(
   Ref ref,
   TotpEntry entry, {

@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/totp_entry_card_providers.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/totp_detail/totp_detail_providers.dart';
-import 'package:totp_folder/totp_detail/totp_detail_viewmodel.dart';
 
 class TotpDetailPage extends ConsumerStatefulWidget {
   final TotpEntry entry;
@@ -23,18 +22,16 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
   late TextEditingController periodController;
   late String algorithm;
   bool isEditing = false;
-  late TotpDetailViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
-    _viewModel = ref.read(totpDetailViewModelProvider(widget.entry));
-    nameController = TextEditingController(text: _viewModel.name);
-    secretController = TextEditingController(text: _viewModel.secret);
-    issuerController = TextEditingController(text: _viewModel.issuer);
-    digitsController = TextEditingController(text: _viewModel.digits.toString());
-    periodController = TextEditingController(text: _viewModel.period.toString());
-    algorithm = _viewModel.algorithm;
+    nameController = TextEditingController(text: '');
+    secretController = TextEditingController(text: '');
+    issuerController = TextEditingController(text: '');
+    digitsController = TextEditingController(text: '');
+    periodController = TextEditingController(text: '');
+    algorithm = widget.entry.algorithm;
   }
   
   @override
@@ -49,9 +46,26 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final totpEntry = ref.watch(totpEntryProvider(widget.entry));
     final totpCode = ref.read(generateTotpProvider(widget.entry));
     final remainingSeconds = ref.read(remainingSecondsProvider(widget.entry));
     final progressValue = ref.read(progressValueProvider(widget.entry));
+
+    totpEntry.when(data: (data) => {
+      nameController.text = data.name,
+      secretController.text = data.secret,
+      issuerController.text = data.issuer,
+      digitsController.text = data.digits.toString(),
+      periodController.text = data.period.toString(),
+      algorithm = data.algorithm,
+    }, error: (error, stack) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error loading TOTP entry: $error')),
+      );
+    }, loading: () {
+      // Optionally show a loading indicator
+      return const Center(child: CircularProgressIndicator());
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -114,12 +128,12 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                 ),
               ),
               const Divider(height: 32),
-              _buildInfoRow('Name', _viewModel.name),
-              _buildInfoRow('Issuer', _viewModel.issuer),
-              _buildInfoRow('Secret', _viewModel.secret, obscure: true),
-              _buildInfoRow('Digits', _viewModel.digits.toString()),
-              _buildInfoRow('Period', '${_viewModel.period} seconds'),
-              _buildInfoRow('Algorithm', _viewModel.algorithm),
+              _buildInfoRow('Name', nameController.text),
+              _buildInfoRow('Issuer', issuerController.text),
+              _buildInfoRow('Secret', secretController.text, obscure: true),
+              _buildInfoRow('Digits', digitsController.text.toString()),
+              _buildInfoRow('Period', '${periodController.text} seconds'),
+              _buildInfoRow('Algorithm', algorithm),
             ] else ...[
               TextField(
                 controller: nameController,
@@ -229,7 +243,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Secret Key'),
-          content: Text(_viewModel.secret),
+          content: Text(widget.entry.secret),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -237,7 +251,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
             ),
             TextButton(
               onPressed: () {
-                Clipboard.setData(ClipboardData(text: _viewModel.secret));
+                Clipboard.setData(ClipboardData(text: widget.entry.secret));
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Secret copied to clipboard')),
                 );
@@ -257,7 +271,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
       entryName: nameController.text,
       secret: secretController.text,
       issuer: issuerController.text,
-      folderId: _viewModel.folderId,
+      folderId: widget.entry.folderId,
       digits: int.tryParse(digitsController.text),
       period: int.tryParse(periodController.text),
       algorithm: algorithm,
@@ -278,7 +292,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Delete TOTP Entry'),
-          content: Text('Are you sure you want to delete "${_viewModel.name}"?'),
+          content: Text('Are you sure you want to delete "${nameController.text}"?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
