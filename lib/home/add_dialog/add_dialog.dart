@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/add_dialog/add_folder_dialog.dart';
 import 'package:totp_folder/home/add_dialog/add_totp_entry_dialog.dart';
 import 'package:totp_folder/home/home_page_providers.dart';
-import 'package:totp_folder/home/qr_scanner_page.dart';
+import 'package:totp_folder/home/add_dialog/qr_scanner_page.dart';
 import 'package:totp_folder/models/folder.dart';
 
 class AddDialog extends ConsumerStatefulWidget {
