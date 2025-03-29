@@ -286,7 +286,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
             ),
             TextButton(
               onPressed: () {
-                _viewModel.deleteTotpEntry();
+                ref.read(deleteTotpEntryProvider(widget.entry));
                 Navigator.pop(context); // Close dialog
                 Navigator.pop(context); // Return to previous screen
               },

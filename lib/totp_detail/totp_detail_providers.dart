@@ -30,3 +30,12 @@ Future<bool> updateTotpEntry(
     ),
   );
 }
+
+@riverpod
+Future<bool> deleteTotpEntry(
+  Ref ref,
+  TotpEntry entry,
+) {
+  final totpEntryRepository = ref.watch(totpEntryRepositoryProvider);
+  return totpEntryRepository.deleteTotpEntry(entry.id!);
+}

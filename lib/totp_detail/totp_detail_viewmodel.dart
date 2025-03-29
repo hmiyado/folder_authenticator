@@ -17,12 +17,6 @@ class TotpDetailViewModel {
 
   TotpDetailViewModel(this.entry, this._totpEntryRepository, this._totpService);
 
-  // Delete the TOTP entry
-  Future<bool> deleteTotpEntry() async {
-    if (entry.id == null) return false;
-    return await _totpEntryRepository.deleteTotpEntry(entry.id!);
-  }
-
   // Validate a TOTP secret
   bool isValidSecret(String secret) {
     return _totpService.isValidSecret(secret);
