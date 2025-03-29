@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/home/add_dialog/add_dialog.dart';
 import 'package:totp_folder/home/folder/folder_view.dart';
 import 'package:totp_folder/settings/settings_page.dart';
 import 'package:totp_folder/home/home_page_providers.dart';
@@ -43,14 +42,6 @@ class _HomePageState extends ConsumerState<HomePage> {
         ],
       ),
       body: FolderView(folderId: currentFolder.id),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(context: context, builder: (context) {
-            return const AddDialog();
-          });
-        },
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

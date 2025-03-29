@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:totp_folder/home/add_dialog/add_dialog.dart';
 import 'package:totp_folder/home/folder/folder_entries_provider.dart';
 import 'package:totp_folder/home/totp_entry_card.dart';
 import 'package:totp_folder/models/folder.dart';
@@ -12,7 +13,7 @@ class FolderView extends ConsumerWidget {
     required this.folderId,
   });
   
-  Widget _buildFolderPathText(List<Folder> folderPath) {
+  Widget _buildFolderPathText(BuildContext context, List<Folder> folderPath) {
     const textStyle = TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 16,
@@ -33,12 +34,22 @@ class FolderView extends ConsumerWidget {
     
     return Row(
       children: [
-        const Icon(Icons.folder, size: 20),
-        const SizedBox(width: 8),
-        Text(
-          folderPath.map((folder) => folder.name).join(' / '),
-          style: textStyle,
-        ),
+      const Icon(Icons.folder, size: 20),
+      const SizedBox(width: 8),
+      Text(
+        folderPath.map((folder) => folder.name).join(' / '),
+        style: textStyle,
+      ),
+      const Spacer(),
+      IconButton(
+        icon: const Icon(Icons.add),
+        onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => const AddDialog(),
+        );
+        },
+      ),
       ],
     );
   }
@@ -49,7 +60,7 @@ class FolderView extends ConsumerWidget {
 
     return allFolderEntries.when(
       data: (allFolderEntries) {
-        return _buildFolderEntries(allFolderEntries);
+        return _buildFolderEntries(context, allFolderEntries);
       },
       error: (error, stack) {
         return Center(
@@ -62,7 +73,7 @@ class FolderView extends ConsumerWidget {
     );
   }
 
-  Widget _buildFolderEntries(List<FolderEntries> allFolderEntries) {
+  Widget _buildFolderEntries(BuildContext context, List<FolderEntries> allFolderEntries) {
     if (allFolderEntries.isEmpty) {
       return const Center(
         child: Text('No TOTP entries or subfolders found'),
@@ -77,7 +88,7 @@ class FolderView extends ConsumerWidget {
             children: allFolderEntries.map((folderEntries){
               final header = Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 8.0),
-                  child: _buildFolderPathText(folderEntries.folderPath),
+                  child: _buildFolderPathText(context, folderEntries.folderPath),
                 );
 
               if (folderEntries.entries.isEmpty) {
