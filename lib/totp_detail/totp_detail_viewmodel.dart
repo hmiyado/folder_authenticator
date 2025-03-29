@@ -17,30 +17,6 @@ class TotpDetailViewModel {
 
   TotpDetailViewModel(this.entry, this._totpEntryRepository, this._totpService);
 
-  // Update the TOTP entry
-  Future<bool> updateTotpEntry({
-    String? name,
-    String? secret,
-    String? issuer,
-    int? folderId,
-    int? digits,
-    int? period,
-    String? algorithm,
-  }) async {
-    final updatedEntry = entry.copyWith(
-      name: name,
-      secret: secret,
-      issuer: issuer,
-      folderId: folderId,
-      digits: digits,
-      period: period,
-      algorithm: algorithm,
-      updatedAt: DateTime.now(),
-    );
-
-    return await _totpEntryRepository.updateTotpEntry(updatedEntry);
-  }
-
   // Delete the TOTP entry
   Future<bool> deleteTotpEntry() async {
     if (entry.id == null) return false;
