@@ -48,15 +48,15 @@ class FolderRepository {
     return rowsAffected > 0;
   }
 
-  // Get the full path of a folder (including all parent folders)
+  /// Get the full path of a folder (including all parent folders)
   Future<List<Folder>> getFolderPath(int folderId) async {
     List<Folder> path = [];
     Folder? current = await getFolder(folderId);
     
     while (current != null) {
       path.insert(0, current);
-      if (current.parentId == null) break;
-      current = await getFolder(current.parentId!);
+      if (current.id == Folder.rootFolderId) break;
+      current = await getFolder(current.parentId);
     }
     
     return path;

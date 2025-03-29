@@ -108,6 +108,9 @@ class DatabaseService {
   }
 
   Future<Folder?> getFolder(int id) async {
+    if (id == Folder.rootFolderId) {
+      return Folder.rootFolder();
+    }
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'folders',

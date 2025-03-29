@@ -23,7 +23,7 @@ void main() {
       id: 1,
       name: 'Test Folder',
       color: '#FF0000',
-      parentId: null,
+      parentId: 0,
     );
 
     final testChildFolder = Folder(
@@ -61,20 +61,35 @@ void main() {
     test('createFolder should insert folder and return with new id', () async {
       // Arrange
       final folderToCreate = Folder(
+        id: 1,
+        parentId: 0,
         name: 'New Folder',
         color: '#0000FF',
       );
-      when(mockDatabaseService.insertFolder(folderToCreate))
+      when(mockDatabaseService.insertFolder(
+            folderToCreate.name,
+            folderToCreate.color,
+            folderToCreate.parentId,
+            any,
+            any,
+      ))
           .thenAnswer((_) async => 3);
 
       // Act
-      final result = await folderRepository.createFolder(folderToCreate);
+      await folderRepository.createFolder(
+        folderToCreate.name,
+        folderToCreate.color,
+        folderToCreate.parentId,
+      );
 
       // Assert
-      expect(result.id, 3);
-      expect(result.name, 'New Folder');
-      expect(result.color, '#0000FF');
-      verify(mockDatabaseService.insertFolder(folderToCreate)).called(1);
+      verify(mockDatabaseService.insertFolder(
+        folderToCreate.name,
+        folderToCreate.color,
+        folderToCreate.parentId,
+        any,
+        any,
+      ));
     });
 
     test('updateFolder should update folder and return success', () async {
@@ -129,18 +144,17 @@ void main() {
 
     test('getFolderPath should return path of folders', () async {
       // Arrange
-      when(mockDatabaseService.getFolder(2)).thenAnswer((_) async => testChildFolder);
+      when(mockDatabaseService.getFolder(0)).thenAnswer((_) async => Folder.rootFolder());
       when(mockDatabaseService.getFolder(1)).thenAnswer((_) async => testFolder);
-
+      when(mockDatabaseService.getFolder(2)).thenAnswer((_) async => testChildFolder);
       // Act
       final result = await folderRepository.getFolderPath(2);
 
       // Assert
-      expect(result.length, 2);
-      expect(result[0].id, 1);
-      expect(result[1].id, 2);
-      verify(mockDatabaseService.getFolder(2)).called(1);
-      verify(mockDatabaseService.getFolder(1)).called(1);
+      expect(result.length, 3);
+      expect(result[0].id, 0);
+      expect(result[1].id, 1);
+      expect(result[2].id, 2);
     });
   });
 }

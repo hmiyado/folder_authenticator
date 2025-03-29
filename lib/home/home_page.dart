@@ -43,7 +43,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      body: FolderView(folderId: currentFolder.id!),
+      body: FolderView(folderId: currentFolder.id),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddDialog(context);
