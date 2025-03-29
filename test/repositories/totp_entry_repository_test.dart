@@ -70,7 +70,7 @@ void main() {
           folderId: 2,
         );
         when(
-          mockDatabaseService.insertTotpEntry(any, any, any, any),
+          mockDatabaseService.insertTotpEntry(any, any, any, any, any, any, any),
         ).thenAnswer((_) async => 3);
 
         // Act
@@ -78,6 +78,9 @@ void main() {
           entryToCreate.name,
           entryToCreate.secret,
           entryToCreate.issuer,
+          entryToCreate.digits,
+          entryToCreate.period,
+          entryToCreate.algorithm,
           entryToCreate.folderId,
         );
 
@@ -87,6 +90,9 @@ void main() {
             entryToCreate.name,
             entryToCreate.secret,
             entryToCreate.issuer,
+            entryToCreate.digits,
+            entryToCreate.period,
+            entryToCreate.algorithm,
             entryToCreate.folderId,
           ),
         ).called(1);

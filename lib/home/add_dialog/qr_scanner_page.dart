@@ -108,6 +108,9 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
                 totpData['name'],
                 totpData['secret'],
                 totpData['issuer'],
+                totpData['digits'],
+                totpData['period'],
+                totpData['algorithm'],
               ),
             );
 

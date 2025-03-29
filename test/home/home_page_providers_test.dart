@@ -41,7 +41,7 @@ void main() {
       const int newEntryId = 2;
 
       when(
-        mockTotpEntryRepository.createTotpEntry(any, any, any, any),
+        mockTotpEntryRepository.createTotpEntry(any, any, any, any, any, any, any),
       ).thenAnswer((_) async => newEntryId);
 
       // Act - create a new entry
@@ -51,6 +51,9 @@ void main() {
           totpEntry.name,
           totpEntry.secret,
           totpEntry.issuer,
+          totpEntry.digits,
+          totpEntry.period,
+          totpEntry.algorithm,
         ),
       );
 
@@ -59,6 +62,9 @@ void main() {
           totpEntry.name,
           totpEntry.secret,
           totpEntry.issuer,
+          totpEntry.digits,
+          totpEntry.period,
+          totpEntry.algorithm,
           totpEntry.folderId,
         ),
       );

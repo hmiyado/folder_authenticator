@@ -51,6 +51,9 @@ class _AddTotpEntryDialogState extends ConsumerState<AddTotpEntryDialog> {
                 nameController.text,
                 secretController.text,
                 issuerController.text,
+                null,
+                null,
+                null,
               ),
             );
             Navigator.pop(context);

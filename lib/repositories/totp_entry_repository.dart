@@ -41,12 +41,18 @@ class TotpEntryRepository {
     String name,
     String secret,
     String issuer,
+    int? digits,
+    int? period,
+    String? algorithm,
     int folderId,
   ) async {
     final id = await _databaseService.insertTotpEntry(
       name,
       secret,
       issuer,
+      digits ?? 6,
+      period ?? 30,
+      algorithm ?? 'SHA1',
       folderId,
     );
     return id;
