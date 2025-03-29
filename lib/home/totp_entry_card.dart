@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/totp_detail/totp_detail_page.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/home/totp_entry_card_providers.dart';
+import 'package:totp_folder/totp_detail/totp_detail_providers.dart';
 
 class TotpEntryCard extends ConsumerStatefulWidget {
   final TotpEntry entry;
@@ -23,14 +24,36 @@ class _TotpEntryCardState extends ConsumerState<TotpEntryCard> {
     // Watch the providers to get the latest values
     final totpCode = ref.watch(generateTotpProvider(widget.entry));
     final remainingSeconds = ref.watch(remainingSecondsProvider(widget.entry));
-    final name = ref.watch(entryNameProvider(widget.entry));
-    final issuer = ref.watch(entryIssuerProvider(widget.entry));
-    
+    final totpEntry = ref.watch(totpEntryProvider(widget.entry));
+
+    return totpEntry.when(
+      data: (data) => _buildContent(context, data, totpCode, remainingSeconds), 
+      error: (error, stack) => const Card(
+          margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: ListTile(
+            title: Text('Error loading TOTP entry'),
+          ),
+      ),
+      loading: () => const Card(
+        margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: ListTile(
+          title: Center(child: CircularProgressIndicator()),
+        ),
+      ),
+      );
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    TotpEntry totpEntry,
+    String totpCode,
+    int remainingSeconds,
+  ){ 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: ListTile(
-        title: Text(name),
-        subtitle: Text(issuer),
+        title: Text(totpEntry.name),
+        subtitle: Text(totpEntry.issuer),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,

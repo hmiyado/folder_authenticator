@@ -27,15 +27,3 @@ double progressValue(Ref ref, TotpEntry entry) {
   final remainingSecs = ref.watch(remainingSecondsProvider(entry));
   return remainingSecs / entry.period;
 }
-
-/// Provider for entry name
-@riverpod
-String entryName(Ref ref, TotpEntry entry) {
-  return entry.name;
-}
-
-/// Provider for entry issuer
-@riverpod
-String entryIssuer(Ref ref, TotpEntry entry) {
-  return entry.issuer;
-}
