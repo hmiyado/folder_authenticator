@@ -4,7 +4,9 @@ import 'package:totp_folder/home/folder/subfolders_provider.dart';
 import 'package:totp_folder/home/home_page_providers.dart';
 
 class AddFolderDialog extends ConsumerStatefulWidget {
-  const AddFolderDialog({super.key});
+  final int folderId;
+
+  const AddFolderDialog({super.key, required this.folderId});
 
   @override
   ConsumerState<AddFolderDialog> createState() => _AddFolderDialogState();
@@ -13,7 +15,6 @@ class AddFolderDialog extends ConsumerStatefulWidget {
 class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
   @override
   Widget build(BuildContext context) {
-    final currentFolder = ref.watch(currentFolderProvider);
     final nameController = TextEditingController();
     final colorController = TextEditingController(text: '#3498db');
 
@@ -43,7 +44,7 @@ class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
               // Create the subfolder
               final folderFuture = ref.read(
                 createSubFolderProvider(
-                  currentFolder.id,
+                  widget.folderId,
                   nameController.text,
                   colorController.text,
                 ),
@@ -54,7 +55,7 @@ class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
                 data: (folder) {
                   // Invalidate the subfolders provider to refresh the UI
                   ref.invalidate(
-                    subfoldersProvider(parentId: currentFolder.id),
+                    subfoldersProvider(parentId: widget.folderId),
                   );
 
                   // Show success message

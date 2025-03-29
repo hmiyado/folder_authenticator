@@ -63,7 +63,7 @@ class _AddDialogState extends ConsumerState<AddDialog> {
     showDialog(
       context: context,
       builder: (context) {
-        return const AddFolderDialog();
+        return AddFolderDialog(folderId: widget.folder.id);
       },
     );
   }
