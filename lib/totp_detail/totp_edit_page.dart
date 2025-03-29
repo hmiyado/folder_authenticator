@@ -14,34 +14,19 @@ class TotpEditPage extends ConsumerStatefulWidget {
 
 class _TotpEditPageState extends ConsumerState<TotpEditPage> {
   late TextEditingController nameController;
-  late TextEditingController secretController;
   late TextEditingController issuerController;
-  late TextEditingController digitsController;
-  late TextEditingController periodController;
-  late String algorithm;
 
   @override
   void initState() {
     super.initState();
     nameController = TextEditingController(text: widget.entry.name);
-    secretController = TextEditingController(text: widget.entry.secret);
     issuerController = TextEditingController(text: widget.entry.issuer);
-    digitsController = TextEditingController(
-      text: widget.entry.digits.toString(),
-    );
-    periodController = TextEditingController(
-      text: widget.entry.period.toString(),
-    );
-    algorithm = widget.entry.algorithm;
   }
 
   @override
   void dispose() {
     nameController.dispose();
-    secretController.dispose();
     issuerController.dispose();
-    digitsController.dispose();
-    periodController.dispose();
     super.dispose();
   }
 
@@ -55,19 +40,9 @@ class _TotpEditPageState extends ConsumerState<TotpEditPage> {
         if (nameController.text != data.name) {
           nameController.text = data.name;
         }
-        if (secretController.text != data.secret) {
-          secretController.text = data.secret;
-        }
         if (issuerController.text != data.issuer) {
           issuerController.text = data.issuer;
         }
-        if (digitsController.text != data.digits.toString()) {
-          digitsController.text = data.digits.toString();
-        }
-        if (periodController.text != data.period.toString()) {
-          periodController.text = data.period.toString();
-        }
-        algorithm = data.algorithm;
       },
       error: (error, stack) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -97,40 +72,30 @@ class _TotpEditPageState extends ConsumerState<TotpEditPage> {
               decoration: const InputDecoration(labelText: 'Name'),
             ),
             TextField(
-              controller: secretController,
+              controller: TextEditingController(text: widget.entry.secret),
               decoration: const InputDecoration(labelText: 'Secret'),
+              enabled: false,
             ),
             TextField(
               controller: issuerController,
               decoration: const InputDecoration(labelText: 'Issuer'),
             ),
             TextField(
-              controller: digitsController,
+              controller: TextEditingController(text: widget.entry.digits.toString()),
               decoration: const InputDecoration(labelText: 'Digits'),
               keyboardType: TextInputType.number,
+              enabled: false,
             ),
             TextField(
-              controller: periodController,
+              controller: TextEditingController(text: widget.entry.period.toString()),
               decoration: const InputDecoration(labelText: 'Period (seconds)'),
               keyboardType: TextInputType.number,
+              enabled: false,
             ),
-            DropdownButtonFormField<String>(
-              value: algorithm,
+            TextField(
+              controller: TextEditingController(text: widget.entry.algorithm),
               decoration: const InputDecoration(labelText: 'Algorithm'),
-              items:
-                  ['SHA1', 'SHA256', 'SHA512'].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    algorithm = newValue;
-                  });
-                }
-              },
+              enabled: false,
             ),
           ],
         ),
@@ -143,12 +108,8 @@ class _TotpEditPageState extends ConsumerState<TotpEditPage> {
       updateTotpEntryProvider(
         widget.entry,
         entryName: nameController.text,
-        secret: secretController.text,
         issuer: issuerController.text,
         folderId: widget.entry.folderId,
-        digits: int.tryParse(digitsController.text),
-        period: int.tryParse(periodController.text),
-        algorithm: algorithm,
       ),
     );
 
