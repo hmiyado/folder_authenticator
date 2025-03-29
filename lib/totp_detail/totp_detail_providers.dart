@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:totp_folder/home/folder/folder_entries_provider.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/repositories/totp_entry_repository.dart';
 import 'package:totp_folder/services/totp_service.dart';
@@ -67,5 +68,6 @@ Future<bool> updateTotpEntry(
 @riverpod
 Future<bool> deleteTotpEntry(Ref ref, TotpEntry entry) {
   final totpEntryRepository = ref.watch(totpEntryRepositoryProvider);
+  ref.invalidate(folderEntriesProvider(entry.folderId));
   return totpEntryRepository.deleteTotpEntry(entry.id!);
 }
