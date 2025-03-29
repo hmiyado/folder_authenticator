@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/totp_entry_card_providers.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/totp_detail/totp_detail_providers.dart';
+import 'package:totp_folder/totp_detail/totp_edit_page.dart';
 
 class TotpDetailPage extends ConsumerStatefulWidget {
   final TotpEntry entry;
@@ -15,78 +16,57 @@ class TotpDetailPage extends ConsumerStatefulWidget {
 }
 
 class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
-  late TextEditingController nameController;
-  late TextEditingController secretController;
-  late TextEditingController issuerController;
-  late TextEditingController digitsController;
-  late TextEditingController periodController;
-  late String algorithm;
-  bool isEditing = false;
-
-  @override
-  void initState() {
-    super.initState();
-    nameController = TextEditingController(text: '');
-    secretController = TextEditingController(text: '');
-    issuerController = TextEditingController(text: '');
-    digitsController = TextEditingController(text: '');
-    periodController = TextEditingController(text: '');
-    algorithm = widget.entry.algorithm;
-  }
-  
-  @override
-  void dispose() {
-    nameController.dispose();
-    secretController.dispose();
-    issuerController.dispose();
-    digitsController.dispose();
-    periodController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final totpEntry = ref.watch(totpEntryProvider(widget.entry));
-    final totpCode = ref.read(generateTotpProvider(widget.entry));
-    final remainingSeconds = ref.read(remainingSecondsProvider(widget.entry));
-    final progressValue = ref.read(progressValueProvider(widget.entry));
+    final totpCode = ref.watch(generateTotpProvider(widget.entry));
+    final remainingSeconds = ref.watch(remainingSecondsProvider(widget.entry));
+    final progressValue = ref.watch(progressValueProvider(widget.entry));
 
-    totpEntry.when(data: (data) => {
-      nameController.text = data.name,
-      secretController.text = data.secret,
-      issuerController.text = data.issuer,
-      digitsController.text = data.digits.toString(),
-      periodController.text = data.period.toString(),
-      algorithm = data.algorithm,
-    }, error: (error, stack) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error loading TOTP entry: $error')),
-      );
-    }, loading: () {
-      // Optionally show a loading indicator
-      return const Center(child: CircularProgressIndicator());
-    });
+    return totpEntry.when(
+      data: (data) => _buildContent(context, data, totpCode, remainingSeconds, progressValue),
+      error: (error, stack) {
+        return Scaffold(
+          appBar: AppBar(title: const Text('TOTP Details')),
+          body: Center(
+            child: Text('Error loading TOTP entry: $error'),
+          ),
+        );
+      },
+      loading: () => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+    );
+  }
+
+  Widget _buildContent(
+    BuildContext context, 
+    TotpEntry data, 
+    String totpCode, 
+    int remainingSeconds, 
+    double progressValue
+  ) {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit TOTP' : 'TOTP Details'),
+        title: const Text('TOTP Details'),
         actions: [
           IconButton(
-            icon: Icon(isEditing ? Icons.save : Icons.edit),
+            icon: const Icon(Icons.edit),
             onPressed: () {
-              if (isEditing) {
-                _saveChanges();
-              } else {
-                setState(() {
-                  isEditing = true;
-                });
-              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TotpEditPage(entry: data),
+                ),
+              );
             },
           ),
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
-              _showDeleteConfirmation();
+              _showDeleteConfirmation(data);
             },
           ),
         ],
@@ -96,97 +76,43 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (!isEditing) ...[
-              Center(
-                child: Column(
-                  children: [
-                    Text(
-                      totpCode,
-                      style: const TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 4,
-                      ),
+            Center(
+              child: Column(
+                children: [
+                  Text(
+                    totpCode,
+                    style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 4,
                     ),
-                    const SizedBox(height: 8),
-                    LinearProgressIndicator(
-                      value: progressValue,
-                    ),
-                    Text('Refreshes in $remainingSeconds seconds'),
-                    const SizedBox(height: 16),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.copy),
-                      label: const Text('Copy Code'),
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: totpCode));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Code copied to clipboard')),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 8),
+                  LinearProgressIndicator(
+                    value: progressValue,
+                  ),
+                  Text('Refreshes in $remainingSeconds seconds'),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.copy),
+                    label: const Text('Copy Code'),
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: totpCode));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Code copied to clipboard')),
+                      );
+                    },
+                  ),
+                ],
               ),
-              const Divider(height: 32),
-              _buildInfoRow('Name', nameController.text),
-              _buildInfoRow('Issuer', issuerController.text),
-              _buildInfoRow('Secret', secretController.text, obscure: true),
-              _buildInfoRow('Digits', digitsController.text.toString()),
-              _buildInfoRow('Period', '${periodController.text} seconds'),
-              _buildInfoRow('Algorithm', algorithm),
-            ] else ...[
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                ),
-              ),
-              TextField(
-                controller: secretController,
-                decoration: const InputDecoration(
-                  labelText: 'Secret',
-                ),
-              ),
-              TextField(
-                controller: issuerController,
-                decoration: const InputDecoration(
-                  labelText: 'Issuer',
-                ),
-              ),
-              TextField(
-                controller: digitsController,
-                decoration: const InputDecoration(
-                  labelText: 'Digits',
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              TextField(
-                controller: periodController,
-                decoration: const InputDecoration(
-                  labelText: 'Period (seconds)',
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              DropdownButtonFormField<String>(
-                value: algorithm,
-                decoration: const InputDecoration(
-                  labelText: 'Algorithm',
-                ),
-                items: ['SHA1', 'SHA256', 'SHA512'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    setState(() {
-                      algorithm = newValue;
-                    });
-                  }
-                },
-              ),
-            ],
+            ),
+            const Divider(height: 32),
+            _buildInfoRow('Name', data.name),
+            _buildInfoRow('Issuer', data.issuer),
+            _buildInfoRow('Secret', data.secret, obscure: true),
+            _buildInfoRow('Digits', data.digits.toString()),
+            _buildInfoRow('Period', '${data.period} seconds'),
+            _buildInfoRow('Algorithm', data.algorithm),
           ],
         ),
       ),
@@ -216,7 +142,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                       IconButton(
                         icon: const Icon(Icons.visibility),
                         onPressed: () {
-                          _showSecret();
+                          _showSecret(widget.entry.secret);
                         },
                       ),
                       IconButton(
@@ -237,13 +163,13 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
     );
   }
 
-  void _showSecret() {
+  void _showSecret(String secret) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('Secret Key'),
-          content: Text(widget.entry.secret),
+          content: Text(secret),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -251,7 +177,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
             ),
             TextButton(
               onPressed: () {
-                Clipboard.setData(ClipboardData(text: widget.entry.secret));
+                Clipboard.setData(ClipboardData(text: secret));
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Secret copied to clipboard')),
                 );
@@ -265,34 +191,13 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
     );
   }
 
-  void _saveChanges() {
-    ref.read(updateTotpEntryProvider(
-      widget.entry,
-      entryName: nameController.text,
-      secret: secretController.text,
-      issuer: issuerController.text,
-      folderId: widget.entry.folderId,
-      digits: int.tryParse(digitsController.text),
-      period: int.tryParse(periodController.text),
-      algorithm: algorithm,
-    ));
-    
-    setState(() {
-      isEditing = false;
-    });
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('TOTP entry updated')),
-    );
-  }
-
-  void _showDeleteConfirmation() {
+  void _showDeleteConfirmation(TotpEntry entry) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('Delete TOTP Entry'),
-          content: Text('Are you sure you want to delete "${nameController.text}"?'),
+          content: Text('Are you sure you want to delete "${entry.name}"?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -300,7 +205,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
             ),
             TextButton(
               onPressed: () {
-                ref.read(deleteTotpEntryProvider(widget.entry));
+                ref.read(deleteTotpEntryProvider(entry));
                 Navigator.pop(context); // Close dialog
                 Navigator.pop(context); // Return to previous screen
               },
