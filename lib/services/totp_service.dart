@@ -2,10 +2,14 @@ import 'dart:async';
 import 'package:base32/base32.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp/otp.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:totp_folder/models/totp_entry.dart';
 
+part 'totp_service.g.dart';
+
 // Provider for the TotpService
-final totpServiceProvider = Provider<TotpService>((ref) {
+@riverpod
+TotpService totpService(Ref ref) {
   // Set up timer to update values every 500ms
   final timer = Timer.periodic(const Duration(milliseconds: 500), (_) {
     ref.invalidateSelf(); // Invalidate the provider to trigger a rebuild
@@ -17,7 +21,7 @@ final totpServiceProvider = Provider<TotpService>((ref) {
   });
 
   return TotpService();
-});
+}
 
 class TotpService {
   // Generate a TOTP code based on the entry's parameters
