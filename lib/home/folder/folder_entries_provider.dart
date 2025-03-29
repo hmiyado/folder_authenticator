@@ -53,11 +53,7 @@ List<FolderEntries> allFolderEntries(Ref ref,int parentFolderId) {
   
   // Get entries for each subfolder
   for (final folder in subfolders) {
-    final folderId = folder.id;
-    if (folderId == null) {
-      continue;
-    }
-    final subfolderEntries = ref.read(folderEntriesProvider(folderId));
+    final subfolderEntries = ref.read(folderEntriesProvider(folder.id));
     if (subfolderEntries.entries.isNotEmpty) {
       result.add(subfolderEntries);
     }

@@ -99,7 +99,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QrScannerPage(folderId: currentFolder.id!),
+        builder: (context) => QrScannerPage(folderId: currentFolder.id),
       ),
     );
   }
@@ -141,7 +141,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 if (nameController.text.isNotEmpty) {
                   // Create the subfolder
                   final folderFuture = ref.read(createSubFolderProvider(
-                    currentFolder.id!,
+                    currentFolder.id,
                     nameController.text,
                     colorController.text,
                   ));
@@ -150,7 +150,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   folderFuture.when(
                     data: (folder) {
                       // Invalidate the subfolders provider to refresh the UI
-                      ref.invalidate(subfoldersProvider(parentId: currentFolder.id!));
+                      ref.invalidate(subfoldersProvider(parentId: currentFolder.id));
                       
                       // Show success message
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -220,7 +220,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               onPressed: () {
                 final currentFolder = ref.watch(currentFolderProvider);
                 ref.read(createTotpEntryProvider(
-                  currentFolder.id!,
+                  currentFolder.id,
                   nameController.text,
                   secretController.text,
                   issuerController.text

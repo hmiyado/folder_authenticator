@@ -35,15 +35,15 @@ void main() {
 
     test('getFolders should return folders from database service', () async {
       // Arrange
-      when(mockDatabaseService.getFolders(parentId: 1))
+      when(mockDatabaseService.getFolders(1))
           .thenAnswer((_) async => [testChildFolder]);
 
       // Act
-      final result = await folderRepository.getFolders(parentId: 1);
+      final result = await folderRepository.getFolders(1);
 
       // Assert
       expect(result, [testChildFolder]);
-      verify(mockDatabaseService.getFolders(parentId: 1)).called(1);
+      verify(mockDatabaseService.getFolders(1)).called(1);
     });
 
     test('getFolder should return a folder from database service', () async {
