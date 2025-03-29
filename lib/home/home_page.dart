@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/folder/folder_view.dart';
+import 'package:totp_folder/home/qr_scanner_page.dart';
 import 'package:totp_folder/settings/settings_page.dart';
 import 'package:totp_folder/home/home_page_providers.dart';
 
@@ -63,10 +64,18 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.key),
-                title: const Text('Add TOTP'),
+                title: const Text('Add TOTP Manually'),
                 onTap: () {
                   Navigator.pop(context);
                   _showAddTotpDialog(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.qr_code_scanner),
+                title: const Text('Scan QR Code'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _openQrScanner(context);
                 },
               ),
               ListTile(
@@ -81,6 +90,16 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         );
       },
+    );
+  }
+
+  void _openQrScanner(BuildContext context) {
+    final currentFolder = ref.watch(currentFolderProvider);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QrScannerPage(folderId: currentFolder.id!),
+      ),
     );
   }
 
