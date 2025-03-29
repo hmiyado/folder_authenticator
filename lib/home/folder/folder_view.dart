@@ -13,22 +13,33 @@ class FolderView extends ConsumerWidget {
   });
   
   Widget _buildFolderPathText(List<Folder> folderPath) {
+    const textStyle = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+    );
+    
     if (folderPath.isEmpty) {
-      return const Text(
-        'Root',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
+      return const Row(
+        children: [
+          Icon(Icons.folder, size: 20),
+          SizedBox(width: 8),
+          Text(
+            'Root',
+            style: textStyle,
+          ),
+        ],
       );
     }
     
-    return Text(
-      folderPath.map((folder) => folder.name).join(' / '),
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
-      ),
+    return Row(
+      children: [
+        const Icon(Icons.folder, size: 20),
+        const SizedBox(width: 8),
+        Text(
+          folderPath.map((folder) => folder.name).join(' / '),
+          style: textStyle,
+        ),
+      ],
     );
   }
 
