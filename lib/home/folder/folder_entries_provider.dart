@@ -21,15 +21,9 @@ class FolderEntries {
 
 // Provider for folder entries (path + entries)
 @riverpod
-FolderEntries folderEntries(Ref ref, int folderId) {
-  final folderPath = ref.watch(folderPathProvider(folderId: folderId)).valueOrNull;
-  final entries = ref.watch(totpEntriesByFolderProvider(folderId: folderId)).valueOrNull;
-  if (folderPath == null || entries == null) {
-    return FolderEntries(
-      folderPath: [],
-      entries: [],
-    );
-  }
+Future<FolderEntries> folderEntries(Ref ref, int folderId) async {
+  final folderPath = await ref.watch(folderPathProvider(folderId: folderId).future);
+  final entries = await ref.watch(totpEntriesByFolderProvider(folderId: folderId).future);
   
   return FolderEntries(
     folderPath: folderPath,
@@ -43,7 +37,7 @@ List<FolderEntries> allFolderEntries(Ref ref,int parentFolderId) {
   final result = <FolderEntries>[];
   
   // Get the parent folder entries
-  final parentEntries = ref.watch(folderEntriesProvider(parentFolderId));
+  final parentEntries = ref.watch(folderEntriesProvider(parentFolderId)).valueOrNull ?? FolderEntries(folderPath: [], entries: []);
   if (parentEntries.entries.isNotEmpty) {
     result.add(parentEntries);
   }
@@ -53,7 +47,7 @@ List<FolderEntries> allFolderEntries(Ref ref,int parentFolderId) {
   
   // Get entries for each subfolder
   for (final folder in subfolders) {
-    final subfolderEntries = ref.read(folderEntriesProvider(folder.id));
+    final subfolderEntries = ref.read(folderEntriesProvider(folder.id)).valueOrNull ?? FolderEntries(folderPath: [], entries: []);
     if (subfolderEntries.entries.isNotEmpty) {
       result.add(subfolderEntries);
     }
