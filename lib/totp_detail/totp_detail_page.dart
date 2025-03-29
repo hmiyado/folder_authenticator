@@ -23,8 +23,6 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
   late TextEditingController periodController;
   late String algorithm;
   bool isEditing = false;
-  Timer? _timer;
-  int _remainingSeconds = 0;
   late TotpDetailViewModel _viewModel;
 
   @override
@@ -37,22 +35,8 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
     digitsController = TextEditingController(text: _viewModel.digits.toString());
     periodController = TextEditingController(text: _viewModel.period.toString());
     algorithm = _viewModel.algorithm;
-    
-    // Initialize remaining seconds
-    _updateRemainingSeconds();
-    
-    // Set up timer to update remaining seconds every second
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      _updateRemainingSeconds();
-    });
   }
   
-  void _updateRemainingSeconds() {
-    setState(() {
-      _remainingSeconds = _viewModel.getRemainingSeconds();
-    });
-  }
-
   @override
   void dispose() {
     nameController.dispose();
@@ -60,13 +44,13 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
     issuerController.dispose();
     digitsController.dispose();
     periodController.dispose();
-    _timer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final totpCode = ref.read(generateTotpProvider(widget.entry));
+    final remainingSeconds = ref.read(remainingSecondsProvider(widget.entry));
 
     return Scaffold(
       appBar: AppBar(
@@ -113,7 +97,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                     LinearProgressIndicator(
                       value: _viewModel.getProgressValue(),
                     ),
-                    Text('Refreshes in $_remainingSeconds seconds'),
+                    Text('Refreshes in $remainingSeconds seconds'),
                     const SizedBox(height: 16),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.copy),
