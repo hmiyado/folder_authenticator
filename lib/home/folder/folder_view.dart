@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/folder/folder_entries_provider.dart';
 import 'package:totp_folder/home/folder/folder_path_provider.dart';
-import 'package:totp_folder/home/home_page_providers.dart';
 import 'package:totp_folder/home/totp_entry_card.dart';
 import 'package:totp_folder/models/folder.dart';
 
@@ -41,19 +40,6 @@ class FolderView extends ConsumerWidget {
           ],
         ],
       ),
-    );
-  }
-
-  Widget _buildFolderItem(BuildContext context, Folder folder, WidgetRef ref) {
-    return ListTile(
-      leading: Icon(
-        Icons.folder,
-        color: Color(int.parse(folder.color.replaceFirst('#', '0xFF'))),
-      ),
-      title: Text(folder.name),
-      onTap: () {
-        ref.read(currentFolderProvider.notifier).setCurrentFolder(folder.id!);
-      },
     );
   }
 
