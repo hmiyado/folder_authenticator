@@ -7,14 +7,12 @@ import 'package:totp_folder/services/totp_service.dart';
 part 'totp_detail_providers.g.dart';
 
 @riverpod
-Future<TotpEntry> totpEntry(
-  Ref ref,
-  TotpEntry entry,
-) {
-  return ref.watch(totpEntryRepositoryProvider).getTotpEntry(entry.id!)
-  .then((fetchedEntry) {
+Future<TotpEntry> totpEntry(Ref ref, TotpEntry entry) {
+  return ref.watch(totpEntryRepositoryProvider).getTotpEntry(entry.id!).then((
+    fetchedEntry,
+  ) {
     return fetchedEntry ?? entry;
-  }); 
+  });
 }
 
 /// Provider for generating TOTP code for a specific entry
@@ -29,7 +27,7 @@ String generateTotp(Ref ref, TotpEntry entry) {
 @riverpod
 int remainingSeconds(Ref ref, TotpEntry entry) {
   final totpService = ref.watch(totpServiceProvider);
-    
+
   return totpService.getRemainingMilliSeconds(entry) ~/ 1000;
 }
 
@@ -67,10 +65,7 @@ Future<bool> updateTotpEntry(
 }
 
 @riverpod
-Future<bool> deleteTotpEntry(
-  Ref ref,
-  TotpEntry entry,
-) {
+Future<bool> deleteTotpEntry(Ref ref, TotpEntry entry) {
   final totpEntryRepository = ref.watch(totpEntryRepositoryProvider);
   return totpEntryRepository.deleteTotpEntry(entry.id!);
 }

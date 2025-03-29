@@ -15,7 +15,6 @@ class TotpDetailPage extends ConsumerStatefulWidget {
 }
 
 class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
-
   @override
   Widget build(BuildContext context) {
     final totpEntry = ref.watch(totpEntryProvider(widget.entry));
@@ -24,29 +23,33 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
     final progressValue = ref.watch(progressValueProvider(widget.entry));
 
     return totpEntry.when(
-      data: (data) => _buildContent(context, data, totpCode, remainingSeconds, progressValue),
+      data:
+          (data) => _buildContent(
+            context,
+            data,
+            totpCode,
+            remainingSeconds,
+            progressValue,
+          ),
       error: (error, stack) {
         return Scaffold(
           appBar: AppBar(title: const Text('TOTP Details')),
-          body: Center(
-            child: Text('Error loading TOTP entry: $error'),
-          ),
+          body: Center(child: Text('Error loading TOTP entry: $error')),
         );
       },
-      loading: () => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      ),
+      loading:
+          () =>
+              const Scaffold(body: Center(child: CircularProgressIndicator())),
     );
   }
 
   Widget _buildContent(
-    BuildContext context, 
-    TotpEntry data, 
-    String totpCode, 
-    int remainingSeconds, 
-    double progressValue
+    BuildContext context,
+    TotpEntry data,
+    String totpCode,
+    int remainingSeconds,
+    double progressValue,
   ) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('TOTP Details'),
@@ -87,9 +90,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  LinearProgressIndicator(
-                    value: progressValue,
-                  ),
+                  LinearProgressIndicator(value: progressValue),
                   Text('Refreshes in $remainingSeconds seconds'),
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
@@ -98,7 +99,9 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                     onPressed: () {
                       Clipboard.setData(ClipboardData(text: totpCode));
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Code copied to clipboard')),
+                        const SnackBar(
+                          content: Text('Code copied to clipboard'),
+                        ),
                       );
                     },
                   ),
@@ -128,34 +131,35 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
             width: 100,
             child: Text(
               '$label:',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           Expanded(
-            child: obscure
-                ? Row(
-                    children: [
-                      Text('•' * 10),
-                      IconButton(
-                        icon: const Icon(Icons.visibility),
-                        onPressed: () {
-                          _showSecret(widget.entry.secret);
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.copy),
-                        onPressed: () {
-                          Clipboard.setData(ClipboardData(text: value));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Secret copied to clipboard')),
-                          );
-                        },
-                      ),
-                    ],
-                  )
-                : Text(value),
+            child:
+                obscure
+                    ? Row(
+                      children: [
+                        Text('•' * 10),
+                        IconButton(
+                          icon: const Icon(Icons.visibility),
+                          onPressed: () {
+                            _showSecret(widget.entry.secret);
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.copy),
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(text: value));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Secret copied to clipboard'),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    )
+                    : Text(value),
           ),
         ],
       ),

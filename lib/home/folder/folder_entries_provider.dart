@@ -13,35 +13,34 @@ class FolderEntries {
   final List<Folder> folderPath;
   final List<TotpEntry> entries;
 
-  FolderEntries({
-    required this.folderPath,
-    required this.entries,
-  });
+  FolderEntries({required this.folderPath, required this.entries});
 }
 
 // Provider for folder entries (path + entries)
 @riverpod
 Future<FolderEntries> folderEntries(Ref ref, int folderId) async {
-  final folderPath = await ref.watch(folderPathProvider(folderId: folderId).future);
-  final entries = await ref.watch(totpEntriesByFolderProvider(folderId: folderId).future);
-  
-  return FolderEntries(
-    folderPath: folderPath,
-    entries: entries,
+  final folderPath = await ref.watch(
+    folderPathProvider(folderId: folderId).future,
   );
+  final entries = await ref.watch(
+    totpEntriesByFolderProvider(folderId: folderId).future,
+  );
+
+  return FolderEntries(folderPath: folderPath, entries: entries);
 }
 
 // Provider for all folder entries (current folder + subfolders)
 @riverpod
-Future<List<FolderEntries>> allFolderEntries(Ref ref,int folderId) async {
+Future<List<FolderEntries>> allFolderEntries(Ref ref, int folderId) async {
   final folderEntries = await ref.watch(folderEntriesProvider(folderId).future);
-  final subfolders = await ref.watch(subfoldersProvider(parentId: folderId).future);
-  final subFolderEntries = await Future.wait(
-    subfolders.map((folder) => ref.watch(folderEntriesProvider(folder.id).future)),
+  final subfolders = await ref.watch(
+    subfoldersProvider(parentId: folderId).future,
   );
-    
-  return [
-    folderEntries,
-    ...subFolderEntries,
-  ];
+  final subFolderEntries = await Future.wait(
+    subfolders.map(
+      (folder) => ref.watch(folderEntriesProvider(folder.id).future),
+    ),
+  );
+
+  return [folderEntries, ...subFolderEntries];
 }

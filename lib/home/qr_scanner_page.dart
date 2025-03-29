@@ -63,16 +63,11 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
       ),
       body: Stack(
         children: [
-          MobileScanner(
-            controller: controller,
-            onDetect: _onDetect,
-          ),
+          MobileScanner(controller: controller, onDetect: _onDetect),
           if (_isProcessing)
             Container(
               color: Colors.black54,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
         ],
       ),
@@ -81,63 +76,69 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
 
   void _onDetect(BarcodeCapture capture) async {
     if (_isProcessing) return;
-    
+
     final List<Barcode> barcodes = capture.barcodes;
-    
+
     for (final barcode in barcodes) {
       if (barcode.rawValue == null) continue;
-      
+
       final String rawValue = barcode.rawValue!;
-      
+
       // Check if it's a TOTP URI
       if (rawValue.startsWith('otpauth://totp/')) {
         setState(() {
           _isProcessing = true;
         });
-        
+
         try {
           final totpService = ref.read(totpServiceProvider);
           final totpData = totpService.parseTotpUri(rawValue);
-          
+
           if (totpData != null) {
             // Validate the secret
             if (!totpService.isValidSecret(totpData['secret'])) {
               _showErrorAndReset('Invalid TOTP secret');
               return;
             }
-            
+
             // Create the TOTP entry with all parameters from QR code
-            final entryIdFuture = ref.read(createTotpEntryProvider(
-              widget.folderId,
-              totpData['name'],
-              totpData['secret'],
-              totpData['issuer'],
-            ));
-            
+            final entryIdFuture = ref.read(
+              createTotpEntryProvider(
+                widget.folderId,
+                totpData['name'],
+                totpData['secret'],
+                totpData['issuer'],
+              ),
+            );
+
             final entryId = await entryIdFuture.when(
               data: (id) => id,
               loading: () => -1,
               error: (_, __) => -1,
             );
-            
+
             // Update the entry with additional parameters if needed
-            if (entryId > 0 && (totpData['digits'] != 6 || 
-                totpData['period'] != 30 || 
-                totpData['algorithm'] != 'SHA1')) {
-              
+            if (entryId > 0 &&
+                (totpData['digits'] != 6 ||
+                    totpData['period'] != 30 ||
+                    totpData['algorithm'] != 'SHA1')) {
               // Get the created entry
-              final entry = await ref.read(totpEntryRepositoryProvider).getTotpEntry(entryId);
+              final entry = await ref
+                  .read(totpEntryRepositoryProvider)
+                  .getTotpEntry(entryId);
               if (entry != null) {
                 // Update with additional parameters
-                await ref.read(updateTotpEntryProvider(
-                  entry,
-                  digits: totpData['digits'],
-                  period: totpData['period'],
-                  algorithm: totpData['algorithm'],
-                ));
+                await ref.read(
+                  updateTotpEntryProvider(
+                    entry,
+                    digits: totpData['digits'],
+                    period: totpData['period'],
+                    algorithm: totpData['algorithm'],
+                  ),
+                );
               }
             }
-            
+
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('TOTP entry added successfully')),
@@ -156,9 +157,9 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
 
   void _showErrorAndReset(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
       setState(() {
         _isProcessing = false;
       });

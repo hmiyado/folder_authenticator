@@ -35,8 +35,9 @@ void main() {
 
     test('getFolders should return folders from database service', () async {
       // Arrange
-      when(mockDatabaseService.getFolders(1))
-          .thenAnswer((_) async => [testChildFolder]);
+      when(
+        mockDatabaseService.getFolders(1),
+      ).thenAnswer((_) async => [testChildFolder]);
 
       // Act
       final result = await folderRepository.getFolders(1);
@@ -48,7 +49,9 @@ void main() {
 
     test('getFolder should return a folder from database service', () async {
       // Arrange
-      when(mockDatabaseService.getFolder(1)).thenAnswer((_) async => testFolder);
+      when(
+        mockDatabaseService.getFolder(1),
+      ).thenAnswer((_) async => testFolder);
 
       // Act
       final result = await folderRepository.getFolder(1);
@@ -66,14 +69,15 @@ void main() {
         name: 'New Folder',
         color: '#0000FF',
       );
-      when(mockDatabaseService.insertFolder(
-            folderToCreate.name,
-            folderToCreate.color,
-            folderToCreate.parentId,
-            any,
-            any,
-      ))
-          .thenAnswer((_) async => 3);
+      when(
+        mockDatabaseService.insertFolder(
+          folderToCreate.name,
+          folderToCreate.color,
+          folderToCreate.parentId,
+          any,
+          any,
+        ),
+      ).thenAnswer((_) async => 3);
 
       // Act
       await folderRepository.createFolder(
@@ -83,19 +87,22 @@ void main() {
       );
 
       // Assert
-      verify(mockDatabaseService.insertFolder(
-        folderToCreate.name,
-        folderToCreate.color,
-        folderToCreate.parentId,
-        any,
-        any,
-      ));
+      verify(
+        mockDatabaseService.insertFolder(
+          folderToCreate.name,
+          folderToCreate.color,
+          folderToCreate.parentId,
+          any,
+          any,
+        ),
+      );
     });
 
     test('updateFolder should update folder and return success', () async {
       // Arrange
-      when(mockDatabaseService.updateFolder(testFolder))
-          .thenAnswer((_) async => 1);
+      when(
+        mockDatabaseService.updateFolder(testFolder),
+      ).thenAnswer((_) async => 1);
 
       // Act
       final result = await folderRepository.updateFolder(testFolder);
@@ -107,8 +114,9 @@ void main() {
 
     test('updateFolder should return false when no rows affected', () async {
       // Arrange
-      when(mockDatabaseService.updateFolder(testFolder))
-          .thenAnswer((_) async => 0);
+      when(
+        mockDatabaseService.updateFolder(testFolder),
+      ).thenAnswer((_) async => 0);
 
       // Act
       final result = await folderRepository.updateFolder(testFolder);
@@ -144,9 +152,15 @@ void main() {
 
     test('getFolderPath should return path of folders', () async {
       // Arrange
-      when(mockDatabaseService.getFolder(0)).thenAnswer((_) async => Folder.rootFolder());
-      when(mockDatabaseService.getFolder(1)).thenAnswer((_) async => testFolder);
-      when(mockDatabaseService.getFolder(2)).thenAnswer((_) async => testChildFolder);
+      when(
+        mockDatabaseService.getFolder(0),
+      ).thenAnswer((_) async => Folder.rootFolder());
+      when(
+        mockDatabaseService.getFolder(1),
+      ).thenAnswer((_) async => testFolder);
+      when(
+        mockDatabaseService.getFolder(2),
+      ).thenAnswer((_) async => testChildFolder);
       // Act
       final result = await folderRepository.getFolderPath(2);
 

@@ -9,9 +9,7 @@ class SettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(settingsPageViewModelProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         children: [
           ListTile(
@@ -51,7 +49,9 @@ class SettingsPage extends ConsumerWidget {
             onTap: () {
               // Navigate to appearance settings
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Appearance settings coming soon')),
+                const SnackBar(
+                  content: Text('Appearance settings coming soon'),
+                ),
               );
             },
           ),
@@ -79,9 +79,15 @@ class SettingsPage extends ConsumerWidget {
                   const SizedBox(height: 16),
                   const Text('Features:'),
                   const SizedBox(height: 8),
-                  _buildFeatureItem('Folder Management: Organize TOTP entries into folders.'),
-                  _buildFeatureItem('Tagging: Assign tags to TOTP entries for easier categorization.'),
-                  _buildFeatureItem('Sorting & Filtering: Quickly find the TOTP you need.'),
+                  _buildFeatureItem(
+                    'Folder Management: Organize TOTP entries into folders.',
+                  ),
+                  _buildFeatureItem(
+                    'Tagging: Assign tags to TOTP entries for easier categorization.',
+                  ),
+                  _buildFeatureItem(
+                    'Sorting & Filtering: Quickly find the TOTP you need.',
+                  ),
                   const SizedBox(height: 16),
                   Text('Version: ${viewModel.getAppVersion()}'),
                 ],
@@ -104,10 +110,7 @@ class SettingsPage extends ConsumerWidget {
       padding: const EdgeInsets.only(left: 16.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('• '),
-          Expanded(child: Text(text)),
-        ],
+        children: [const Text('• '), Expanded(child: Text(text))],
       ),
     );
   }

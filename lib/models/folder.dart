@@ -1,10 +1,12 @@
 class Folder {
   /// Special folder ID for the root folder
   static const int rootFolderId = 0;
-  static Folder rootFolder() => Folder(id: rootFolderId, name: '(root)', parentId: rootFolderId);
+  static Folder rootFolder() =>
+      Folder(id: rootFolderId, name: '(root)', parentId: rootFolderId);
   final int id;
+
   /// Reference to parent folder, 0 if it's a root folder. Parent folder for the root folder is itself.
-  final int parentId; 
+  final int parentId;
   final String name;
   final String color;
   final DateTime createdAt;
@@ -17,8 +19,8 @@ class Folder {
     this.color = '#3498db', // Default blue color
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   Folder copyWith({
     int? id,

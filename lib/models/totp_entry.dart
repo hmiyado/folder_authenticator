@@ -21,8 +21,8 @@ class TotpEntry {
     this.algorithm = 'SHA1',
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   TotpEntry copyWith({
     int? id,

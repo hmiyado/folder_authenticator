@@ -8,48 +8,39 @@ import 'package:totp_folder/models/folder.dart';
 class FolderView extends ConsumerWidget {
   final int folderId;
 
-  const FolderView({
-    super.key,
-    required this.folderId,
-  });
-  
+  const FolderView({super.key, required this.folderId});
+
   Widget _buildFolderPathText(BuildContext context, List<Folder> folderPath) {
-    const textStyle = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-    );
-    
+    const textStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+
     if (folderPath.isEmpty) {
       return const Row(
         children: [
           Icon(Icons.folder, size: 20),
           SizedBox(width: 8),
-          Text(
-            'Root',
-            style: textStyle,
-          ),
+          Text('Root', style: textStyle),
         ],
       );
     }
-    
+
     return Row(
       children: [
-      const Icon(Icons.folder, size: 20),
-      const SizedBox(width: 8),
-      Text(
-        folderPath.map((folder) => folder.name).join(' / '),
-        style: textStyle,
-      ),
-      const Spacer(),
-      IconButton(
-        icon: const Icon(Icons.add),
-        onPressed: () {
-        showDialog(
-          context: context,
-          builder: (context) => AddDialog(folder: folderPath.last),
-        );
-        },
-      ),
+        const Icon(Icons.folder, size: 20),
+        const SizedBox(width: 8),
+        Text(
+          folderPath.map((folder) => folder.name).join(' / '),
+          style: textStyle,
+        ),
+        const Spacer(),
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => AddDialog(folder: folderPath.last),
+            );
+          },
+        ),
       ],
     );
   }
@@ -63,9 +54,7 @@ class FolderView extends ConsumerWidget {
         return _buildFolderEntries(context, allFolderEntries);
       },
       error: (error, stack) {
-        return Center(
-          child: Text('Error loading folder entries: $error'),
-        );
+        return Center(child: Text('Error loading folder entries: $error'));
       },
       loading: () {
         return const Center(child: CircularProgressIndicator());
@@ -73,43 +62,56 @@ class FolderView extends ConsumerWidget {
     );
   }
 
-  Widget _buildFolderEntries(BuildContext context, List<FolderEntries> allFolderEntries) {
+  Widget _buildFolderEntries(
+    BuildContext context,
+    List<FolderEntries> allFolderEntries,
+  ) {
     if (allFolderEntries.isEmpty) {
-      return const Center(
-        child: Text('No TOTP entries or subfolders found'),
-      );
+      return const Center(child: Text('No TOTP entries or subfolders found'));
     }
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: ListView(
-            children: allFolderEntries.map((folderEntries){
-              final header = Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 8.0),
-                  child: _buildFolderPathText(context, folderEntries.folderPath),
-                );
+            children: allFolderEntries
+                .map((folderEntries) {
+                  final header = Padding(
+                    padding: const EdgeInsets.only(
+                      left: 16.0,
+                      top: 16.0,
+                      bottom: 8.0,
+                    ),
+                    child: _buildFolderPathText(
+                      context,
+                      folderEntries.folderPath,
+                    ),
+                  );
 
-              if (folderEntries.entries.isEmpty) {
-                return [
-                  header,
-                  const Center(child: Text('No TOTP entries or subfolders found')),
-                ];
-              }
-              
-              final totpEntries = folderEntries.entries.map(
-                  (entry) => TotpEntryCard(entry: entry),
-                ).toList();
+                  if (folderEntries.entries.isEmpty) {
+                    return [
+                      header,
+                      const Center(
+                        child: Text('No TOTP entries or subfolders found'),
+                      ),
+                    ];
+                  }
 
-              return [
-                header,
-                ...totpEntries,
-              ];
-            }).reduce((allFolderEntries, folderEntries) => allFolderEntries + folderEntries)
-          )
+                  final totpEntries =
+                      folderEntries.entries
+                          .map((entry) => TotpEntryCard(entry: entry))
+                          .toList();
+
+                  return [header, ...totpEntries];
+                })
+                .reduce(
+                  (allFolderEntries, folderEntries) =>
+                      allFolderEntries + folderEntries,
+                ),
+          ),
         ),
-        ],
+      ],
     );
   }
 }

@@ -24,11 +24,7 @@ class DatabaseService {
 
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'totp_folder.db');
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _createDatabase,
-    );
+    return await openDatabase(path, version: 1, onCreate: _createDatabase);
   }
 
   Future<void> _createDatabase(Database db, int version) async {
@@ -62,7 +58,7 @@ class DatabaseService {
 
   // Folder operations
   Future<int> insertFolder(
-    String  name ,
+    String name,
     String color,
     int parentId,
     int createdAt,
@@ -90,11 +86,7 @@ class DatabaseService {
 
   Future<int> deleteFolder(int id) async {
     final db = await database;
-    return await db.delete(
-      'folders',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('folders', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<List<Folder>> getFolders(int parentId) async {
@@ -154,11 +146,7 @@ class DatabaseService {
 
   Future<int> deleteTotpEntry(int id) async {
     final db = await database;
-    return await db.delete(
-      'totp_entries',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('totp_entries', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<List<TotpEntry>> getTotpEntries({required int folderId}) async {

@@ -25,21 +25,15 @@ class _AddTotpEntryDialogState extends ConsumerState<AddTotpEntryDialog> {
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-              ),
+              decoration: const InputDecoration(labelText: 'Name'),
             ),
             TextField(
               controller: secretController,
-              decoration: const InputDecoration(
-                labelText: 'Secret',
-              ),
+              decoration: const InputDecoration(labelText: 'Secret'),
             ),
             TextField(
               controller: issuerController,
-              decoration: const InputDecoration(
-                labelText: 'Issuer (optional)',
-              ),
+              decoration: const InputDecoration(labelText: 'Issuer (optional)'),
             ),
           ],
         ),
@@ -51,12 +45,14 @@ class _AddTotpEntryDialogState extends ConsumerState<AddTotpEntryDialog> {
         ),
         TextButton(
           onPressed: () {
-            ref.read(createTotpEntryProvider(
-              widget.folderId,
-              nameController.text,
-              secretController.text,
-              issuerController.text
-            ));
+            ref.read(
+              createTotpEntryProvider(
+                widget.folderId,
+                nameController.text,
+                secretController.text,
+                issuerController.text,
+              ),
+            );
             Navigator.pop(context);
           },
           child: const Text('Add'),
@@ -65,4 +61,3 @@ class _AddTotpEntryDialogState extends ConsumerState<AddTotpEntryDialog> {
     );
   }
 }
-

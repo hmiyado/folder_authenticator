@@ -5,9 +5,7 @@ import 'package:totp_folder/home/home_page.dart';
 void main() {
   runApp(
     // Wrap the entire app with ProviderScope for Riverpod
-    const ProviderScope(
-      child: MyApp(),
-    ),
+    const ProviderScope(child: MyApp()),
   );
 }
 

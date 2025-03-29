@@ -13,29 +13,40 @@ class CurrentFolder extends _$CurrentFolder {
   Folder build() => Folder.rootFolder();
 
   void setCurrentFolder(int folderId) async {
-    Folder? folder = await ref.watch(folderRepositoryProvider).getFolder(folderId);
+    Folder? folder = await ref
+        .watch(folderRepositoryProvider)
+        .getFolder(folderId);
     if (folder != null) {
       state = folder;
     }
   }
-
 }
 
 @riverpod
-Future<int?> createSubFolder(Ref ref, int parentId, String folderName, String color) async {
-  final i = await ref.watch(folderRepositoryProvider).createFolder(folderName, color, parentId);
+Future<int?> createSubFolder(
+  Ref ref,
+  int parentId,
+  String folderName,
+  String color,
+) async {
+  final i = await ref
+      .watch(folderRepositoryProvider)
+      .createFolder(folderName, color, parentId);
   ref.invalidate(subfoldersProvider(parentId: parentId));
   return i;
 }
 
 @riverpod
-Future<int> createTotpEntry(Ref ref, int folderId, String totpName, String secret, String issuer) async {
-  final id = await ref.watch(totpEntryRepositoryProvider).createTotpEntry(
-    totpName,
-    secret,
-    issuer,
-    folderId,
-  );
+Future<int> createTotpEntry(
+  Ref ref,
+  int folderId,
+  String totpName,
+  String secret,
+  String issuer,
+) async {
+  final id = await ref
+      .watch(totpEntryRepositoryProvider)
+      .createTotpEntry(totpName, secret, issuer, folderId);
   ref.invalidate(totpEntriesByFolderProvider(folderId: folderId));
   return id;
 }

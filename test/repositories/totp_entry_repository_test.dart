@@ -27,22 +27,28 @@ void main() {
       folderId: 1,
     );
 
-    test('getTotpEntriesByFolderId should return entries from database service', () async {
-      // Arrange
-      when(mockDatabaseService.getTotpEntries(folderId: 1))
-          .thenAnswer((_) async => [testTotpEntry]);
+    test(
+      'getTotpEntriesByFolderId should return entries from database service',
+      () async {
+        // Arrange
+        when(
+          mockDatabaseService.getTotpEntries(folderId: 1),
+        ).thenAnswer((_) async => [testTotpEntry]);
 
-      // Act
-      final result = await totpEntryRepository.getTotpEntriesByFolderId(1);
+        // Act
+        final result = await totpEntryRepository.getTotpEntriesByFolderId(1);
 
-      // Assert
-      expect(result, [testTotpEntry]);
-      verify(mockDatabaseService.getTotpEntries(folderId: 1)).called(1);
-    });
+        // Assert
+        expect(result, [testTotpEntry]);
+        verify(mockDatabaseService.getTotpEntries(folderId: 1)).called(1);
+      },
+    );
 
     test('getTotpEntry should return an entry from database service', () async {
       // Arrange
-      when(mockDatabaseService.getTotpEntry(1)).thenAnswer((_) async => testTotpEntry);
+      when(
+        mockDatabaseService.getTotpEntry(1),
+      ).thenAnswer((_) async => testTotpEntry);
 
       // Act
       final result = await totpEntryRepository.getTotpEntry(1);
@@ -52,38 +58,45 @@ void main() {
       verify(mockDatabaseService.getTotpEntry(1)).called(1);
     });
 
-    test('createTotpEntry should insert entry and return with new id', () async {
-      // Arrange
-      final entryToCreate = TotpEntry(
-        name: 'New Entry',
-        secret: 'QRSTUVWXYZ123456',
-        issuer: 'New Issuer',
-        folderId: 2,
-      );
-      when(mockDatabaseService.insertTotpEntry(any, any, any, any))
-          .thenAnswer((_) async => 3);
+    test(
+      'createTotpEntry should insert entry and return with new id',
+      () async {
+        // Arrange
+        final entryToCreate = TotpEntry(
+          name: 'New Entry',
+          secret: 'QRSTUVWXYZ123456',
+          issuer: 'New Issuer',
+          folderId: 2,
+        );
+        when(
+          mockDatabaseService.insertTotpEntry(any, any, any, any),
+        ).thenAnswer((_) async => 3);
 
-      // Act
-      await totpEntryRepository.createTotpEntry(
-        entryToCreate.name,
-        entryToCreate.secret,
-        entryToCreate.issuer,
-        entryToCreate.folderId,
-      );
+        // Act
+        await totpEntryRepository.createTotpEntry(
+          entryToCreate.name,
+          entryToCreate.secret,
+          entryToCreate.issuer,
+          entryToCreate.folderId,
+        );
 
-      // Assert
-      verify(mockDatabaseService.insertTotpEntry(
-        entryToCreate.name,
-        entryToCreate.secret,
-        entryToCreate.issuer,
-        entryToCreate.folderId,
-      )).called(1);
-    });
+        // Assert
+        verify(
+          mockDatabaseService.insertTotpEntry(
+            entryToCreate.name,
+            entryToCreate.secret,
+            entryToCreate.issuer,
+            entryToCreate.folderId,
+          ),
+        ).called(1);
+      },
+    );
 
     test('updateTotpEntry should update entry and return success', () async {
       // Arrange
-      when(mockDatabaseService.updateTotpEntry(testTotpEntry))
-          .thenAnswer((_) async => 1);
+      when(
+        mockDatabaseService.updateTotpEntry(testTotpEntry),
+      ).thenAnswer((_) async => 1);
 
       // Act
       final result = await totpEntryRepository.updateTotpEntry(testTotpEntry);
@@ -95,8 +108,9 @@ void main() {
 
     test('updateTotpEntry should return false when no rows affected', () async {
       // Arrange
-      when(mockDatabaseService.updateTotpEntry(testTotpEntry))
-          .thenAnswer((_) async => 0);
+      when(
+        mockDatabaseService.updateTotpEntry(testTotpEntry),
+      ).thenAnswer((_) async => 0);
 
       // Act
       final result = await totpEntryRepository.updateTotpEntry(testTotpEntry);

@@ -13,7 +13,7 @@ TotpService totpService(Ref ref) {
   final timer = Timer.periodic(const Duration(milliseconds: 500), (_) {
     ref.invalidateSelf(); // Invalidate the provider to trigger a rebuild
   });
-  
+
   // Clean up when the provider is disposed
   ref.onDispose(() {
     timer.cancel();
@@ -72,27 +72,27 @@ class TotpService {
       return false;
     }
   }
-  
+
   // Parse TOTP URI and extract parameters
   Map<String, dynamic>? parseTotpUri(String uri) {
     try {
       // Parse the URI
       final Uri parsedUri = Uri.parse(uri);
-      
+
       if (parsedUri.scheme != 'otpauth' || parsedUri.host != 'totp') {
         return null;
       }
-      
+
       // Extract the path (which contains the label)
       final String path = parsedUri.path;
       if (path.isEmpty || path == '/') {
         return null;
       }
-      
+
       // The path is in the format "/label" or "/issuer:label"
       String label = path.substring(1); // Remove leading '/'
       String? issuer = parsedUri.queryParameters['issuer'];
-      
+
       // If the label contains a colon, it might have the issuer in it
       if (label.contains(':')) {
         final parts = label.split(':');
@@ -101,18 +101,20 @@ class TotpService {
         }
         label = parts[1].trim();
       }
-      
+
       // Get the secret from query parameters
       final String? secret = parsedUri.queryParameters['secret'];
       if (secret == null || secret.isEmpty) {
         return null;
       }
-      
+
       // Get optional parameters with defaults
       final String algorithm = parsedUri.queryParameters['algorithm'] ?? 'SHA1';
-      final int digits = int.tryParse(parsedUri.queryParameters['digits'] ?? '') ?? 6;
-      final int period = int.tryParse(parsedUri.queryParameters['period'] ?? '') ?? 30;
-      
+      final int digits =
+          int.tryParse(parsedUri.queryParameters['digits'] ?? '') ?? 6;
+      final int period =
+          int.tryParse(parsedUri.queryParameters['period'] ?? '') ?? 30;
+
       return {
         'name': label,
         'secret': secret,

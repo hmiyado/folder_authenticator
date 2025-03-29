@@ -7,17 +7,13 @@ import 'package:totp_folder/totp_detail/totp_detail_providers.dart';
 class TotpEntryCard extends ConsumerStatefulWidget {
   final TotpEntry entry;
 
-  const TotpEntryCard({
-    super.key,
-    required this.entry,
-  });
+  const TotpEntryCard({super.key, required this.entry});
 
   @override
   ConsumerState<TotpEntryCard> createState() => _TotpEntryCardState();
 }
 
 class _TotpEntryCardState extends ConsumerState<TotpEntryCard> {
-
   @override
   Widget build(BuildContext context) {
     // Watch the providers to get the latest values
@@ -26,20 +22,18 @@ class _TotpEntryCardState extends ConsumerState<TotpEntryCard> {
     final totpEntry = ref.watch(totpEntryProvider(widget.entry));
 
     return totpEntry.when(
-      data: (data) => _buildContent(context, data, totpCode, remainingSeconds), 
-      error: (error, stack) => const Card(
-          margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: ListTile(
-            title: Text('Error loading TOTP entry'),
+      data: (data) => _buildContent(context, data, totpCode, remainingSeconds),
+      error:
+          (error, stack) => const Card(
+            margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: ListTile(title: Text('Error loading TOTP entry')),
           ),
-      ),
-      loading: () => const Card(
-        margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: ListTile(
-          title: Center(child: CircularProgressIndicator()),
-        ),
-      ),
-      );
+      loading:
+          () => const Card(
+            margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: ListTile(title: Center(child: CircularProgressIndicator())),
+          ),
+    );
   }
 
   Widget _buildContent(
@@ -47,7 +41,7 @@ class _TotpEntryCardState extends ConsumerState<TotpEntryCard> {
     TotpEntry totpEntry,
     String totpCode,
     int remainingSeconds,
-  ){ 
+  ) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: ListTile(
@@ -59,10 +53,7 @@ class _TotpEntryCardState extends ConsumerState<TotpEntryCard> {
           children: [
             Text(
               totpCode,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Text('$remainingSeconds s'),
           ],

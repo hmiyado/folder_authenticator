@@ -15,7 +15,7 @@ void main() {
 
   setUp(() {
     mockTotpEntryRepository = MockTotpEntryRepository();
-    
+
     // Create a ProviderContainer with overrides
     container = ProviderContainer(
       overrides: [
@@ -23,7 +23,7 @@ void main() {
         totpEntryRepositoryProvider.overrideWithValue(mockTotpEntryRepository),
       ],
     );
-    
+
     // Add a listener to the container to make sure providers are properly disposed
     addTearDown(container.dispose);
   });
@@ -32,13 +32,13 @@ void main() {
     test('createTotpEntry should update totpEntriesByFolder', () async {
       // Test data
       final totpEntry = TotpEntry(
-          name: 'Existing Entry 1',
-          secret: 'SECRET1',
-          issuer: 'Issuer 1',
-          folderId: 1,
-        );
+        name: 'Existing Entry 1',
+        secret: 'SECRET1',
+        issuer: 'Issuer 1',
+        folderId: 1,
+      );
       const int newEntryId = 2;
-      
+
       when(
         mockTotpEntryRepository.createTotpEntry(any, any, any, any),
       ).thenAnswer((_) async => newEntryId);
@@ -50,15 +50,17 @@ void main() {
           totpEntry.name,
           totpEntry.secret,
           totpEntry.issuer,
-        )
+        ),
       );
-      
-      verify(mockTotpEntryRepository.createTotpEntry(
-        totpEntry.name,
-        totpEntry.secret,
-        totpEntry.issuer,
-        totpEntry.folderId,
-      ));
+
+      verify(
+        mockTotpEntryRepository.createTotpEntry(
+          totpEntry.name,
+          totpEntry.secret,
+          totpEntry.issuer,
+          totpEntry.folderId,
+        ),
+      );
     });
   });
 }

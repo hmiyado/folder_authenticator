@@ -12,11 +12,12 @@ void main() {
     group('parseTotpUri', () {
       test('should correctly parse a standard TOTP URI', () {
         // Arrange
-        final uri = 'otpauth://totp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Example&algorithm=SHA1&digits=6&period=30';
-        
+        final uri =
+            'otpauth://totp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Example&algorithm=SHA1&digits=6&period=30';
+
         // Act
         final result = totpService.parseTotpUri(uri);
-        
+
         // Assert
         expect(result, isNotNull);
         expect(result!['name'], equals('alice@example.com'));
@@ -29,11 +30,12 @@ void main() {
 
       test('should correctly parse a URI with label containing issuer', () {
         // Arrange
-        final uri = 'otpauth://totp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP';
-        
+        final uri =
+            'otpauth://totp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP';
+
         // Act
         final result = totpService.parseTotpUri(uri);
-        
+
         // Assert
         expect(result, isNotNull);
         expect(result!['name'], equals('alice@example.com'));
@@ -46,11 +48,12 @@ void main() {
 
       test('should correctly parse a URI with issuer in query params', () {
         // Arrange
-        final uri = 'otpauth://totp/alice@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Example';
-        
+        final uri =
+            'otpauth://totp/alice@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Example';
+
         // Act
         final result = totpService.parseTotpUri(uri);
-        
+
         // Assert
         expect(result, isNotNull);
         expect(result!['name'], equals('alice@example.com'));
@@ -60,11 +63,12 @@ void main() {
 
       test('should correctly parse a URI with non-default parameters', () {
         // Arrange
-        final uri = 'otpauth://totp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP&algorithm=SHA256&digits=8&period=60';
-        
+        final uri =
+            'otpauth://totp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP&algorithm=SHA256&digits=8&period=60';
+
         // Act
         final result = totpService.parseTotpUri(uri);
-        
+
         // Assert
         expect(result, isNotNull);
         expect(result!['algorithm'], equals('SHA256'));
@@ -74,22 +78,24 @@ void main() {
 
       test('should return null for invalid scheme', () {
         // Arrange
-        final uri = 'invalid://totp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP';
-        
+        final uri =
+            'invalid://totp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP';
+
         // Act
         final result = totpService.parseTotpUri(uri);
-        
+
         // Assert
         expect(result, isNull);
       });
 
       test('should return null for invalid host', () {
         // Arrange
-        final uri = 'otpauth://hotp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP';
-        
+        final uri =
+            'otpauth://hotp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP';
+
         // Act
         final result = totpService.parseTotpUri(uri);
-        
+
         // Assert
         expect(result, isNull);
       });
@@ -97,10 +103,10 @@ void main() {
       test('should return null for missing secret', () {
         // Arrange
         final uri = 'otpauth://totp/Example:alice@example.com';
-        
+
         // Act
         final result = totpService.parseTotpUri(uri);
-        
+
         // Assert
         expect(result, isNull);
       });
@@ -108,10 +114,10 @@ void main() {
       test('should return null for empty path', () {
         // Arrange
         final uri = 'otpauth://totp/?secret=JBSWY3DPEHPK3PXP';
-        
+
         // Act
         final result = totpService.parseTotpUri(uri);
-        
+
         // Assert
         expect(result, isNull);
       });
@@ -119,10 +125,10 @@ void main() {
       test('should handle malformed URI gracefully', () {
         // Arrange
         final uri = 'not a valid uri';
-        
+
         // Act
         final result = totpService.parseTotpUri(uri);
-        
+
         // Assert
         expect(result, isNull);
       });

@@ -24,11 +24,7 @@ class FolderRepository {
     return await _databaseService.getFolder(id);
   }
 
-  Future<int?> createFolder(
-    String name,
-    String color,
-    int parentId,
-  ) async {
+  Future<int?> createFolder(String name, String color, int parentId) async {
     return await _databaseService.insertFolder(
       name,
       color,
@@ -52,13 +48,13 @@ class FolderRepository {
   Future<List<Folder>> getFolderPath(int folderId) async {
     List<Folder> path = [];
     Folder? current = await getFolder(folderId);
-    
+
     while (current != null) {
       path.insert(0, current);
       if (current.id == Folder.rootFolderId) break;
       current = await getFolder(current.parentId);
     }
-    
+
     return path;
   }
 }

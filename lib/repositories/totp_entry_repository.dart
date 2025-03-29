@@ -14,7 +14,10 @@ TotpEntryRepository totpEntryRepository(Ref ref) {
 
 // Provider for TOTP entries by folder
 @riverpod
-Future<List<TotpEntry>> totpEntriesByFolder(Ref ref, {required int folderId}) async {
+Future<List<TotpEntry>> totpEntriesByFolder(
+  Ref ref, {
+  required int folderId,
+}) async {
   final repository = ref.watch(totpEntryRepositoryProvider);
   return repository.getTotpEntriesByFolderId(folderId);
 }
@@ -27,7 +30,7 @@ class TotpEntryRepository {
   Future<List<TotpEntry>> getTotpEntriesByFolderId(int folderId) async {
     return await _databaseService.getTotpEntries(folderId: folderId);
   }
-  
+
   Future<TotpEntry?> getTotpEntry(int id) async {
     return await _databaseService.getTotpEntry(id);
   }

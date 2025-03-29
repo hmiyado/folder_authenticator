@@ -9,8 +9,8 @@ class AddFolderDialog extends ConsumerStatefulWidget {
   @override
   ConsumerState<AddFolderDialog> createState() => _AddFolderDialogState();
 }
-class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
 
+class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
   @override
   Widget build(BuildContext context) {
     final currentFolder = ref.watch(currentFolderProvider);
@@ -18,64 +18,66 @@ class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
     final colorController = TextEditingController(text: '#3498db');
 
     return AlertDialog(
-          title: const Text('Add Folder'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Folder Name',
-                ),
-              ),
-              TextField(
-                controller: colorController,
-                decoration: const InputDecoration(
-                  labelText: 'Color (hex)',
-                ),
-              ),
-            ],
+      title: const Text('Add Folder'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: nameController,
+            decoration: const InputDecoration(labelText: 'Folder Name'),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () async {
-                if (nameController.text.isNotEmpty) {
-                  // Create the subfolder
-                  final folderFuture = ref.read(createSubFolderProvider(
-                    currentFolder.id,
-                    nameController.text,
-                    colorController.text,
-                  ));
-                  
-                  // Wait for the folder to be created
-                  folderFuture.when(
-                    data: (folder) {
-                      // Invalidate the subfolders provider to refresh the UI
-                      ref.invalidate(subfoldersProvider(parentId: currentFolder.id));
-                      
-                      // Show success message
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Folder "${nameController.text}" created')),
-                      );
-                    },
-                    loading: () => null,
-                    error: (error, stack) {
-                      // Show error message
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Error creating folder: $error')),
-                      );
-                    },
+          TextField(
+            controller: colorController,
+            decoration: const InputDecoration(labelText: 'Color (hex)'),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async {
+            if (nameController.text.isNotEmpty) {
+              // Create the subfolder
+              final folderFuture = ref.read(
+                createSubFolderProvider(
+                  currentFolder.id,
+                  nameController.text,
+                  colorController.text,
+                ),
+              );
+
+              // Wait for the folder to be created
+              folderFuture.when(
+                data: (folder) {
+                  // Invalidate the subfolders provider to refresh the UI
+                  ref.invalidate(
+                    subfoldersProvider(parentId: currentFolder.id),
                   );
-                }
-                Navigator.pop(context);
-              },
-              child: const Text('Add'),
-            ),
-          ],
-        );
-     }
+
+                  // Show success message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Folder "${nameController.text}" created'),
+                    ),
+                  );
+                },
+                loading: () => null,
+                error: (error, stack) {
+                  // Show error message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error creating folder: $error')),
+                  );
+                },
+              );
+            }
+            Navigator.pop(context);
+          },
+          child: const Text('Add'),
+        ),
+      ],
+    );
+  }
 }
