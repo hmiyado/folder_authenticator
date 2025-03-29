@@ -111,7 +111,7 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
               ),
             );
 
-            final entryId = await entryIdFuture.when(
+            final entryId = entryIdFuture.when(
               data: (id) => id,
               loading: () => -1,
               error: (_, __) => -1,
