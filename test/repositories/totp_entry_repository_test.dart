@@ -114,24 +114,26 @@ void main() {
 
       // Assert
       expect(result, true);
-      verify(mockDatabaseService.updateTotpEntry(
-        testTotpEntry.id!,
-        testTotpEntry.name,
-        testTotpEntry.issuer,
-        testTotpEntry.folderId,
-        any,
-      )).called(1);
+      verify(
+        mockDatabaseService.updateTotpEntry(
+          testTotpEntry.id!,
+          testTotpEntry.name,
+          testTotpEntry.issuer,
+          testTotpEntry.folderId,
+          any,
+        ),
+      ).called(1);
     });
 
     test('updateTotpEntry should return false when no rows affected', () async {
       // Arrange
       when(
         mockDatabaseService.updateTotpEntry(
-        testTotpEntry.id!,
-        testTotpEntry.name,
-        testTotpEntry.issuer,
-        testTotpEntry.folderId,
-        any,
+          testTotpEntry.id!,
+          testTotpEntry.name,
+          testTotpEntry.issuer,
+          testTotpEntry.folderId,
+          any,
         ),
       ).thenAnswer((_) async => 0);
 
@@ -145,13 +147,15 @@ void main() {
 
       // Assert
       expect(result, false);
-      verify(mockDatabaseService.updateTotpEntry(
-                testTotpEntry.id!,
-        testTotpEntry.name,
-        testTotpEntry.issuer,
-        testTotpEntry.folderId,
-        any,
-      )).called(1);
+      verify(
+        mockDatabaseService.updateTotpEntry(
+          testTotpEntry.id!,
+          testTotpEntry.name,
+          testTotpEntry.issuer,
+          testTotpEntry.folderId,
+          any,
+        ),
+      ).called(1);
     });
 
     test('deleteTotpEntry should delete entry and return success', () async {

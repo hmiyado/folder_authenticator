@@ -33,8 +33,10 @@ Future<FolderEntries> folderEntries(Ref ref, int folderId) async {
 @riverpod
 Future<List<FolderEntries>> allFolderEntries(Ref ref, int folderId) async {
   final folderEntries = await ref.watch(folderEntriesProvider(folderId).future);
-  final subfolders = await ref.watch(subfoldersProvider(parentId: folderId).future);
-  
+  final subfolders = await ref.watch(
+    subfoldersProvider(parentId: folderId).future,
+  );
+
   // Then recursively get entries from all nested subfolders
   final allNestedEntries = await Future.wait(
     subfolders.map(
@@ -42,5 +44,5 @@ Future<List<FolderEntries>> allFolderEntries(Ref ref, int folderId) async {
     ),
   );
 
-  return [folderEntries, ...allNestedEntries.expand((entries) => entries),];
+  return [folderEntries, ...allNestedEntries.expand((entries) => entries)];
 }

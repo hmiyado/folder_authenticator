@@ -128,11 +128,7 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
                   .getTotpEntry(entryId);
               if (entry != null) {
                 // Update with additional parameters
-                ref.read(
-                  updateTotpEntryProvider(
-                    entry,
-                  ),
-                );
+                ref.read(updateTotpEntryProvider(entry));
               }
             }
 

@@ -81,13 +81,17 @@ class _TotpEditPageState extends ConsumerState<TotpEditPage> {
               decoration: const InputDecoration(labelText: 'Issuer'),
             ),
             TextField(
-              controller: TextEditingController(text: widget.entry.digits.toString()),
+              controller: TextEditingController(
+                text: widget.entry.digits.toString(),
+              ),
               decoration: const InputDecoration(labelText: 'Digits'),
               keyboardType: TextInputType.number,
               enabled: false,
             ),
             TextField(
-              controller: TextEditingController(text: widget.entry.period.toString()),
+              controller: TextEditingController(
+                text: widget.entry.period.toString(),
+              ),
               decoration: const InputDecoration(labelText: 'Period (seconds)'),
               keyboardType: TextInputType.number,
               enabled: false,

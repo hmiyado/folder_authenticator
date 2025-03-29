@@ -54,9 +54,7 @@ class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
               folderFuture.when(
                 data: (folder) {
                   // Invalidate the subfolders provider to refresh the UI
-                  ref.invalidate(
-                    subfoldersProvider(parentId: widget.folderId),
-                  );
+                  ref.invalidate(subfoldersProvider(parentId: widget.folderId));
 
                   // Show success message
                   ScaffoldMessenger.of(context).showSnackBar(

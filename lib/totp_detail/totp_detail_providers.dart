@@ -49,10 +49,10 @@ Future<bool> updateTotpEntry(
 }) async {
   final totpEntryRepository = ref.watch(totpEntryRepositoryProvider);
   final updated = await totpEntryRepository.updateTotpEntry(
-      entry.id!,
-      entryName,
-      issuer,
-      folderId,
+    entry.id!,
+    entryName,
+    issuer,
+    folderId,
   );
   ref.invalidate(totpEntryProvider(entry));
   ref.invalidate(folderEntriesProvider(entry.folderId));
