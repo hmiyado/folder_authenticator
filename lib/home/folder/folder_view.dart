@@ -75,17 +75,18 @@ class FolderView extends ConsumerWidget {
         Expanded(
           child: ListView(
             children: allFolderEntries.map((folderEntries){
-              if (folderEntries.entries.isEmpty) {
-                return [const Center(
-                  child: Text('No TOTP entries or subfolders found'),
-                )];
-              }
-
               final header = Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 8.0),
                   child: _buildFolderPathText(folderEntries.folderPath),
                 );
 
+              if (folderEntries.entries.isEmpty) {
+                return [
+                  header,
+                  const Center(child: Text('No TOTP entries or subfolders found')),
+                ];
+              }
+              
               final totpEntries = folderEntries.entries.map(
                   (entry) => TotpEntryCard(entry: entry),
                 ).toList();
