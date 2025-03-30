@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:totp_folder/folder_edit/folder_edit_page.dart';
 import 'package:totp_folder/home/add_dialog/add_dialog.dart';
 import 'package:totp_folder/home/folder/folder_entries_provider.dart';
 import 'package:totp_folder/home/totp_entry_card.dart';
@@ -25,22 +26,37 @@ class FolderView extends ConsumerWidget {
 
     return Row(
       children: [
-        const Icon(Icons.folder, size: 20),
-        const SizedBox(width: 8),
-        Text(
-          folderPath.map((folder) => folder.name).join(' / '),
-          style: textStyle,
+      Expanded(
+        child: GestureDetector(
+        onTap: () {
+          if (folderPath.isEmpty) return;
+          Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => FolderEditPage(folder: folderPath.last),
+          ),
+          );
+        },
+        child: Row(
+          children: [
+          const Icon(Icons.folder, size: 20),
+          const SizedBox(width: 8),
+          Text(
+            folderPath.map((folder) => folder.name).join(' / '),
+            style: textStyle,
+          ),
+          ],
         ),
-        const Spacer(),
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => AddDialog(folder: folderPath.last),
-            );
-          },
         ),
+      ),
+      IconButton(
+        icon: const Icon(Icons.add),
+        onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => AddDialog(folder: folderPath.last),
+        );
+        },
+      ),
       ],
     );
   }
