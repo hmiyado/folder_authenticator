@@ -101,29 +101,63 @@ void main() {
     test('updateFolder should update folder and return success', () async {
       // Arrange
       when(
-        mockDatabaseService.updateFolder(testFolder),
+        mockDatabaseService.updateFolder(
+          testFolder.id,
+          any,
+          name: testFolder.name,
+          color: testFolder.color,
+          parentId: testFolder.parentId,
+        ),
       ).thenAnswer((_) async => 1);
 
       // Act
-      final result = await folderRepository.updateFolder(testFolder);
+      final result = await folderRepository.updateFolder(
+        testFolder.id,
+        name: testFolder.name,
+        color: testFolder.color,
+        parentId: testFolder.parentId,
+      );
 
       // Assert
       expect(result, true);
-      verify(mockDatabaseService.updateFolder(testFolder)).called(1);
+      verify(mockDatabaseService.updateFolder(
+        testFolder.id,
+        any,
+        name: testFolder.name,
+        color: testFolder.color,
+        parentId: testFolder.parentId,
+      )).called(1);
     });
 
     test('updateFolder should return false when no rows affected', () async {
       // Arrange
       when(
-        mockDatabaseService.updateFolder(testFolder),
+        mockDatabaseService.updateFolder(
+          testFolder.id,
+          any,
+          name: testFolder.name,
+          color: testFolder.color,
+          parentId: testFolder.parentId,
+        ),
       ).thenAnswer((_) async => 0);
 
       // Act
-      final result = await folderRepository.updateFolder(testFolder);
+      final result = await folderRepository.updateFolder(
+        testFolder.id,
+        name: testFolder.name,
+        color: testFolder.color,
+        parentId: testFolder.parentId,
+      );
 
       // Assert
       expect(result, false);
-      verify(mockDatabaseService.updateFolder(testFolder)).called(1);
+      verify(mockDatabaseService.updateFolder(
+        testFolder.id,
+        any,
+        name: testFolder.name,
+        color: testFolder.color,
+        parentId: testFolder.parentId,
+      )).called(1);
     });
 
     test('deleteFolder should delete folder and return success', () async {

@@ -77,13 +77,27 @@ class DatabaseService {
     });
   }
 
-  Future<int> updateFolder(Folder folder) async {
+  Future<int> updateFolder(
+    int id,
+    DateTime updatedAt,
+    {
+      String? name,
+      String? color,
+      int? parentId,
+    }
+  ) async {
     final db = await database;
+    final Map<String, dynamic> map = {
+      'updated_at': updatedAt.millisecondsSinceEpoch,
+    };
+    if (name != null) map['name'] = name;
+    if (color != null) map['color'] = color;
+    if (parentId != null) map['parent_id'] = parentId;
     return await db.update(
       'folders',
-      folder.toMap(),
+      map,
       where: 'id = ?',
-      whereArgs: [folder.id],
+      whereArgs: [id],
     );
   }
 

@@ -34,8 +34,21 @@ class FolderRepository {
     );
   }
 
-  Future<bool> updateFolder(Folder folder) async {
-    final rowsAffected = await _databaseService.updateFolder(folder);
+  Future<bool> updateFolder(
+    int id,
+    {
+      String? name,
+      String? color,
+      int? parentId,
+    }
+  ) async {
+    final rowsAffected = await _databaseService.updateFolder(
+      id,
+      DateTime.now(),
+      name: name,
+      color: color,
+      parentId: parentId,
+    );
     return rowsAffected > 0;
   }
 
