@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:totp_folder/folder_edit/folder_edit_providers.dart';
 import 'package:totp_folder/home/folder/folder_path_provider.dart';
 import 'package:totp_folder/models/folder.dart';
-import 'package:totp_folder/repositories/folder_repository.dart';
 
 class FolderEditPage extends ConsumerStatefulWidget {
   final Folder folder;
@@ -36,13 +36,12 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
 
   void _saveFolder() {
     if (_formKey.currentState!.validate()) {
-      ref.read(folderRepositoryProvider).updateFolder(
+      ref.read(updateFolderProvider(
         widget.folder.id,
-        name: nameController.text == widget.folder.name ? null : nameController.text,
+        folderName: nameController.text == widget.folder.name ? null : nameController.text,
         color: colorController.text == widget.folder.color ? null : colorController.text,
         parentId: parentFolderId == widget.folder.parentId ? null : parentFolderId,
-      );
-      ref.invalidate(folderRepositoryProvider);
+      ));
       Navigator.of(context).pop();
     }
   }
