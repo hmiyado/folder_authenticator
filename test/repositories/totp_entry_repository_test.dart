@@ -70,7 +70,15 @@ void main() {
           folderId: 2,
         );
         when(
-          mockDatabaseService.insertTotpEntry(any, any, any, any, any, any, any),
+          mockDatabaseService.insertTotpEntry(
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+          ),
         ).thenAnswer((_) async => 3);
 
         // Act

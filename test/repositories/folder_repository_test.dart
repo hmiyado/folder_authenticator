@@ -120,13 +120,15 @@ void main() {
 
       // Assert
       expect(result, true);
-      verify(mockDatabaseService.updateFolder(
-        testFolder.id,
-        any,
-        name: testFolder.name,
-        color: testFolder.color,
-        parentId: testFolder.parentId,
-      )).called(1);
+      verify(
+        mockDatabaseService.updateFolder(
+          testFolder.id,
+          any,
+          name: testFolder.name,
+          color: testFolder.color,
+          parentId: testFolder.parentId,
+        ),
+      ).called(1);
     });
 
     test('updateFolder should return false when no rows affected', () async {
@@ -151,13 +153,15 @@ void main() {
 
       // Assert
       expect(result, false);
-      verify(mockDatabaseService.updateFolder(
-        testFolder.id,
-        any,
-        name: testFolder.name,
-        color: testFolder.color,
-        parentId: testFolder.parentId,
-      )).called(1);
+      verify(
+        mockDatabaseService.updateFolder(
+          testFolder.id,
+          any,
+          name: testFolder.name,
+          color: testFolder.color,
+          parentId: testFolder.parentId,
+        ),
+      ).called(1);
     });
 
     test('deleteFolder should delete folder and return success', () async {

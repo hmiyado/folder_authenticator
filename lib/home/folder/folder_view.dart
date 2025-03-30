@@ -26,37 +26,37 @@ class FolderView extends ConsumerWidget {
 
     return Row(
       children: [
-      Expanded(
-        child: GestureDetector(
-        onTap: () {
-          if (folderPath.isEmpty) return;
-          Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => FolderEditPage(folder: folderPath.last),
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              if (folderPath.isEmpty) return;
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => FolderEditPage(folder: folderPath.last),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                const Icon(Icons.folder, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  folderPath.map((folder) => folder.name).join(' / '),
+                  style: textStyle,
+                ),
+              ],
+            ),
           ),
-          );
-        },
-        child: Row(
-          children: [
-          const Icon(Icons.folder, size: 20),
-          const SizedBox(width: 8),
-          Text(
-            folderPath.map((folder) => folder.name).join(' / '),
-            style: textStyle,
-          ),
-          ],
         ),
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => AddDialog(folder: folderPath.last),
+            );
+          },
         ),
-      ),
-      IconButton(
-        icon: const Icon(Icons.add),
-        onPressed: () {
-        showDialog(
-          context: context,
-          builder: (context) => AddDialog(folder: folderPath.last),
-        );
-        },
-      ),
       ],
     );
   }

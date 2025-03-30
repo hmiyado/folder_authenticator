@@ -41,7 +41,15 @@ void main() {
       const int newEntryId = 2;
 
       when(
-        mockTotpEntryRepository.createTotpEntry(any, any, any, any, any, any, any),
+        mockTotpEntryRepository.createTotpEntry(
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+        ),
       ).thenAnswer((_) async => newEntryId);
 
       // Act - create a new entry

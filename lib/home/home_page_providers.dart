@@ -49,7 +49,15 @@ Future<int> createTotpEntry(
 ) async {
   final id = await ref
       .watch(totpEntryRepositoryProvider)
-      .createTotpEntry(totpName, secret, issuer,  digits, period, algorithm, folderId,);
+      .createTotpEntry(
+        totpName,
+        secret,
+        issuer,
+        digits,
+        period,
+        algorithm,
+        folderId,
+      );
   ref.invalidate(totpEntriesByFolderProvider(folderId: folderId));
   return id;
 }

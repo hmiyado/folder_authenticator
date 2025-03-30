@@ -79,13 +79,11 @@ class DatabaseService {
 
   Future<int> updateFolder(
     int id,
-    DateTime updatedAt,
-    {
-      String? name,
-      String? color,
-      int? parentId,
-    }
-  ) async {
+    DateTime updatedAt, {
+    String? name,
+    String? color,
+    int? parentId,
+  }) async {
     final db = await database;
     final Map<String, dynamic> map = {
       'updated_at': updatedAt.millisecondsSinceEpoch,
@@ -93,12 +91,7 @@ class DatabaseService {
     if (name != null) map['name'] = name;
     if (color != null) map['color'] = color;
     if (parentId != null) map['parent_id'] = parentId;
-    return await db.update(
-      'folders',
-      map,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.update('folders', map, where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> deleteFolder(int id) async {

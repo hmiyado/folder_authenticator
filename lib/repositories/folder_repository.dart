@@ -35,13 +35,11 @@ class FolderRepository {
   }
 
   Future<bool> updateFolder(
-    int id,
-    {
-      String? name,
-      String? color,
-      int? parentId,
-    }
-  ) async {
+    int id, {
+    String? name,
+    String? color,
+    int? parentId,
+  }) async {
     final rowsAffected = await _databaseService.updateFolder(
       id,
       DateTime.now(),
