@@ -112,27 +112,18 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextFormField(
+              TextField(
                 controller: nameController,
                 decoration: const InputDecoration(
                   labelText: 'Folder Name',
-                  border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a folder name';
-                  }
-                  return null;
-                },
               ),
               const SizedBox(height: 16),
-              TextFormField(
+              TextField(
                 controller: colorController,
                 decoration: const InputDecoration(
                   labelText: 'Color',
-                  border: OutlineInputBorder(),
                 ),
-                maxLines: 3,
               ),
               DropdownButton(
                 value: folderPathController.text,
