@@ -25,3 +25,10 @@ Future<bool> updateFolder(Ref ref,int folderId, {
   ref.invalidate(folderRepositoryProvider);
   return updated;
 }
+
+@riverpod
+Future<bool> deleteFolder(Ref ref, int folderId) async {
+  final deleted = ref.read(folderRepositoryProvider).deleteFolder(folderId);
+  ref.invalidate(folderRepositoryProvider);
+  return deleted;
+}

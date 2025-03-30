@@ -60,6 +60,34 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Folder'),
+        actions: [
+          IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('Delete Folder'),
+                content: Text('Are you sure you want to delete "${widget.folder.name}"?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      ref.read(deleteFolderProvider(widget.folder.id));
+                      Navigator.of(context).pop(); // Close dialog
+                      Navigator.of(context).pop(); // Return to previous screen
+                    },
+                    child: const Text('Delete'),
+                  ),
+                ],
+              ),
+            );
+        },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
