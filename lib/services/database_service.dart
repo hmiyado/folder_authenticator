@@ -54,7 +54,7 @@ class DatabaseService {
         folder_id INTEGER,
         created_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL,
-        FOREIGN KEY (folder_id) REFERENCES folders (id) ON DELETE SET NULL
+        FOREIGN KEY (folder_id) REFERENCES folders (id) ON DELETE CASCADE
       )
     ''');
   }
