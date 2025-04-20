@@ -111,17 +111,13 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
             const Divider(height: 32),
             _buildInfoRow('Name', data.name),
             _buildInfoRow('Issuer', data.issuer),
-            _buildInfoRow('Secret', data.secret, obscure: true),
-            _buildInfoRow('Digits', data.digits.toString()),
-            _buildInfoRow('Period', '${data.period} seconds'),
-            _buildInfoRow('Algorithm', data.algorithm),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {bool obscure = false}) {
+  Widget _buildInfoRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -134,63 +130,9 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          Expanded(
-            child:
-                obscure
-                    ? Row(
-                      children: [
-                        Text('•' * 10),
-                        IconButton(
-                          icon: const Icon(Icons.visibility),
-                          onPressed: () {
-                            _showSecret(widget.entry.secret);
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.copy),
-                          onPressed: () {
-                            Clipboard.setData(ClipboardData(text: value));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Secret copied to clipboard'),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    )
-                    : Text(value),
-          ),
+          Expanded(child: Text(value)),
         ],
       ),
-    );
-  }
-
-  void _showSecret(String secret) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Secret Key'),
-          content: Text(secret),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
-            ),
-            TextButton(
-              onPressed: () {
-                Clipboard.setData(ClipboardData(text: secret));
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Secret copied to clipboard')),
-                );
-                Navigator.pop(context);
-              },
-              child: const Text('Copy'),
-            ),
-          ],
-        );
-      },
     );
   }
 
