@@ -127,4 +127,19 @@ class TotpService {
       return null;
     }
   }
+  
+  // Generate otpauth URI for a TOTP entry
+  String generateOtpauthUri(TotpEntry entry) {
+    // Format: otpauth://totp/{issuer}:{name}?secret={secret}&issuer={issuer}&algorithm={algorithm}&digits={digits}&period={period}
+    final label = entry.issuer.isNotEmpty 
+        ? '${Uri.encodeComponent(entry.issuer)}:${Uri.encodeComponent(entry.name)}'
+        : Uri.encodeComponent(entry.name);
+    
+    return 'otpauth://totp/$label?'
+        'secret=${entry.secret}'
+        '&issuer=${Uri.encodeComponent(entry.issuer)}'
+        '&algorithm=${entry.algorithm}'
+        '&digits=${entry.digits}'
+        '&period=${entry.period}';
+  }
 }

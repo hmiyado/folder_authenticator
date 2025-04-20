@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:totp_folder/models/totp_entry.dart';
 import 'package:totp_folder/services/totp_service.dart';
 
 void main() {
@@ -131,6 +132,122 @@ void main() {
 
         // Assert
         expect(result, isNull);
+      });
+    });
+    
+    group('generateOtpauthUri', () {
+      test('should generate correct URI with issuer', () {
+        // Arrange
+        final totpEntry = TotpEntry(
+          id: 1,
+          name: 'Test Account',
+          secret: 'ABCDEFGHIJKLMNOP',
+          issuer: 'Test Issuer',
+          folderId: 1,
+          digits: 6,
+          period: 30,
+          algorithm: 'SHA1',
+        );
+
+        // Expected URI format:
+        // otpauth://totp/{issuer}:{name}?secret={secret}&issuer={issuer}&algorithm={algorithm}&digits={digits}&period={period}
+        final expectedUri = 'otpauth://totp/Test%20Issuer:Test%20Account?'
+            'secret=ABCDEFGHIJKLMNOP'
+            '&issuer=Test%20Issuer'
+            '&algorithm=SHA1'
+            '&digits=6'
+            '&period=30';
+
+        // Act
+        final uri = totpService.generateOtpauthUri(totpEntry);
+
+        // Assert
+        expect(uri, equals(expectedUri));
+      });
+
+      test('should generate correct URI without issuer', () {
+        // Arrange
+        final totpEntry = TotpEntry(
+          id: 1,
+          name: 'Test Account',
+          secret: 'ABCDEFGHIJKLMNOP',
+          issuer: '', // Empty issuer
+          folderId: 1,
+          digits: 6,
+          period: 30,
+          algorithm: 'SHA1',
+        );
+
+        // Expected URI format without issuer in label:
+        // otpauth://totp/{name}?secret={secret}&issuer={issuer}&algorithm={algorithm}&digits={digits}&period={period}
+        final expectedUri = 'otpauth://totp/Test%20Account?'
+            'secret=ABCDEFGHIJKLMNOP'
+            '&issuer='
+            '&algorithm=SHA1'
+            '&digits=6'
+            '&period=30';
+
+        // Act
+        final uri = totpService.generateOtpauthUri(totpEntry);
+
+        // Assert
+        expect(uri, equals(expectedUri));
+      });
+
+      test('should handle special characters in name and issuer', () {
+        // Arrange
+        final totpEntry = TotpEntry(
+          id: 1,
+          name: 'Test & Account+',
+          secret: 'ABCDEFGHIJKLMNOP',
+          issuer: 'Test & Issuer+',
+          folderId: 1,
+          digits: 6,
+          period: 30,
+          algorithm: 'SHA1',
+        );
+
+        // Expected URI with encoded special characters
+        final expectedUri = 'otpauth://totp/Test%20%26%20Issuer%2B:Test%20%26%20Account%2B?'
+            'secret=ABCDEFGHIJKLMNOP'
+            '&issuer=Test%20%26%20Issuer%2B'
+            '&algorithm=SHA1'
+            '&digits=6'
+            '&period=30';
+
+        // Act
+        final uri = totpService.generateOtpauthUri(totpEntry);
+
+        // Assert
+        expect(uri, equals(expectedUri));
+      });
+
+      test('should handle non-default parameters', () {
+        // Arrange
+        final totpEntry = TotpEntry(
+          id: 1,
+          name: 'Test Account',
+          secret: 'ABCDEFGHIJKLMNOP',
+          issuer: 'Test Issuer',
+          folderId: 1,
+          digits: 8, // Non-default
+          period: 60, // Non-default
+          algorithm: 'SHA256', // Non-default
+        );
+
+        // Expected URI with non-default parameters
+        final expectedUri = 'otpauth://totp/Test%20Issuer:Test%20Account?'
+            'secret=ABCDEFGHIJKLMNOP'
+            '&issuer=Test%20Issuer'
+            '&algorithm=SHA256'
+            '&digits=8'
+            '&period=60';
+
+        // Act
+        final uri = totpService.generateOtpauthUri(totpEntry);
+
+        // Assert
+        expect(uri, equals(expectedUri));
       });
     });
   });

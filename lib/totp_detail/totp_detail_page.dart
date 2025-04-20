@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/models/totp_entry.dart';
+import 'package:totp_folder/services/totp_service.dart';
 import 'package:totp_folder/totp_detail/totp_detail_providers.dart';
 import 'package:totp_folder/totp_detail/totp_edit_page.dart';
+import 'package:totp_folder/totp_detail/totp_export_dialog.dart';
 
 class TotpDetailPage extends ConsumerStatefulWidget {
   final TotpEntry entry;
@@ -63,6 +65,13 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                   builder: (context) => TotpEditPage(entry: data),
                 ),
               );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.qr_code),
+            tooltip: 'Export',
+            onPressed: () {
+              _showExportDialog(data);
             },
           ),
           IconButton(
@@ -133,6 +142,19 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
           Expanded(child: Text(value)),
         ],
       ),
+    );
+  }
+
+  void _showExportDialog(TotpEntry entry) {
+    final totpService = ref.read(totpServiceProvider);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return TotpExportDialog(
+          entry: entry,
+          totpService: totpService,
+        );
+      },
     );
   }
 
