@@ -52,8 +52,9 @@ dependencies:
   riverpod_annotation: ^2.6.1
   riverpod_generator: ^2.6.5
   
-  # QR code scanning
+  # QR code scanning and generation
   mobile_scanner: ^3.5.7
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:
