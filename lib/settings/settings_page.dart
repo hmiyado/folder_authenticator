@@ -20,41 +20,6 @@ class SettingsPage extends ConsumerWidget {
               _showAboutDialog(context);
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.security),
-            title: const Text('Security'),
-            subtitle: const Text('App lock and biometric authentication'),
-            onTap: () {
-              // Navigate to security settings
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Security settings coming soon')),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.backup),
-            title: const Text('Backup & Restore'),
-            subtitle: const Text('Export and import your TOTP data'),
-            onTap: () {
-              // Navigate to backup settings
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Backup & Restore coming soon')),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.color_lens),
-            title: const Text('Appearance'),
-            subtitle: const Text('Theme and display options'),
-            onTap: () {
-              // Navigate to appearance settings
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Appearance settings coming soon'),
-                ),
-              );
-            },
-          ),
         ],
       ),
     );
