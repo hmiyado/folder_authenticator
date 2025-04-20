@@ -15,7 +15,7 @@ Future<bool> updateFolder(
   Ref ref,
   int folderId, {
   String? folderName,
-  String? color,
+  String? icon,
   int? parentId,
 }) async {
   final updated = ref
@@ -23,7 +23,7 @@ Future<bool> updateFolder(
       .updateFolder(
         folderId,
         name: folderName,
-        color: color,
+        icon: icon,
         parentId: parentId,
       );
   ref.invalidate(folderRepositoryProvider);

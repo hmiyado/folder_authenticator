@@ -16,7 +16,7 @@ class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
   @override
   Widget build(BuildContext context) {
     final nameController = TextEditingController();
-    final colorController = TextEditingController(text: '#3498db');
+    final iconController = TextEditingController(text: '');
 
     return AlertDialog(
       title: const Text('Add Folder'),
@@ -28,8 +28,8 @@ class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
             decoration: const InputDecoration(labelText: 'Folder Name'),
           ),
           TextField(
-            controller: colorController,
-            decoration: const InputDecoration(labelText: 'Color (hex)'),
+            controller: iconController,
+            decoration: const InputDecoration(labelText: 'Icon'),
           ),
         ],
       ),
@@ -46,7 +46,7 @@ class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
                 createSubFolderProvider(
                   widget.folderId,
                   nameController.text,
-                  colorController.text,
+                  iconController.text,
                 ),
               );
 

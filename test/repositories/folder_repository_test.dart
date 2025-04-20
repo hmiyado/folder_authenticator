@@ -22,14 +22,14 @@ void main() {
     final testFolder = Folder(
       id: 1,
       name: 'Test Folder',
-      color: '#FF0000',
+      icon: '',
       parentId: 0,
     );
 
     final testChildFolder = Folder(
       id: 2,
       name: 'Child Folder',
-      color: '#00FF00',
+      icon: '',
       parentId: 1,
     );
 
@@ -67,12 +67,12 @@ void main() {
         id: 1,
         parentId: 0,
         name: 'New Folder',
-        color: '#0000FF',
+        icon: '#0000FF',
       );
       when(
         mockDatabaseService.insertFolder(
           folderToCreate.name,
-          folderToCreate.color,
+          folderToCreate.icon,
           folderToCreate.parentId,
           any,
           any,
@@ -82,7 +82,7 @@ void main() {
       // Act
       await folderRepository.createFolder(
         folderToCreate.name,
-        folderToCreate.color,
+        folderToCreate.icon,
         folderToCreate.parentId,
       );
 
@@ -90,7 +90,7 @@ void main() {
       verify(
         mockDatabaseService.insertFolder(
           folderToCreate.name,
-          folderToCreate.color,
+          folderToCreate.icon,
           folderToCreate.parentId,
           any,
           any,
@@ -105,7 +105,7 @@ void main() {
           testFolder.id,
           any,
           name: testFolder.name,
-          color: testFolder.color,
+          icon: testFolder.icon,
           parentId: testFolder.parentId,
         ),
       ).thenAnswer((_) async => 1);
@@ -114,7 +114,7 @@ void main() {
       final result = await folderRepository.updateFolder(
         testFolder.id,
         name: testFolder.name,
-        color: testFolder.color,
+        icon: testFolder.icon,
         parentId: testFolder.parentId,
       );
 
@@ -125,7 +125,7 @@ void main() {
           testFolder.id,
           any,
           name: testFolder.name,
-          color: testFolder.color,
+          icon: testFolder.icon,
           parentId: testFolder.parentId,
         ),
       ).called(1);
@@ -138,7 +138,7 @@ void main() {
           testFolder.id,
           any,
           name: testFolder.name,
-          color: testFolder.color,
+          icon: testFolder.icon,
           parentId: testFolder.parentId,
         ),
       ).thenAnswer((_) async => 0);
@@ -147,7 +147,7 @@ void main() {
       final result = await folderRepository.updateFolder(
         testFolder.id,
         name: testFolder.name,
-        color: testFolder.color,
+        icon: testFolder.icon,
         parentId: testFolder.parentId,
       );
 
@@ -158,7 +158,7 @@ void main() {
           testFolder.id,
           any,
           name: testFolder.name,
-          color: testFolder.color,
+          icon: testFolder.icon,
           parentId: testFolder.parentId,
         ),
       ).called(1);

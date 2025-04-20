@@ -33,7 +33,7 @@ class DatabaseService {
       CREATE TABLE folders(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL UNIQUE,
-        color TEXT NOT NULL,
+        icon TEXT NOT NULL,
         parent_id INTEGER,
         created_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL,
@@ -62,7 +62,7 @@ class DatabaseService {
   // Folder operations
   Future<int> insertFolder(
     String name,
-    String color,
+    String icon,
     int parentId,
     int createdAt,
     int updatedAt,
@@ -70,7 +70,7 @@ class DatabaseService {
     final db = await database;
     return await db.insert('folders', {
       'name': name,
-      'color': color,
+      'icon': icon,
       'parent_id': parentId,
       'created_at': createdAt,
       'updated_at': updatedAt,
@@ -81,7 +81,7 @@ class DatabaseService {
     int id,
     DateTime updatedAt, {
     String? name,
-    String? color,
+    String? icon,
     int? parentId,
   }) async {
     final db = await database;
@@ -89,7 +89,7 @@ class DatabaseService {
       'updated_at': updatedAt.millisecondsSinceEpoch,
     };
     if (name != null) map['name'] = name;
-    if (color != null) map['color'] = color;
+    if (icon != null) map['icon'] = icon;
     if (parentId != null) map['parent_id'] = parentId;
     return await db.update('folders', map, where: 'id = ?', whereArgs: [id]);
   }

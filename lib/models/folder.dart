@@ -8,7 +8,8 @@ class Folder {
   /// Reference to parent folder, 0 if it's a root folder. Parent folder for the root folder is itself.
   final int parentId;
   final String name;
-  final String color;
+  /// If icon is empty string, it means default icon.
+  final String icon;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -16,7 +17,7 @@ class Folder {
     required this.id,
     required this.name,
     required this.parentId,
-    this.color = '#3498db', // Default blue color
+    this.icon = '',
     DateTime? createdAt,
     DateTime? updatedAt,
   }) : createdAt = createdAt ?? DateTime.now(),
@@ -25,7 +26,7 @@ class Folder {
   Folder copyWith({
     int? id,
     String? name,
-    String? color,
+    String? icon,
     int? parentId,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -33,7 +34,7 @@ class Folder {
     return Folder(
       id: id ?? this.id,
       name: name ?? this.name,
-      color: color ?? this.color,
+      icon: icon ?? this.icon,
       parentId: parentId ?? this.parentId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -44,7 +45,7 @@ class Folder {
     return {
       'id': id,
       'name': name,
-      'color': color,
+      'icon': icon,
       'parent_id': parentId,
       'created_at': createdAt.millisecondsSinceEpoch,
       'updated_at': updatedAt.millisecondsSinceEpoch,
@@ -55,7 +56,7 @@ class Folder {
     return Folder(
       id: map['id'],
       name: map['name'],
-      color: map['color'] ?? '#3498db',
+      icon: map['icon'] ?? '#3498db',
       parentId: map['parent_id'],
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at']),
       updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updated_at']),
@@ -64,7 +65,7 @@ class Folder {
 
   @override
   String toString() {
-    return 'Folder(id: $id, name: $name, parentId: $parentId, color: $color)';
+    return 'Folder(id: $id, name: $name, parentId: $parentId, icon: $icon)';
   }
 
   @override
@@ -75,11 +76,11 @@ class Folder {
         other.id == id &&
         other.name == name &&
         other.parentId == parentId &&
-        other.color == color;
+        other.icon == icon;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ parentId.hashCode ^ color.hashCode;
+    return id.hashCode ^ name.hashCode ^ parentId.hashCode ^ icon.hashCode;
   }
 }

@@ -16,7 +16,7 @@ class FolderEditPage extends ConsumerStatefulWidget {
 class _FolderEditPageState extends ConsumerState<FolderEditPage> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
-  final colorController = TextEditingController();
+  final iconController = TextEditingController();
   final folderPathController = TextEditingController();
   var parentFolderId = 0;
 
@@ -29,7 +29,7 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
   @override
   void dispose() {
     nameController.dispose();
-    colorController.dispose();
+    iconController.dispose();
     folderPathController.dispose();
     super.dispose();
   }
@@ -43,10 +43,10 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
               nameController.text == widget.folder.name
                   ? null
                   : nameController.text,
-          color:
-              colorController.text == widget.folder.color
+          icon:
+              iconController.text == widget.folder.icon
                   ? null
-                  : colorController.text,
+                  : iconController.text,
           parentId:
               parentFolderId == widget.folder.parentId ? null : parentFolderId,
         ),
@@ -65,7 +65,7 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
             .join('/') ??
         widget.folder.name;
     nameController.text = widget.folder.name;
-    colorController.text = widget.folder.color;
+    iconController.text = widget.folder.icon;
     folderPathController.text = folderPath;
 
     return Scaffold(
@@ -120,9 +120,9 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
               ),
               const SizedBox(height: 16),
               TextField(
-                controller: colorController,
+                controller: iconController,
                 decoration: const InputDecoration(
-                  labelText: 'Color',
+                  labelText: 'Icon',
                 ),
               ),
               DropdownButton(

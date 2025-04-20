@@ -24,10 +24,10 @@ class FolderRepository {
     return await _databaseService.getFolder(id);
   }
 
-  Future<int?> createFolder(String name, String color, int parentId) async {
+  Future<int?> createFolder(String name, String icon, int parentId) async {
     return await _databaseService.insertFolder(
       name,
-      color,
+      icon,
       parentId,
       DateTime.now().millisecondsSinceEpoch,
       DateTime.now().millisecondsSinceEpoch,
@@ -37,14 +37,14 @@ class FolderRepository {
   Future<bool> updateFolder(
     int id, {
     String? name,
-    String? color,
+    String? icon,
     int? parentId,
   }) async {
     final rowsAffected = await _databaseService.updateFolder(
       id,
       DateTime.now(),
       name: name,
-      color: color,
+      icon: icon,
       parentId: parentId,
     );
     return rowsAffected > 0;
