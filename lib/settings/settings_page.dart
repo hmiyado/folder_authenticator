@@ -20,6 +20,20 @@ class SettingsPage extends ConsumerWidget {
               _showAboutDialog(context);
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.description),
+            title: const Text('Licenses'),
+            subtitle: const Text('Open Source Licenses'),
+            onTap: () {
+              showLicensePage(
+                context: context,
+                applicationName: 'TOTP Folder',
+                applicationVersion: ref
+                    .read(settingsPageViewModelProvider)
+                    .getAppVersion(),
+              );
+            },
+          ),
         ],
       ),
     );
