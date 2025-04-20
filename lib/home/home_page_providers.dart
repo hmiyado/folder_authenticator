@@ -27,11 +27,13 @@ Future<int?> createSubFolder(
   Ref ref,
   int parentId,
   String folderName,
-  String icon,
+  {
+    String? icon,
+  }
 ) async {
   final i = await ref
       .watch(folderRepositoryProvider)
-      .createFolder(folderName, icon, parentId);
+      .createFolder(folderName, icon ?? '', parentId);
   ref.invalidate(subfoldersProvider(parentId: parentId));
   return i;
 }
