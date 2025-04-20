@@ -72,34 +72,8 @@ class _TotpEditPageState extends ConsumerState<TotpEditPage> {
               decoration: const InputDecoration(labelText: 'Name'),
             ),
             TextField(
-              controller: TextEditingController(text: widget.entry.secret),
-              decoration: const InputDecoration(labelText: 'Secret'),
-              enabled: false,
-            ),
-            TextField(
               controller: issuerController,
               decoration: const InputDecoration(labelText: 'Issuer'),
-            ),
-            TextField(
-              controller: TextEditingController(
-                text: widget.entry.digits.toString(),
-              ),
-              decoration: const InputDecoration(labelText: 'Digits'),
-              keyboardType: TextInputType.number,
-              enabled: false,
-            ),
-            TextField(
-              controller: TextEditingController(
-                text: widget.entry.period.toString(),
-              ),
-              decoration: const InputDecoration(labelText: 'Period (seconds)'),
-              keyboardType: TextInputType.number,
-              enabled: false,
-            ),
-            TextField(
-              controller: TextEditingController(text: widget.entry.algorithm),
-              decoration: const InputDecoration(labelText: 'Algorithm'),
-              enabled: false,
             ),
           ],
         ),
