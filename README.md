@@ -24,7 +24,7 @@ TOTP Folder is a Flutter-based mobile application that allows you to manage your
    ```
 3. Generate code
     ```sh
-    flutter pub run build_runner build --delete-conflicting-outputs
+    dart run build_runner build --delete-conflicting-outputs
     ```
 4. Run the application:
    ```sh
