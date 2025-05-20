@@ -136,14 +136,16 @@ The codebase is organized by feature:
 
 ```
 lib/
+├── folder_edit/        # Folder editing functionality
 ├── home/               # Home screen and related components
-│   ├── folder/         # Folder-related UI components
-│   └── ...
+│   ├── add_dialog/     # Dialog components for adding items
+│   └── folder/         # Folder-related UI components
 ├── models/             # Data models
 ├── repositories/       # Data access layer
 ├── services/           # Business logic services
 ├── settings/           # Settings screen and related components
 ├── totp_detail/        # TOTP detail screen and related components
+├── util/               # Utility functions and helpers
 └── main.dart           # Application entry point
 ```
 
