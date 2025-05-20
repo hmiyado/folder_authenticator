@@ -10,7 +10,7 @@ part 'totp_service.g.dart';
 // Provider for the TotpService
 @riverpod
 TotpService totpService(Ref ref) {
-  final timer = Timer.periodic(const Duration(milliseconds: 500), (_) {
+  final timer = Timer.periodic(const Duration(milliseconds: 1000), (_) {
     ref.invalidateSelf(); // Invalidate the provider to trigger a rebuild
   });
 
