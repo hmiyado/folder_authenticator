@@ -4,17 +4,22 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:totp_folder/models/folder.dart';
 import 'package:totp_folder/models/totp_entry.dart';
+import 'package:totp_folder/services/encryption_service.dart';
 
 part 'database_service.g.dart';
 
 // Provider for the DatabaseService
 @riverpod
 DatabaseService databaseService(Ref ref) {
-  return DatabaseService();
+  final encryptionService = ref.watch(encryptionServiceProvider);
+  return DatabaseService(encryptionService);
 }
 
 class DatabaseService {
+  final EncryptionService _encryptionService;
   Database? _database;
+  
+  DatabaseService(this._encryptionService);
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -135,10 +140,13 @@ class DatabaseService {
     String algorithm,
     int folderId,
   ) async {
+    // Encrypt the secret before storing
+    final encryptedSecret = await _encryptionService.encrypt(secret);
+    
     final db = await database;
     final map = {
       'name': name,
-      'secret': secret,
+      'secret': encryptedSecret,
       'issuer': issuer,
       'digits': digits,
       'period': period,
@@ -190,7 +198,21 @@ class DatabaseService {
       where: whereClause,
       whereArgs: whereArgs,
     );
-    return List.generate(maps.length, (i) => TotpEntry.fromMap(maps[i]));
+    
+    // Decrypt the secrets before returning
+    final entries = <TotpEntry>[];
+    for (final map in maps) {
+      final encryptedSecret = map['secret'] as String;
+      final decryptedSecret = await _encryptionService.decrypt(encryptedSecret);
+      
+      // Create a new map with the decrypted secret
+      final decryptedMap = Map<String, dynamic>.from(map);
+      decryptedMap['secret'] = decryptedSecret;
+      
+      entries.add(TotpEntry.fromMap(decryptedMap));
+    }
+    
+    return entries;
   }
 
   Future<TotpEntry?> getTotpEntry(int id) async {
@@ -200,9 +222,19 @@ class DatabaseService {
       where: 'id = ?',
       whereArgs: [id],
     );
+    
     if (maps.isNotEmpty) {
-      return TotpEntry.fromMap(maps.first);
+      final map = maps.first;
+      final encryptedSecret = map['secret'] as String;
+      final decryptedSecret = await _encryptionService.decrypt(encryptedSecret);
+      
+      // Create a new map with the decrypted secret
+      final decryptedMap = Map<String, dynamic>.from(map);
+      decryptedMap['secret'] = decryptedSecret;
+      
+      return TotpEntry.fromMap(decryptedMap);
     }
+    
     return null;
   }
 }
