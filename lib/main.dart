@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:totp_folder/home/home_page.dart';
+import 'package:totp_folder/services/config_service.dart';
+import 'package:totp_folder/services/encryption_service.dart';
 
-void main() {
+void main() async {
+  // Ensure Flutter is initialized
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Create a container to initialize services before the app starts
+  final container = ProviderContainer();
+  
+  // Initialize services
+  await container.read(configServiceProvider).initialize();
+  await container.read(encryptionServiceProvider).initialize();
+  
   runApp(
     // Wrap the entire app with ProviderScope for Riverpod
-    const ProviderScope(child: MyApp()),
+    ProviderScope(
+      parent: container,
+      child: const MyApp(),
+    ),
   );
 }
 
