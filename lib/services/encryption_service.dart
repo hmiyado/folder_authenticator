@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:encrypt/encrypt.dart';
@@ -20,7 +19,6 @@ EncryptionService encryptionService(Ref ref) {
 class EncryptionService {
   final ConfigService _configService;
   Encrypter? _encrypter;
-  final Random _random = Random.secure();
 
   EncryptionService(this._configService);
 
