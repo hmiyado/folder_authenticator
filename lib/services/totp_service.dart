@@ -27,14 +27,14 @@ class TotpService {
   String generateTotp(TotpEntry entry) {
     try {
       // Generate the OTP directly from the base32 secret
-      return OTP.generateTOTPCodeString(
+      final code = OTP.generateTOTPCodeString(
         entry.secret.toUpperCase(),
         DateTime.now().millisecondsSinceEpoch,
         length: entry.digits,
         interval: entry.period,
         algorithm: _getAlgorithm(entry.algorithm),
-        isGoogle: true,
       );
+      return code;
     } catch (e) {
       // Return error indicator if generation fails
       return 'ERROR';
