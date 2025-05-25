@@ -59,6 +59,9 @@ dependencies:
   # QR code scanning and generation
   mobile_scanner: ^3.5.7
   qr_flutter: ^4.1.0
+  
+  # Package info
+  package_info_plus: ^4.2.0
 
 dev_dependencies:
   flutter_test:

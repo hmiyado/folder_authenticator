@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // Provider for the SettingsPageViewModel
 final settingsPageViewModelProvider = Provider<SettingsPageViewModel>((ref) {
@@ -16,9 +17,10 @@ class SettingsPageViewModel {
   // - Export/import functionality
   // - Data backup settings
 
-  // For now, we'll include a version method as an example
-  String getAppVersion() {
-    return '1.0.0'; // This would typically come from a config or package info
+  // Get the app version from package info
+  Future<String> getAppVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    return '${packageInfo.version}+${packageInfo.buildNumber}';
   }
 
   // Example of a setting that could be implemented

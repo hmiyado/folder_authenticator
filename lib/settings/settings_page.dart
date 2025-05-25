@@ -24,14 +24,17 @@ class SettingsPage extends ConsumerWidget {
             leading: const Icon(Icons.description),
             title: const Text('Licenses'),
             subtitle: const Text('Open Source Licenses'),
-            onTap: () {
-              showLicensePage(
-                context: context,
-                applicationName: 'TOTP Folder',
-                applicationVersion: ref
-                    .read(settingsPageViewModelProvider)
-                    .getAppVersion(),
-              );
+            onTap: () async {
+              final version = await ref
+                  .read(settingsPageViewModelProvider)
+                  .getAppVersion();
+              if (context.mounted) {
+                showLicensePage(
+                  context: context,
+                  applicationName: 'TOTP Folder',
+                  applicationVersion: version,
+                );
+              }
             },
           ),
         ],
@@ -68,7 +71,18 @@ class SettingsPage extends ConsumerWidget {
                     'Sorting & Filtering: Quickly find the TOTP you need.',
                   ),
                   const SizedBox(height: 16),
-                  Text('Version: ${viewModel.getAppVersion()}'),
+                  FutureBuilder<String>(
+                    future: viewModel.getAppVersion(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text('Version: ${snapshot.data}');
+                      } else if (snapshot.hasError) {
+                        return const Text('Version: Unknown');
+                      } else {
+                        return const Text('Version: Loading...');
+                      }
+                    },
+                  ),
                 ],
               ),
               actions: [
