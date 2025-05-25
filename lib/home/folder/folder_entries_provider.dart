@@ -32,8 +32,7 @@ Future<FolderEntries> folderEntries(Ref ref, int folderId) async {
 // Provider for all folder entries (current folder + subfolders)
 @riverpod
 Future<List<FolderEntries>> allFolderEntries(Ref ref, int folderId) async {
-  final folderEntries = await ref.watch(folderEntriesProvider(folderId).future);
-  List<FolderEntries> allFolderEntries = [folderEntries];
+  List<FolderEntries> allFolderEntries = [];
   List<int> queue = [folderId];
 
   while (queue.isNotEmpty) {
