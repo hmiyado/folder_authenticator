@@ -1,8 +1,6 @@
 class Folder {
   /// Special folder ID for the root folder
   static const int rootFolderId = 0;
-  static Folder rootFolder() =>
-      Folder(id: rootFolderId, name: '(root)', parentId: rootFolderId);
   final int id;
 
   /// Reference to parent folder, 0 if it's a root folder. Parent folder for the root folder is itself.

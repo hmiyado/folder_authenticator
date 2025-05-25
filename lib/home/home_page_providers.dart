@@ -8,9 +8,28 @@ import 'package:totp_folder/repositories/totp_entry_repository.dart';
 part 'home_page_providers.g.dart';
 
 @riverpod
+Future<Folder> rootFolder(Ref ref) async {
+  return await ref.watch(folderRepositoryProvider).ensureRootFolderExists();
+}
+
+@riverpod
 class CurrentFolder extends _$CurrentFolder {
   @override
-  Folder build() => Folder.rootFolder();
+  Folder build() {
+    // Start with the root folder as default
+    ref.watch(rootFolderProvider).when(
+      data: (folder) => state = folder,
+      loading: () {},
+      error: (_, __) {},
+    );
+    
+    // Return a temporary folder while loading
+    return Folder(
+      id: Folder.rootFolderId,
+      name: 'Root',
+      parentId: Folder.rootFolderId,
+    );
+  }
 
   void setCurrentFolder(int folderId) async {
     Folder? folder = await ref

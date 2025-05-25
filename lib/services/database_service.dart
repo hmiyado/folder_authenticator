@@ -62,6 +62,21 @@ class DatabaseService {
         FOREIGN KEY (folder_id) REFERENCES folders (id) ON DELETE CASCADE
       )
     ''');
+
+    // Create the root folder
+    await _createRootFolder(db);
+  }
+
+  Future<void> _createRootFolder(Database db) async {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    await db.insert('folders', {
+      'id': Folder.rootFolderId,
+      'name': 'Root',
+      'icon': '',
+      'parent_id': Folder.rootFolderId,
+      'created_at': now,
+      'updated_at': now,
+    });
   }
 
   // Folder operations
@@ -95,11 +110,18 @@ class DatabaseService {
     };
     if (name != null) map['name'] = name;
     if (icon != null) map['icon'] = icon;
-    if (parentId != null) map['parent_id'] = parentId;
+    // Prevent changing the parent of the root folder
+    if (parentId != null && id != Folder.rootFolderId) {
+      map['parent_id'] = parentId;
+    }
     return await db.update('folders', map, where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> deleteFolder(int id) async {
+    // Prevent deletion of root folder
+    if (id == Folder.rootFolderId) {
+      return 0;
+    }
     final db = await database;
     return await db.delete('folders', where: 'id = ?', whereArgs: [id]);
   }
@@ -115,9 +137,6 @@ class DatabaseService {
   }
 
   Future<Folder?> getFolder(int id) async {
-    if (id == Folder.rootFolderId) {
-      return Folder.rootFolder();
-    }
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'folders',

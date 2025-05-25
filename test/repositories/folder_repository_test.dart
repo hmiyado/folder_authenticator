@@ -33,6 +33,12 @@ void main() {
       parentId: 1,
     );
 
+    final rootFolder = Folder(
+      id: Folder.rootFolderId,
+      name: 'Root',
+      parentId: Folder.rootFolderId,
+    );
+
     test('getFolders should return folders from database service', () async {
       // Arrange
       when(
@@ -188,11 +194,21 @@ void main() {
       verify(mockDatabaseService.deleteFolder(1)).called(1);
     });
 
+    test('deleteFolder should return false for root folder', () async {
+      // Act
+      final result = await folderRepository.deleteFolder(Folder.rootFolderId);
+
+      // Assert
+      expect(result, false);
+      // Verify that database service deleteFolder is not called for root folder
+      verifyNever(mockDatabaseService.deleteFolder(Folder.rootFolderId));
+    });
+
     test('getFolderPath should return path of folders', () async {
       // Arrange
       when(
         mockDatabaseService.getFolder(0),
-      ).thenAnswer((_) async => Folder.rootFolder());
+      ).thenAnswer((_) async => rootFolder);
       when(
         mockDatabaseService.getFolder(1),
       ).thenAnswer((_) async => testFolder);
@@ -207,6 +223,44 @@ void main() {
       expect(result[0].id, 0);
       expect(result[1].id, 1);
       expect(result[2].id, 2);
+    });
+
+    test('ensureRootFolderExists should create root folder if it does not exist', () async {
+      // Arrange
+      var callCount = 0;
+      when(mockDatabaseService.getFolder(Folder.rootFolderId))
+          .thenAnswer((_) async {
+            callCount++;
+            if (callCount == 1) {
+              return null; // First call - folder doesn't exist
+            } else {
+              return rootFolder; // Second call - folder exists after creation
+            }
+          });
+      when(mockDatabaseService.insertFolder('Root', '', Folder.rootFolderId, any, any))
+          .thenAnswer((_) async => Folder.rootFolderId);
+
+      // Act
+      final result = await folderRepository.ensureRootFolderExists();
+
+      // Assert
+      expect(result, rootFolder);
+      verify(mockDatabaseService.insertFolder('Root', '', Folder.rootFolderId, any, any)).called(1);
+      verify(mockDatabaseService.getFolder(Folder.rootFolderId)).called(2);
+    });
+
+    test('ensureRootFolderExists should return existing root folder if it exists', () async {
+      // Arrange
+      when(mockDatabaseService.getFolder(Folder.rootFolderId))
+          .thenAnswer((_) async => rootFolder);
+
+      // Act
+      final result = await folderRepository.ensureRootFolderExists();
+
+      // Assert
+      expect(result, rootFolder);
+      verify(mockDatabaseService.getFolder(Folder.rootFolderId)).called(1);
+      verifyNever(mockDatabaseService.insertFolder(any, any, any, any, any));
     });
   });
 }

@@ -17,11 +17,32 @@ class FolderRepository {
   FolderRepository(this._databaseService);
 
   Future<List<Folder>> getFolders(int parentId) async {
+    if (parentId == Folder.rootFolderId) {
+      // Ensure root folder exists before fetching subfolders
+      await ensureRootFolderExists();
+    }
     return await _databaseService.getFolders(parentId);
   }
 
   Future<Folder?> getFolder(int id) async {
     return await _databaseService.getFolder(id);
+  }
+
+  /// Ensures the root folder exists in the database
+  Future<Folder> ensureRootFolderExists() async {
+    Folder? rootFolder = await getFolder(Folder.rootFolderId);
+    if (rootFolder == null) {
+      // Create root folder if it doesn't exist
+      await _databaseService.insertFolder(
+        'Root',
+        '',
+        Folder.rootFolderId,
+        DateTime.now().millisecondsSinceEpoch,
+        DateTime.now().millisecondsSinceEpoch,
+      );
+      rootFolder = await getFolder(Folder.rootFolderId);
+    }
+    return rootFolder!;
   }
 
   Future<int?> createFolder(String name, String icon, int parentId) async {
@@ -51,6 +72,10 @@ class FolderRepository {
   }
 
   Future<bool> deleteFolder(int id) async {
+    // Prevent deletion of root folder
+    if (id == Folder.rootFolderId) {
+      return false;
+    }
     final rowsAffected = await _databaseService.deleteFolder(id);
     return rowsAffected > 0;
   }

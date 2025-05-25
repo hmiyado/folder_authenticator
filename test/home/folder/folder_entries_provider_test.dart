@@ -39,7 +39,7 @@ void main() {
       () async {
         // Arrange
         final testFolderPath = [
-          Folder.rootFolder(),
+          Folder(id: Folder.rootFolderId, name: 'Root', parentId: Folder.rootFolderId),
           Folder(id: 1, name: 'Test Folder', parentId: 0),
         ];
         final testEntries = [
@@ -72,10 +72,11 @@ void main() {
   group('allFolderEntriesProvider', () {
     test('should return', () async {
       // Arrange
+      final rootFolder = Folder(id: Folder.rootFolderId, name: 'Root', parentId: Folder.rootFolderId);
       // Setup parent folder with no entries
       when(
         mockFolderRepository.getFolderPath(0),
-      ).thenAnswer((_) async => [Folder.rootFolder()]);
+      ).thenAnswer((_) async => [rootFolder]);
       when(
         mockTotpEntryRepository.getTotpEntriesByFolderId(0),
       ).thenAnswer((_) async => []);
@@ -84,13 +85,14 @@ void main() {
       final result = await container.read(allFolderEntriesProvider(0).future);
 
       // Assert
-      expect(result[0].folderPath, [Folder.rootFolder()]);
+      expect(result[0].folderPath, [rootFolder]);
       expect(result[0].entries, []);
     });
 
     test('should return parent folder entries when available', () async {
       // Arrange
-      final testFolderPath = [Folder.rootFolder()];
+      final rootFolder = Folder(id: Folder.rootFolderId, name: 'Root', parentId: Folder.rootFolderId);
+      final testFolderPath = [rootFolder];
       final testEntries = [
         TotpEntry(
           id: 1,
@@ -119,7 +121,7 @@ void main() {
     test('should return entries from parent and subfolders', () async {
       // Arrange
       // Setup parent folder
-      final rootFolder = Folder.rootFolder();
+      final rootFolder = Folder(id: Folder.rootFolderId, name: 'Root', parentId: Folder.rootFolderId);
       final parentFolderPath = [rootFolder];
       final parentEntries = [
         TotpEntry(
@@ -192,7 +194,7 @@ void main() {
       // │   └── Subfolder1 Entry
       // └── Root Entry
       // Setup root folder
-      final rootFolder = Folder.rootFolder();
+      final rootFolder = Folder(id: Folder.rootFolderId, name: 'Root', parentId: Folder.rootFolderId);
       final rootFolderPath = [rootFolder];
       final rootEntries = [
         TotpEntry(
@@ -287,7 +289,7 @@ void main() {
     test('should not skip folders with no entries', () async {
       // Arrange
       // Setup parent folder with entries
-      final rootFolder = Folder.rootFolder();
+      final rootFolder = Folder(id: Folder.rootFolderId, name: 'Root', parentId: Folder.rootFolderId);
       final parentFolderPath = [rootFolder];
       final parentEntries = [
         TotpEntry(

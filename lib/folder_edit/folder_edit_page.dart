@@ -42,7 +42,10 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
                   ? null
                   : nameController.text,
           parentId:
-              parentFolderId == widget.folder.parentId ? null : parentFolderId,
+              // Prevent changing parent of root folder
+              widget.folder.id == Folder.rootFolderId || parentFolderId == widget.folder.parentId 
+                  ? null 
+                  : parentFolderId,
         ),
       );
       Navigator.of(context).pop();
@@ -61,41 +64,45 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
     nameController.text = widget.folder.name;
     folderPathController.text = folderPath;
 
+    final isRootFolder = widget.folder.id == Folder.rootFolderId;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Folder'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder:
-                    (context) => AlertDialog(
-                      title: const Text('Delete Folder'),
-                      content: Text(
-                        'Are you sure you want to delete "${widget.folder.name}"?',
+          // Hide delete button for root folder
+          if (!isRootFolder)
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        title: const Text('Delete Folder'),
+                        content: Text(
+                          'Are you sure you want to delete "${widget.folder.name}"?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              ref.read(deleteFolderProvider(widget.folder.id));
+                              Navigator.of(context).pop(); // Close dialog
+                              Navigator.of(
+                                context,
+                              ).pop(); // Return to previous screen
+                            },
+                            child: const Text('Delete'),
+                          ),
+                        ],
                       ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            ref.read(deleteFolderProvider(widget.folder.id));
-                            Navigator.of(context).pop(); // Close dialog
-                            Navigator.of(
-                              context,
-                            ).pop(); // Return to previous screen
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ],
-                    ),
-              );
-            },
-          ),
+                );
+              },
+            ),
         ],
       ),
       body: Padding(
@@ -111,28 +118,30 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
                   labelText: 'Folder Name',
                 ),
               ),
-              DropdownButton(
-                value: folderPathController.text,
-                items: [],
-                onChanged:
-                    (value) => folderPathController.text = value.toString(),
-                onTap:
-                    () => showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('Select Folder Path'),
-                          content: const Text('Folder path selection dialog'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-              ),
+              // Hide folder path selector for root folder
+              if (!isRootFolder)
+                DropdownButton(
+                  value: folderPathController.text,
+                  items: [],
+                  onChanged:
+                      (value) => folderPathController.text = value.toString(),
+                  onTap:
+                      () => showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Select Folder Path'),
+                            content: const Text('Folder path selection dialog'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                ),
               const SizedBox(height: 24),
               ElevatedButton(onPressed: _saveFolder, child: const Text('Save')),
             ],
