@@ -17,7 +17,7 @@
 
 本アプリケーションは、データ処理に関して独自のプライバシーポリシーを持つ第三者サービスを利用していることにご留意ください。本アプリケーションが利用している第三者サービスプロバイダーのプライバシーポリシーへのリンクは以下のとおりです。
 
-- Google Play Services
+- [Google Play Services](https://policies.google.com/privacy?hl=ja)
 
 サービスプロバイダーは、ユーザー提供情報および自動収集情報を、以下の場合に開示する可能性があります。
 
@@ -57,4 +57,4 @@
 
 本アプリケーションの使用中のプライバシーに関するご質問、または慣行に関するご質問がある場合は、test@example.com まで電子メールでサービスプロバイダーにご連絡ください。
 
-このプライバシーポリシーページはApp Privacy Policy Generatorによって生成されました。
+このプライバシーポリシーページは[App Privacy Policy Generator](https://app-privacy-policy-generator.nisrulz.com/)によって生成されました。
