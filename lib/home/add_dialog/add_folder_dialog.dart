@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/home/folder/subfolders_provider.dart';
-import 'package:totp_folder/home/home_page_providers.dart';
+import 'package:folder_authenticator/home/folder/subfolders_provider.dart';
+import 'package:folder_authenticator/home/home_page_providers.dart';
 
 class AddFolderDialog extends ConsumerStatefulWidget {
   final int folderId;

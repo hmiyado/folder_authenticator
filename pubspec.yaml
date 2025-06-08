@@ -1,4 +1,4 @@
-name: totp_folder
+name: folder_authenticator
 description: "A Flutter-based mobile application that allows you to manage your Time-based One-Time Passwords (TOTP) efficiently."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.

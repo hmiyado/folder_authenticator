@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:totp_folder/models/folder.dart';
-import 'package:totp_folder/repositories/folder_repository.dart';
-import 'package:totp_folder/services/database_service.dart';
+import 'package:folder_authenticator/models/folder.dart';
+import 'package:folder_authenticator/repositories/folder_repository.dart';
+import 'package:folder_authenticator/services/database_service.dart';
 
 // Generate a MockDatabaseService using Mockito
 @GenerateMocks([DatabaseService])

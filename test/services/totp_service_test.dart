@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:totp_folder/models/totp_entry.dart';
-import 'package:totp_folder/services/totp_service.dart';
+import 'package:folder_authenticator/models/totp_entry.dart';
+import 'package:folder_authenticator/services/totp_service.dart';
 
 void main() {
   group('TotpService', () {

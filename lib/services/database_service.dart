@@ -2,9 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:totp_folder/models/folder.dart';
-import 'package:totp_folder/models/totp_entry.dart';
-import 'package:totp_folder/services/encryption_service.dart';
+import 'package:folder_authenticator/models/folder.dart';
+import 'package:folder_authenticator/models/totp_entry.dart';
+import 'package:folder_authenticator/services/encryption_service.dart';
 
 part 'database_service.g.dart';
 
@@ -28,7 +28,7 @@ class DatabaseService {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'totp_folder.db');
+    String path = join(await getDatabasesPath(), 'folder_authenticator.db');
     return await openDatabase(path, version: 1, onCreate: _createDatabase);
   }
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/home/add_dialog/add_folder_dialog.dart';
-import 'package:totp_folder/home/add_dialog/add_totp_entry_dialog.dart';
-import 'package:totp_folder/home/add_dialog/qr_scanner_page.dart';
-import 'package:totp_folder/models/folder.dart';
+import 'package:folder_authenticator/home/add_dialog/add_folder_dialog.dart';
+import 'package:folder_authenticator/home/add_dialog/add_totp_entry_dialog.dart';
+import 'package:folder_authenticator/home/add_dialog/qr_scanner_page.dart';
+import 'package:folder_authenticator/models/folder.dart';
 
 class AddDialog extends ConsumerStatefulWidget {
   final Folder folder;

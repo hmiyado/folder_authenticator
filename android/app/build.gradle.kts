@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.miyado.totp_folder"
+    namespace = "dev.miyado.folder_authenticator"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "dev.miyado.totp_folder"
+        applicationId = "dev.miyado.folder_authenticator"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:totp_folder/home/home_page_providers.dart';
-import 'package:totp_folder/repositories/totp_entry_repository.dart';
-import 'package:totp_folder/services/totp_service.dart';
-import 'package:totp_folder/totp_detail/totp_detail_providers.dart';
+import 'package:folder_authenticator/home/home_page_providers.dart';
+import 'package:folder_authenticator/repositories/totp_entry_repository.dart';
+import 'package:folder_authenticator/services/totp_service.dart';
+import 'package:folder_authenticator/totp_detail/totp_detail_providers.dart';
 
 class QrScannerPage extends ConsumerStatefulWidget {
   final int folderId;

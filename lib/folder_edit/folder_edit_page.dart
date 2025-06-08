@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/folder_edit/folder_edit_providers.dart';
-import 'package:totp_folder/home/folder/folder_path_provider.dart';
-import 'package:totp_folder/models/folder.dart';
+import 'package:folder_authenticator/folder_edit/folder_edit_providers.dart';
+import 'package:folder_authenticator/home/folder/folder_path_provider.dart';
+import 'package:folder_authenticator/models/folder.dart';
 
 class FolderEditPage extends ConsumerStatefulWidget {
   final Folder folder;

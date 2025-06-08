@@ -1,4 +1,4 @@
-package dev.miyado.totp_folder
+package dev.miyado.folder_authenticator
 
 import io.flutter.embedding.android.FlutterActivity
 

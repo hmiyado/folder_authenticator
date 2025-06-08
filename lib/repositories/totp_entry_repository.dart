@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:totp_folder/models/totp_entry.dart';
-import 'package:totp_folder/services/database_service.dart';
+import 'package:folder_authenticator/models/totp_entry.dart';
+import 'package:folder_authenticator/services/database_service.dart';
 
 part 'totp_entry_repository.g.dart';
 

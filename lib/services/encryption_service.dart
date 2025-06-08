@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:totp_folder/services/config_service.dart';
+import 'package:folder_authenticator/services/config_service.dart';
 
 part 'encryption_service.g.dart';
 

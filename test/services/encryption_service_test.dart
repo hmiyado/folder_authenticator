@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:totp_folder/services/config_service.dart';
-import 'package:totp_folder/services/encryption_service.dart';
+import 'package:folder_authenticator/services/config_service.dart';
+import 'package:folder_authenticator/services/encryption_service.dart';
 
 // Generate a MockConfigService using Mockito
 @GenerateMocks([ConfigService])

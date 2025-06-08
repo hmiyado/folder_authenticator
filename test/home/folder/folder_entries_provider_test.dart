@@ -2,11 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:totp_folder/home/folder/folder_entries_provider.dart';
-import 'package:totp_folder/models/folder.dart';
-import 'package:totp_folder/models/totp_entry.dart';
-import 'package:totp_folder/repositories/folder_repository.dart';
-import 'package:totp_folder/repositories/totp_entry_repository.dart';
+import 'package:folder_authenticator/home/folder/folder_entries_provider.dart';
+import 'package:folder_authenticator/models/folder.dart';
+import 'package:folder_authenticator/models/totp_entry.dart';
+import 'package:folder_authenticator/repositories/folder_repository.dart';
+import 'package:folder_authenticator/repositories/totp_entry_repository.dart';
 
 @GenerateNiceMocks([
   MockSpec<FolderRepository>(),

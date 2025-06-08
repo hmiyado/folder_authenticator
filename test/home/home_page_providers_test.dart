@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:totp_folder/home/home_page_providers.dart';
-import 'package:totp_folder/models/totp_entry.dart';
-import 'package:totp_folder/repositories/totp_entry_repository.dart';
+import 'package:folder_authenticator/home/home_page_providers.dart';
+import 'package:folder_authenticator/models/totp_entry.dart';
+import 'package:folder_authenticator/repositories/totp_entry_repository.dart';
 
 @GenerateNiceMocks([MockSpec<TotpEntryRepository>()])
 import 'home_page_providers_test.mocks.dart';

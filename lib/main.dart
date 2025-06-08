@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/home/home_page.dart';
-import 'package:totp_folder/services/config_service.dart';
-import 'package:totp_folder/services/encryption_service.dart';
+import 'package:folder_authenticator/home/home_page.dart';
+import 'package:folder_authenticator/services/config_service.dart';
+import 'package:folder_authenticator/services/encryption_service.dart';
 
 void main() async {
   // Ensure Flutter is initialized

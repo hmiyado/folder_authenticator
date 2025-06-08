@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:totp_folder/home/folder/folder_path_provider.dart';
-import 'package:totp_folder/home/folder/subfolders_provider.dart';
-import 'package:totp_folder/models/folder.dart';
-import 'package:totp_folder/models/totp_entry.dart';
-import 'package:totp_folder/repositories/totp_entry_repository.dart';
+import 'package:folder_authenticator/home/folder/folder_path_provider.dart';
+import 'package:folder_authenticator/home/folder/subfolders_provider.dart';
+import 'package:folder_authenticator/models/folder.dart';
+import 'package:folder_authenticator/models/totp_entry.dart';
+import 'package:folder_authenticator/repositories/totp_entry_repository.dart';
 
 part 'folder_entries_provider.g.dart';
 

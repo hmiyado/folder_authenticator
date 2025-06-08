@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/settings/settings_page_viewmodel.dart';
+import 'package:folder_authenticator/settings/settings_page_viewmodel.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:totp_folder/folder_edit/folder_edit_page.dart';
-import 'package:totp_folder/home/add_dialog/add_dialog.dart';
-import 'package:totp_folder/home/folder/folder_entries_provider.dart';
-import 'package:totp_folder/home/totp_entry_card.dart';
-import 'package:totp_folder/models/folder.dart';
+import 'package:folder_authenticator/folder_edit/folder_edit_page.dart';
+import 'package:folder_authenticator/home/add_dialog/add_dialog.dart';
+import 'package:folder_authenticator/home/folder/folder_entries_provider.dart';
+import 'package:folder_authenticator/home/totp_entry_card.dart';
+import 'package:folder_authenticator/models/folder.dart';
 
 class FolderView extends ConsumerWidget {
   final int folderId;
