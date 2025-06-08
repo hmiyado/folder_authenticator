@@ -1,6 +1,6 @@
 # Privacy Policy
 
-This Privacy Policy applies to the “Folder Authenticator” application for mobile devices (the “Application”) created by [name of service provider] (“Service Provider”) as a free service. This service is intended to be provided on an “AS IS” basis.
+This Privacy Policy applies to the “Folder Authenticator” application for mobile devices (the “Application”) created by Takuma Yoshida (“Service Provider”) as a free service. This service is intended to be provided on an “AS IS” basis.
 
 ## Collection and Use of Information
 
@@ -31,13 +31,13 @@ You can easily stop the collection of information by this Application by uninsta
 
 ## Data Retention Policy
 
-Service Provider will retain User Provided Data for as long as you use the Application and for a reasonable period of time thereafter. If you wish to request deletion of the User Provided Data you have provided through the Application, please contact us at test@example.com. Service Provider will respond within a reasonable time.
+Service Provider will retain User Provided Data for as long as you use the Application and for a reasonable period of time thereafter. If you wish to request deletion of the User Provided Data you have provided through the Application, please contact us at support.folder_authenticator@miyado.dev. Service Provider will respond within a reasonable time.
 
 ## CHILDREN
 
 Service Provider will not use this Application to intentionally solicit data from or market to children under the age of 13.
 
-This Application is not intended for persons under the age of 13. Service Provider does not knowingly collect personally identifiable information from children under the age of 13. If Service Provider discovers that a child under the age of 13 has provided Service Provider with personally identifiable information, Service Provider will immediately delete this from their servers. If you are a parent or guardian and know that your child has provided personal information, please contact the service provider at test@example.com. The service provider will then be able to take the necessary action.
+This Application is not intended for persons under the age of 13. Service Provider does not knowingly collect personally identifiable information from children under the age of 13. If Service Provider discovers that a child under the age of 13 has provided Service Provider with personally identifiable information, Service Provider will immediately delete this from their servers. If you are a parent or guardian and know that your child has provided personal information, please contact the service provider at support.folder_authenticator@miyado.dev. The service provider will then be able to take the necessary action.
 
 ## Security
 
