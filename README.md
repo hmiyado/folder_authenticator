@@ -1,6 +1,6 @@
-# TOTP Folder
+# Folder Authenticator
 
-TOTP Folder is a Flutter-based mobile application that allows you to manage your Time-based One-Time Passwords (TOTP) efficiently. Organize your TOTP entries into folders, tag them for better categorization, and utilize sorting and filtering options for quick access.
+Folder Authenticator is a Flutter-based mobile application that allows you to manage your Time-based One-Time Passwords (TOTP) efficiently. Organize your TOTP entries into folders, tag them for better categorization, and utilize sorting and filtering options for quick access.
 
 ## Features
 - **Folder Management**: Organize TOTP entries into folders.
