@@ -1,6 +1,6 @@
 # Terms and Conditions
 
-These Terms and Conditions ("Terms") govern your use of [App Name] ("App"), developed by [Developer's Full Legal Name] ("Developer"). By downloading, installing, or using the App, you agree to be bound by these Terms. If you don't agree to these Terms, please don't use the App.
+These Terms and Conditions ("Terms") govern your use of Folder Authenticator ("App"), developed by Takuma Yoshida ("Developer"). By downloading, installing, or using the App, you agree to be bound by these Terms. If you don't agree to these Terms, please don't use the App.
 
 ## Definitions
 "User" refers to any person who downloads, installs, or uses the App.
@@ -36,7 +36,7 @@ Should any dispute arise between the Developer and the User regarding these Term
 The Developer reserves the right to modify these Terms at any time, in its sole discretion. Any modifications to these Terms will become effective upon notification within the App or by announcement on the Developer's website. Your continued use of the App following any modification constitutes your acceptance of the modified Terms.
 
 ## Privacy
-The Developer respects your privacy and handles your personal information appropriately. For details on the collection, use, storage, and disclosure of personal information, please refer to our separate Privacy Policy. You can review the Privacy Policy at [Link to Privacy Policy].
+The Developer respects your privacy and handles your personal information appropriately. For details on the collection, use, storage, and disclosure of personal information, please refer to our separate Privacy Policy. You can review the Privacy Policy at [Privacy Policy](./privacy_policy.md).
 
 ## Contact Information
 If you have any questions or concerns about these Terms or the App, please contact the Developer at [Email Address].
