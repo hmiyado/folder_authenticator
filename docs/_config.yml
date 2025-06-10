@@ -4,5 +4,6 @@ plugins:
  - jekyll-feed
  - jekyll-seo-tag
 minima:
+  nav_pages:
   show_excerpts: false
   hide_site_feed_link: true
