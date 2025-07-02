@@ -1,6 +1,6 @@
 # TOTP Secret Encryption
 
-This document describes how TOTP secrets are encrypted in the TOTP Folder application.
+This document describes how TOTP secrets are encrypted in Folder Authenticator application.
 
 ## Overview
 

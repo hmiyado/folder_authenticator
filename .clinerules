@@ -1,8 +1,8 @@
-# TOTP Folder - Cline Rules
+# Folder Authenticator - Cline Rules
 
 ## Role Description
 
-TOTP Folder is a Flutter-based mobile application that allows users to manage their Time-based One-Time Passwords (TOTP) efficiently. The application provides the following key features:
+Folder Authenticator is a Flutter-based mobile application that allows users to manage their Time-based One-Time Passwords (TOTP) efficiently. The application provides the following key features:
 
 - **Folder Management**: Organize TOTP entries into folders for better organization
 - **Tagging**: Assign tags to TOTP entries for easier categorization

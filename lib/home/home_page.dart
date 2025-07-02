@@ -18,7 +18,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TOTP Folder'),
+        title: const Text('Folder Authenticator'),
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert),

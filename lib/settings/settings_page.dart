@@ -15,7 +15,7 @@ class SettingsPage extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.info),
             title: const Text('About'),
-            subtitle: const Text('TOTP Folder App'),
+            subtitle: const Text('Folder Authenticator'),
             onTap: () {
               _showAboutDialog(context);
             },
@@ -31,7 +31,7 @@ class SettingsPage extends ConsumerWidget {
               if (context.mounted) {
                 showLicensePage(
                   context: context,
-                  applicationName: 'TOTP Folder',
+                  applicationName: 'Folder Authenticator',
                   applicationVersion: version,
                 );
               }
@@ -50,13 +50,13 @@ class SettingsPage extends ConsumerWidget {
           builder: (context, ref, child) {
             final viewModel = ref.watch(settingsPageViewModelProvider);
             return AlertDialog(
-              title: const Text('About TOTP Folder'),
+              title: const Text('About Folder Authenticator'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'TOTP Folder is a Flutter-based mobile application that allows you to manage your Time-based One-Time Passwords (TOTP) efficiently.',
+                    'Folder Authenticator is a Flutter-based mobile application that allows you to manage your Time-based One-Time Passwords (TOTP) efficiently.',
                   ),
                   const SizedBox(height: 16),
                   const Text('Features:'),
