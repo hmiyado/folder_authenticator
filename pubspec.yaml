@@ -57,11 +57,11 @@ dependencies:
   riverpod_generator: ^2.6.5
   
   # QR code scanning and generation
-  mobile_scanner: ^3.5.7
+  mobile_scanner: ^7.0.1
   qr_flutter: ^4.1.0
   
   # Package info
-  package_info_plus: ^4.2.0
+  package_info_plus: ^8.0.2
   flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:

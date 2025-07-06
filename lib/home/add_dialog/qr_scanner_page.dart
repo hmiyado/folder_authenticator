@@ -33,13 +33,17 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
         actions: [
           IconButton(
             icon: ValueListenableBuilder(
-              valueListenable: controller.torchState,
-              builder: (context, state, child) {
-                switch (state) {
+              valueListenable: controller,
+              builder: (context, value, child) {
+                switch (value.torchState) {
                   case TorchState.off:
                     return const Icon(Icons.flash_off);
                   case TorchState.on:
                     return const Icon(Icons.flash_on);
+                  case TorchState.unavailable:
+                    return const Icon(Icons.flash_off);
+                  case TorchState.auto:
+                    return const Icon(Icons.flash_auto);
                 }
               },
             ),
@@ -47,12 +51,15 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
           ),
           IconButton(
             icon: ValueListenableBuilder(
-              valueListenable: controller.cameraFacingState,
-              builder: (context, state, child) {
-                switch (state) {
+              valueListenable: controller,
+              builder: (context, value, child) {
+                switch (value.cameraDirection) {
                   case CameraFacing.front:
                     return const Icon(Icons.camera_front);
                   case CameraFacing.back:
+                    return const Icon(Icons.camera_rear);
+                  case CameraFacing.external:
+                  case CameraFacing.unknown:
                     return const Icon(Icons.camera_rear);
                 }
               },
