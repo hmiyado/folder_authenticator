@@ -39,6 +39,14 @@ fastlane ios update_profiles
 
 Update provisioning profiles
 
+### ios upload_metadata
+
+```
+fastlane ios upload_metadata
+```
+
+Upload metadata and screenshots only
+
 ----
 
 ## Android

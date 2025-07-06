@@ -1,0 +1,39 @@
+Folder Authenticator - Organize Your TOTP Codes Like Never Before
+
+  Take control of your two-factor authentication with Folder Authenticator, the only TOTP app that lets
+  you organize your codes in folders for ultimate convenience and security.
+
+Smart Organization
+  • Create custom folders to group your TOTP codes by category
+  • Business, Personal, Social Media - organize however you like
+  • Never scroll through endless lists again
+
+Effortless Setup
+  • Scan QR codes instantly with built-in camera
+  • Manual entry support for all services
+  • Bulk import from other authenticator apps
+
+Security
+  • AES-256 encryption protects your secrets
+  • Secure local storage - your data stays on your device
+  • No cloud sync means no privacy concerns
+
+Beautiful Design
+  • Clean, intuitive interface
+  • Dark and Light mode support
+  • Smooth animations and responsive design
+
+Easy Backup & Migration
+  • Export codes as QR codes for easy backup
+  • Transfer to new devices in seconds
+  • Never lose access to your accounts again
+
+Premium Features
+  • Unlimited folders and codes
+  • Advanced customization options
+
+  Perfect for professionals, security-conscious users, and anyone tired of cluttered authenticator apps.
+   Download Folder Authenticator today and experience organized, secure two-factor authentication.
+
+  ---
+  Privacy focused. Folder organized. Simply secure.

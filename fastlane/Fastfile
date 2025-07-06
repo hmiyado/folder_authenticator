@@ -40,7 +40,21 @@ platform :ios do
       skip_metadata: false,
       skip_screenshots: false,
       submit_for_review: true,
-      automatic_release: true
+      automatic_release: true,
+      metadata_path: "./fastlane/metadata",
+      screenshots_path: "./fastlane/screenshots"
+    )
+  end
+  
+  desc "Upload metadata and screenshots only"
+  lane :upload_metadata do
+    upload_to_app_store(
+      skip_binary_upload: true,
+      skip_metadata: false,
+      skip_screenshots: false,
+      force: true,
+      metadata_path: "./fastlane/metadata",
+      screenshots_path: "./fastlane/screenshots"
     )
   end
 
