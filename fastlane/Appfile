@@ -1,0 +1,16 @@
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
+
+# iOS configuration (using environment variables)
+app_identifier(ENV["IOS_APP_IDENTIFIER"])
+apple_id(ENV["APPLE_ID"])
+team_id(ENV["FASTLANE_TEAM_ID"])
+itc_team_id(ENV["ITC_TEAM_ID"])
+
+# Android configuration
+package_name(ENV["ANDROID_PACKAGE_NAME"])
+
+# Environment variables are automatically loaded from:
+# 1. .env.local (ignored by git, for local development)
+# 2. .env (template file, committed to git)
+# 3. .env.default (default values, committed to git)

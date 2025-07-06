@@ -1,0 +1,88 @@
+# This file contains the fastlane configuration
+# You can find the documentation at https://docs.fastlane.tools
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and deploy iOS app to TestFlight"
+  lane :beta do
+    flutter_build(
+      build_args: "--release --no-tree-shake-icons",
+      ios: true
+    )
+    build_app(
+      scheme: "Runner",
+      export_method: "app-store",
+      export_options: {
+        signingStyle: "automatic"
+      }
+    )
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+
+  desc "Build and deploy iOS app to App Store"
+  lane :release do
+    flutter_build(
+      build_args: "--release --no-tree-shake-icons",
+      ios: true
+    )
+    build_app(
+      scheme: "Runner",
+      export_method: "app-store",
+      export_options: {
+        signingStyle: "automatic"
+      }
+    )
+    upload_to_app_store(
+      force: true,
+      skip_metadata: false,
+      skip_screenshots: false,
+      submit_for_review: true,
+      automatic_release: true
+    )
+  end
+
+  desc "Update provisioning profiles"
+  lane :update_profiles do
+    sigh(
+      force: true,
+      adhoc: false
+    )
+  end
+end
+
+platform :android do
+  desc "Build and deploy Android app to internal track"
+  lane :beta do
+    flutter_build(
+      build_args: "--release --no-tree-shake-icons",
+      android: true
+    )
+    upload_to_play_store(
+      track: "internal",
+      aab: "build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  desc "Build and deploy Android app to production"
+  lane :release do
+    flutter_build(
+      build_args: "--release --no-tree-shake-icons",
+      android: true
+    )
+    upload_to_play_store(
+      track: "production",
+      aab: "build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: false,
+      skip_upload_changelogs: false,
+      skip_upload_images: false,
+      skip_upload_screenshots: false
+    )
+  end
+end

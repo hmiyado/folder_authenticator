@@ -14,6 +14,7 @@ migrate_working_dir/
 
 # Environment variables and secrets
 .env
+fastlane/.env.local
 
 # IntelliJ related
 *.iml
