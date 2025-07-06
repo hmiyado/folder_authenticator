@@ -32,6 +32,8 @@
 	<string>LaunchScreen</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to scan QR codes for TOTP setup</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>

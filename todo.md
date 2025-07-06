@@ -1,5 +1,5 @@
 - [ ] iOS
-  - アプリの暗号化に関する書類を作る
+  - [x] アプリの暗号化に関する書類を作る
     - アプリが暗号化を使用するかどうかを示すブール値とともに、非免除暗号化を使用するアプリキーをAppのInfo.plistファイルに追加して、Xcodeでのアプリの暗号化の使用を明記します。[詳しく見る](https://developer.apple.com/documentation/security/complying_with_encryption_export_regulations)
 
 アプリに以下のいずれかが含まれている場合、書類を提出する必要があります。
