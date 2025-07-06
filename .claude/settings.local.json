@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(flutter pub deps:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(flutter:*)",
+      "Bash(flutter pub:*)",
+      "WebFetch(domain:pub.dev)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": []
   }
