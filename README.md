@@ -30,6 +30,10 @@ Folder Authenticator is a Flutter-based mobile application that allows you to ma
    ```sh
    flutter run
    ```
+5. Release the application:
+   ```sh
+   flutter build ipa --obfuscate --split-debug-info=vX.Y.Z
+   ```
 
 ## Development
 
