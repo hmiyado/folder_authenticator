@@ -34,6 +34,7 @@ Folder Authenticator is a Flutter-based mobile application that allows you to ma
    ```sh
    flutter build ipa --obfuscate --split-debug-info=vX.Y.Z
    ```
+   Use Transporter to upload ipa.
 
 ## Development
 
