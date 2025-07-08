@@ -12,30 +12,30 @@ Implementation of internationalization (i18n) for Japanese and other languages i
 ## High Priority Tasks
 
 ### 1. Setup i18n Dependencies
-- [ ] Add internationalization packages to pubspec.yaml (flutter_localizations, intl, intl_utils)
+- [x] Add internationalization packages to pubspec.yaml (flutter_localizations, intl, intl_utils)
 
 ### 2. Create l10n Configuration
-- [ ] Create l10n.yaml configuration file for code generation
+- [x] Create l10n.yaml configuration file for code generation
 
 ### 3. Create ARB Files
-- [ ] Create ARB files for English (app_en.arb) and Japanese (app_ja.arb) localizations
+- [x] Create ARB files for English (app_en.arb) and Japanese (app_ja.arb) localizations
 
 ### 4. Configure MaterialApp
-- [ ] Update MaterialApp in main.dart with localizationsDelegates and supportedLocales
+- [x] Update MaterialApp in main.dart with localizationsDelegates and supportedLocales
 
 ## Medium Priority Tasks
 
 ### 5. Main App Localization
-- [ ] Replace hardcoded strings in main.dart with localized versions
+- [x] Replace hardcoded strings in main.dart with localized versions
 
 ### 6. Home Page Localization
-- [ ] Replace hardcoded strings in home_page.dart with localized versions
+- [x] Replace hardcoded strings in home_page.dart with localized versions
 
 ### 7. Settings Page Localization
-- [ ] Replace hardcoded strings in settings_page.dart with localized versions (includes about dialog)
+- [x] Replace hardcoded strings in settings_page.dart with localized versions (includes about dialog)
 
 ### 8. TOTP Detail Page Localization
-- [ ] Replace hardcoded strings in totp_detail_page.dart with localized versions
+- [x] Replace hardcoded strings in totp_detail_page.dart with localized versions
 
 ### 9. TOTP Edit Page Localization
 - [ ] Replace hardcoded strings in totp_edit_page.dart with localized versions
@@ -59,10 +59,10 @@ Implementation of internationalization (i18n) for Japanese and other languages i
 - [ ] Replace hardcoded strings in totp_entry_card.dart with localized versions
 
 ### 16. Generate Localization Files
-- [ ] Run dart run build_runner build to generate localization files
+- [x] Run dart run build_runner build to generate localization files
 
 ### 17. Add Japanese Translations
-- [ ] Add comprehensive Japanese translations to app_ja.arb file
+- [x] Add comprehensive Japanese translations to app_ja.arb file
 
 ### 18. Test Localization
 - [ ] Test app with different locales and ensure proper fallback behavior
