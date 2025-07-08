@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folder_authenticator/home/home_page.dart';
 import 'package:folder_authenticator/services/config_service.dart';
 import 'package:folder_authenticator/services/encryption_service.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 void main() async {
   // Ensure Flutter is initialized
@@ -30,7 +32,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Folder Authenticator',
+      onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('ja'), // Japanese
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,

@@ -1,0 +1,337 @@
+{
+  "@@locale": "en",
+  "appTitle": "Folder Authenticator",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings menu item"
+  },
+  "about": "About",
+  "@about": {
+    "description": "About menu item"
+  },
+  "licenses": "Licenses",
+  "@licenses": {
+    "description": "Licenses menu item"
+  },
+  "openSourceLicenses": "Open Source Licenses",
+  "@openSourceLicenses": {
+    "description": "Open source licenses title"
+  },
+  "aboutFolderAuthenticator": "About Folder Authenticator",
+  "@aboutFolderAuthenticator": {
+    "description": "About dialog title"
+  },
+  "aboutDescription": "A Flutter-based mobile application that allows you to manage your Time-based One-Time Passwords (TOTP) efficiently.",
+  "@aboutDescription": {
+    "description": "About dialog description"
+  },
+  "features": "Features:",
+  "@features": {
+    "description": "Features section title"
+  },
+  "featureOrganizeWithFolders": "• Organize TOTP entries into folders",
+  "@featureOrganizeWithFolders": {
+    "description": "Feature description"
+  },
+  "featureSecureEncryption": "• Secure encryption of TOTP secrets",
+  "@featureSecureEncryption": {
+    "description": "Feature description"
+  },
+  "featureQRCodeScanning": "• QR code scanning for easy setup",
+  "@featureQRCodeScanning": {
+    "description": "Feature description"
+  },
+  "featureExportFunctionality": "• Export functionality for backup",
+  "@featureExportFunctionality": {
+    "description": "Feature description"
+  },
+  "featureCleanIntuitive": "• Clean and intuitive user interface",
+  "@featureCleanIntuitive": {
+    "description": "Feature description"
+  },
+  "featureOfflineAccess": "• Offline access to all your TOTP codes",
+  "@featureOfflineAccess": {
+    "description": "Feature description"
+  },
+  "featureHierarchicalOrganization": "• Hierarchical organization with nested folders",
+  "@featureHierarchicalOrganization": {
+    "description": "Feature description"
+  },
+  "featureRealTimeSync": "• Real-time synchronization of TOTP codes",
+  "@featureRealTimeSync": {
+    "description": "Feature description"
+  },
+  "version": "Version: {version}",
+  "@version": {
+    "description": "Version display",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0"
+      }
+    }
+  },
+  "versionUnknown": "Version: Unknown",
+  "@versionUnknown": {
+    "description": "Version when unknown"
+  },
+  "versionLoading": "Version: Loading...",
+  "@versionLoading": {
+    "description": "Version while loading"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button"
+  },
+  "totpDetails": "TOTP Details",
+  "@totpDetails": {
+    "description": "TOTP details page title"
+  },
+  "export": "Export",
+  "@export": {
+    "description": "Export button tooltip"
+  },
+  "refreshesIn": "Refreshes in {seconds} seconds",
+  "@refreshesIn": {
+    "description": "Countdown message",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "copyCode": "Copy Code",
+  "@copyCode": {
+    "description": "Copy TOTP code button"
+  },
+  "codeCopiedToClipboard": "Code copied to clipboard",
+  "@codeCopiedToClipboard": {
+    "description": "Snackbar message when code is copied"
+  },
+  "name": "Name",
+  "@name": {
+    "description": "Name field label"
+  },
+  "issuer": "Issuer",
+  "@issuer": {
+    "description": "Issuer field label"
+  },
+  "deleteTotpEntry": "Delete TOTP Entry",
+  "@deleteTotpEntry": {
+    "description": "Delete TOTP entry button"
+  },
+  "deleteConfirmation": "Are you sure you want to delete \"{name}\"?",
+  "@deleteConfirmation": {
+    "description": "Delete confirmation dialog",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Google"
+      }
+    }
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button"
+  },
+  "editTotp": "Edit TOTP",
+  "@editTotp": {
+    "description": "Edit TOTP page title"
+  },
+  "totpEntryUpdated": "TOTP entry updated",
+  "@totpEntryUpdated": {
+    "description": "Success message when TOTP entry is updated"
+  },
+  "exportTotp": "Export TOTP",
+  "@exportTotp": {
+    "description": "Export TOTP dialog title"
+  },
+  "copyUri": "Copy URI",
+  "@copyUri": {
+    "description": "Copy URI button"
+  },
+  "uriCopiedToClipboard": "URI copied to clipboard",
+  "@uriCopiedToClipboard": {
+    "description": "URI copied message"
+  },
+  "showSecret": "Show Secret",
+  "@showSecret": {
+    "description": "Show secret button"
+  },
+  "secretCopiedToClipboard": "Secret copied to clipboard",
+  "@secretCopiedToClipboard": {
+    "description": "Secret copied message"
+  },
+  "securityWarning": "Warning: Keep this secret secure and do not share it with anyone.",
+  "@securityWarning": {
+    "description": "Security warning message"
+  },
+  "editFolder": "Edit Folder",
+  "@editFolder": {
+    "description": "Edit folder page title"
+  },
+  "deleteFolder": "Delete Folder",
+  "@deleteFolder": {
+    "description": "Delete folder button"
+  },
+  "deleteFolderConfirmation": "Are you sure you want to delete \"{name}\"?",
+  "@deleteFolderConfirmation": {
+    "description": "Delete folder confirmation",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Work"
+      }
+    }
+  },
+  "folderName": "Folder Name",
+  "@folderName": {
+    "description": "Folder name field label"
+  },
+  "selectFolderPath": "Select Folder Path",
+  "@selectFolderPath": {
+    "description": "Select folder path button"
+  },
+  "folderPathSelectionDialog": "Folder path selection dialog",
+  "@folderPathSelectionDialog": {
+    "description": "Folder path selection dialog title"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button"
+  },
+  "addNew": "Add New",
+  "@addNew": {
+    "description": "Add new dialog title"
+  },
+  "addTotpManually": "Add TOTP Manually",
+  "@addTotpManually": {
+    "description": "Add TOTP manually button"
+  },
+  "scanQrCode": "Scan QR Code",
+  "@scanQrCode": {
+    "description": "Scan QR code button"
+  },
+  "addFolder": "Add Folder",
+  "@addFolder": {
+    "description": "Add folder button"
+  },
+  "folderCreated": "Folder \"{name}\" created",
+  "@folderCreated": {
+    "description": "Folder created success message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Work"
+      }
+    }
+  },
+  "errorCreatingFolder": "Error creating folder: {error}",
+  "@errorCreatingFolder": {
+    "description": "Error creating folder message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Database error"
+      }
+    }
+  },
+  "add": "Add",
+  "@add": {
+    "description": "Add button"
+  },
+  "addTotp": "Add TOTP",
+  "@addTotp": {
+    "description": "Add TOTP dialog title"
+  },
+  "secret": "Secret",
+  "@secret": {
+    "description": "Secret field label"
+  },
+  "issuerOptional": "Issuer (optional)",
+  "@issuerOptional": {
+    "description": "Optional issuer field label"
+  },
+  "totpEntryAddedSuccessfully": "TOTP entry added successfully",
+  "@totpEntryAddedSuccessfully": {
+    "description": "TOTP entry added success message"
+  },
+  "invalidTotpQrCode": "Invalid TOTP QR code",
+  "@invalidTotpQrCode": {
+    "description": "Invalid QR code error message"
+  },
+  "errorProcessingQrCode": "Error processing QR code: {error}",
+  "@errorProcessingQrCode": {
+    "description": "QR code processing error",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Parse error"
+      }
+    }
+  },
+  "root": "Root",
+  "@root": {
+    "description": "Root folder name"
+  },
+  "errorLoadingFolderEntries": "Error loading folder entries: {error}",
+  "@errorLoadingFolderEntries": {
+    "description": "Error loading folder entries",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Database error"
+      }
+    }
+  },
+  "noTotpEntriesOrSubfolders": "No TOTP entries or subfolders found",
+  "@noTotpEntriesOrSubfolders": {
+    "description": "Empty folder message"
+  },
+  "errorLoadingTotpEntry": "Error loading TOTP entry",
+  "@errorLoadingTotpEntry": {
+    "description": "Error loading TOTP entry"
+  },
+  "secondsShort": "{seconds} s",
+  "@secondsShort": {
+    "description": "Seconds abbreviation",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language settings option"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Language selection dialog title"
+  },
+  "english": "English",
+  "@english": {
+    "description": "English language option"
+  },
+  "japanese": "日本語",
+  "@japanese": {
+    "description": "Japanese language option"
+  },
+  "systemDefault": "System Default",
+  "@systemDefault": {
+    "description": "System default language option"
+  }
+}

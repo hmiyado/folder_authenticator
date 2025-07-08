@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folder_authenticator/settings/settings_page_viewmodel.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -9,21 +10,21 @@ class SettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(settingsPageViewModelProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.settings)),
       body: ListView(
         children: [
           ListTile(
             leading: const Icon(Icons.info),
-            title: const Text('About'),
-            subtitle: const Text('Folder Authenticator'),
+            title: Text(AppLocalizations.of(context)!.about),
+            subtitle: Text(AppLocalizations.of(context)!.appTitle),
             onTap: () {
               _showAboutDialog(context);
             },
           ),
           ListTile(
             leading: const Icon(Icons.description),
-            title: const Text('Licenses'),
-            subtitle: const Text('Open Source Licenses'),
+            title: Text(AppLocalizations.of(context)!.licenses),
+            subtitle: Text(AppLocalizations.of(context)!.openSourceLicenses),
             onTap: () async {
               final version = await ref
                   .read(settingsPageViewModelProvider)
@@ -31,7 +32,7 @@ class SettingsPage extends ConsumerWidget {
               if (context.mounted) {
                 showLicensePage(
                   context: context,
-                  applicationName: 'Folder Authenticator',
+                  applicationName: AppLocalizations.of(context)!.appTitle,
                   applicationVersion: version,
                 );
               }
@@ -50,36 +51,51 @@ class SettingsPage extends ConsumerWidget {
           builder: (context, ref, child) {
             final viewModel = ref.watch(settingsPageViewModelProvider);
             return AlertDialog(
-              title: const Text('About Folder Authenticator'),
+              title: Text(AppLocalizations.of(context)!.aboutFolderAuthenticator),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Folder Authenticator is a Flutter-based mobile application that allows you to manage your Time-based One-Time Passwords (TOTP) efficiently.',
+                  Text(
+                    AppLocalizations.of(context)!.aboutDescription,
                   ),
                   const SizedBox(height: 16),
-                  const Text('Features:'),
+                  Text(AppLocalizations.of(context)!.features),
                   const SizedBox(height: 8),
                   _buildFeatureItem(
-                    'Folder Management: Organize TOTP entries into folders.',
+                    AppLocalizations.of(context)!.featureOrganizeWithFolders,
                   ),
                   _buildFeatureItem(
-                    'Tagging: Assign tags to TOTP entries for easier categorization.',
+                    AppLocalizations.of(context)!.featureSecureEncryption,
                   ),
                   _buildFeatureItem(
-                    'Sorting & Filtering: Quickly find the TOTP you need.',
+                    AppLocalizations.of(context)!.featureQRCodeScanning,
+                  ),
+                  _buildFeatureItem(
+                    AppLocalizations.of(context)!.featureExportFunctionality,
+                  ),
+                  _buildFeatureItem(
+                    AppLocalizations.of(context)!.featureCleanIntuitive,
+                  ),
+                  _buildFeatureItem(
+                    AppLocalizations.of(context)!.featureOfflineAccess,
+                  ),
+                  _buildFeatureItem(
+                    AppLocalizations.of(context)!.featureHierarchicalOrganization,
+                  ),
+                  _buildFeatureItem(
+                    AppLocalizations.of(context)!.featureRealTimeSync,
                   ),
                   const SizedBox(height: 16),
                   FutureBuilder<String>(
                     future: viewModel.getAppVersion(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        return Text('Version: ${snapshot.data}');
+                        return Text(AppLocalizations.of(context)!.version(snapshot.data!));
                       } else if (snapshot.hasError) {
-                        return const Text('Version: Unknown');
+                        return Text(AppLocalizations.of(context)!.versionUnknown);
                       } else {
-                        return const Text('Version: Loading...');
+                        return Text(AppLocalizations.of(context)!.versionLoading);
                       }
                     },
                   ),
@@ -88,7 +104,7 @@ class SettingsPage extends ConsumerWidget {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Close'),
+                  child: Text(AppLocalizations.of(context)!.close),
                 ),
               ],
             );

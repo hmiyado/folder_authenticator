@@ -6,6 +6,7 @@ import 'package:folder_authenticator/services/totp_service.dart';
 import 'package:folder_authenticator/totp_detail/totp_detail_providers.dart';
 import 'package:folder_authenticator/totp_detail/totp_edit_page.dart';
 import 'package:folder_authenticator/totp_detail/totp_export_dialog.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class TotpDetailPage extends ConsumerStatefulWidget {
   final TotpEntry entry;
@@ -35,8 +36,8 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
           ),
       error: (error, stack) {
         return Scaffold(
-          appBar: AppBar(title: const Text('TOTP Details')),
-          body: Center(child: Text('Error loading TOTP entry: $error')),
+          appBar: AppBar(title: Text(AppLocalizations.of(context)!.totpDetails)),
+          body: Center(child: Text('${AppLocalizations.of(context)!.errorLoadingTotpEntry}: $error')),
         );
       },
       loading:
@@ -54,7 +55,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TOTP Details'),
+        title: Text(AppLocalizations.of(context)!.totpDetails),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -69,7 +70,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
           ),
           IconButton(
             icon: const Icon(Icons.qr_code),
-            tooltip: 'Export',
+            tooltip: AppLocalizations.of(context)!.export,
             onPressed: () {
               _showExportDialog(data);
             },
@@ -100,16 +101,16 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                   ),
                   const SizedBox(height: 8),
                   LinearProgressIndicator(value: progressValue),
-                  Text('Refreshes in $remainingSeconds seconds'),
+                  Text(AppLocalizations.of(context)!.refreshesIn(remainingSeconds)),
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     icon: const Icon(Icons.copy),
-                    label: const Text('Copy Code'),
+                    label: Text(AppLocalizations.of(context)!.copyCode),
                     onPressed: () {
                       Clipboard.setData(ClipboardData(text: totpCode));
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Code copied to clipboard'),
+                        SnackBar(
+                          content: Text(AppLocalizations.of(context)!.codeCopiedToClipboard),
                         ),
                       );
                     },
@@ -118,8 +119,8 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
               ),
             ),
             const Divider(height: 32),
-            _buildInfoRow('Name', data.name),
-            _buildInfoRow('Issuer', data.issuer),
+            _buildInfoRow(AppLocalizations.of(context)!.name, data.name),
+            _buildInfoRow(AppLocalizations.of(context)!.issuer, data.issuer),
           ],
         ),
       ),
@@ -163,12 +164,12 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete TOTP Entry'),
-          content: Text('Are you sure you want to delete "${entry.name}"?'),
+          title: Text(AppLocalizations.of(context)!.deleteTotpEntry),
+          content: Text(AppLocalizations.of(context)!.deleteConfirmation(entry.name)),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -176,7 +177,7 @@ class _TotpDetailPageState extends ConsumerState<TotpDetailPage> {
                 Navigator.pop(context); // Close dialog
                 Navigator.pop(context); // Return to previous screen
               },
-              child: const Text('Delete'),
+              child: Text(AppLocalizations.of(context)!.delete),
             ),
           ],
         );

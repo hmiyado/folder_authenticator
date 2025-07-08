@@ -10,7 +10,9 @@
       "WebFetch(domain:pub.dev)",
       "WebFetch(domain:github.com)",
       "Bash(bundle install:*)",
-      "Bash(bundle exec fastlane:*)"
+      "Bash(bundle exec fastlane:*)",
+      "Bash(mkdir:*)",
+      "Bash(dart run build_runner:*)"
     ],
     "deny": []
   }

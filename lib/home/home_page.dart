@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folder_authenticator/home/folder/folder_view.dart';
 import 'package:folder_authenticator/settings/settings_page.dart';
 import 'package:folder_authenticator/home/home_page_providers.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -18,7 +19,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Folder Authenticator'),
+        title: Text(AppLocalizations.of(context)!.appTitle),
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert),
@@ -32,9 +33,9 @@ class _HomePageState extends ConsumerState<HomePage> {
             },
             itemBuilder:
                 (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'settings',
-                    child: Text('Settings'),
+                    child: Text(AppLocalizations.of(context)!.settings),
                   ),
                 ],
           ),
