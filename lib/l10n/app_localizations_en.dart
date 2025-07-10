@@ -224,4 +224,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String secondsShort(int seconds) {
     return '$seconds s';
   }
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get selectLanguage => 'Select Language';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get japanese => '日本語';
+
+  @override
+  String get systemDefault => 'System Default';
 }

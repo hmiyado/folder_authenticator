@@ -64,5 +64,10 @@
   "errorLoadingFolderEntries": "フォルダエントリの読み込みエラー: {error}",
   "noTotpEntriesOrSubfolders": "TOTPエントリまたはサブフォルダが見つかりません",
   "errorLoadingTotpEntry": "TOTPエントリの読み込みエラー",
-  "secondsShort": "{seconds}秒"
+  "secondsShort": "{seconds}秒",
+  "language": "言語",
+  "selectLanguage": "言語を選択",
+  "english": "English",
+  "japanese": "日本語",
+  "systemDefault": "システムのデフォルト"
 }

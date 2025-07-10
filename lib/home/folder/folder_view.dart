@@ -5,6 +5,7 @@ import 'package:folder_authenticator/home/add_dialog/add_dialog.dart';
 import 'package:folder_authenticator/home/folder/folder_entries_provider.dart';
 import 'package:folder_authenticator/home/totp_entry_card.dart';
 import 'package:folder_authenticator/models/folder.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class FolderView extends ConsumerWidget {
   final int folderId;
@@ -15,11 +16,11 @@ class FolderView extends ConsumerWidget {
     const textStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
 
     if (folderPath.isEmpty) {
-      return const Row(
+      return Row(
         children: [
-          Icon(Icons.folder, size: 20),
-          SizedBox(width: 8),
-          Text('Root', style: textStyle),
+          const Icon(Icons.folder, size: 20),
+          const SizedBox(width: 8),
+          Text(AppLocalizations.of(context)!.root, style: textStyle),
         ],
       );
     }
@@ -70,7 +71,7 @@ class FolderView extends ConsumerWidget {
         return _buildFolderEntries(context, allFolderEntries);
       },
       error: (error, stack) {
-        return Center(child: Text('Error loading folder entries: $error'));
+        return Center(child: Text(AppLocalizations.of(context)!.errorLoadingFolderEntries(error.toString())));
       },
       loading: () {
         return const Center(child: CircularProgressIndicator());
@@ -83,7 +84,7 @@ class FolderView extends ConsumerWidget {
     List<FolderEntries> allFolderEntries,
   ) {
     if (allFolderEntries.isEmpty) {
-      return const Center(child: Text('No TOTP entries or subfolders found'));
+      return Center(child: Text(AppLocalizations.of(context)!.noTotpEntriesOrSubfolders));
     }
 
     return Column(
@@ -108,8 +109,8 @@ class FolderView extends ConsumerWidget {
                   if (folderEntries.entries.isEmpty) {
                     return [
                       header,
-                      const Center(
-                        child: Text('No TOTP entries or subfolders found'),
+                      Center(
+                        child: Text(AppLocalizations.of(context)!.noTotpEntriesOrSubfolders),
                       ),
                     ];
                   }

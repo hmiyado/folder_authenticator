@@ -9,7 +9,7 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get appTitle => 'フォルダオーセンティケータ';
+  String get appTitle => 'Folder Authenticator';
 
   @override
   String get settings => '設定';
@@ -24,7 +24,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get openSourceLicenses => 'オープンソースライセンス';
 
   @override
-  String get aboutFolderAuthenticator => 'フォルダオーセンティケータについて';
+  String get aboutFolderAuthenticator => 'Folder Authenticatorについて';
 
   @override
   String get aboutDescription =>
@@ -221,4 +221,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String secondsShort(int seconds) {
     return '$seconds秒';
   }
+
+  @override
+  String get language => '言語';
+
+  @override
+  String get selectLanguage => '言語を選択';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get japanese => '日本語';
+
+  @override
+  String get systemDefault => 'システムのデフォルト';
 }

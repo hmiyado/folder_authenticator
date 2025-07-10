@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folder_authenticator/totp_detail/totp_detail_page.dart';
 import 'package:folder_authenticator/models/totp_entry.dart';
 import 'package:folder_authenticator/totp_detail/totp_detail_providers.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class TotpEntryCard extends ConsumerStatefulWidget {
   final TotpEntry entry;
@@ -24,9 +25,9 @@ class _TotpEntryCardState extends ConsumerState<TotpEntryCard> {
     return totpEntry.when(
       data: (data) => _buildContent(context, data, totpCode, remainingSeconds),
       error:
-          (error, stack) => const Card(
-            margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: ListTile(title: Text('Error loading TOTP entry')),
+          (error, stack) => Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: ListTile(title: Text(AppLocalizations.of(context)!.errorLoadingTotpEntry)),
           ),
       loading:
           () => const Card(
@@ -55,7 +56,7 @@ class _TotpEntryCardState extends ConsumerState<TotpEntryCard> {
               totpCode,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text('$remainingSeconds s'),
+            Text(AppLocalizations.of(context)!.secondsShort(remainingSeconds)),
           ],
         ),
         onTap: () {
