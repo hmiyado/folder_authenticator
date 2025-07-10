@@ -7,8 +7,8 @@ platform :ios do
   desc "Build and deploy iOS app to TestFlight"
   lane :beta do
     flutter_build(
-      build_args: "--release --no-tree-shake-icons",
-      ios: true
+      build: "ios",
+      build_args: ["--release", "--no-tree-shake-icons"]
     )
     build_app(
       scheme: "Runner",
@@ -25,8 +25,8 @@ platform :ios do
   desc "Build and deploy iOS app to App Store"
   lane :release do
     flutter_build(
-      build_args: "--release --no-tree-shake-icons",
-      ios: true
+      build: "ios",
+      build_args: ["--release", "--no-tree-shake-icons"]
     )
     build_app(
       scheme: "Runner",
@@ -71,8 +71,8 @@ platform :android do
   desc "Build and deploy Android app to internal track"
   lane :beta do
     flutter_build(
-      build_args: "--release --no-tree-shake-icons",
-      android: true
+      build: "appbundle",
+      build_args: ["--release", "--no-tree-shake-icons"]
     )
     upload_to_play_store(
       track: "internal",
@@ -87,8 +87,8 @@ platform :android do
   desc "Build and deploy Android app to production"
   lane :release do
     flutter_build(
-      build_args: "--release --no-tree-shake-icons",
-      android: true
+      build: "appbundle",
+      build_args: ["--release", "--no-tree-shake-icons"]
     )
     upload_to_play_store(
       track: "production",

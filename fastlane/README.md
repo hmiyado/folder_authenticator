@@ -5,7 +5,7 @@ fastlane documentation
 
 Make sure you have the latest version of the Xcode command line tools installed:
 
-```
+```sh
 xcode-select --install
 ```
 
@@ -17,52 +17,53 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ### ios beta
 
-```
-fastlane ios beta
+```sh
+[bundle exec] fastlane ios beta
 ```
 
 Build and deploy iOS app to TestFlight
 
 ### ios release
 
-```
-fastlane ios release
+```sh
+[bundle exec] fastlane ios release
 ```
 
 Build and deploy iOS app to App Store
 
-### ios update_profiles
-
-```
-fastlane ios update_profiles
-```
-
-Update provisioning profiles
-
 ### ios upload_metadata
 
-```
-fastlane ios upload_metadata
+```sh
+[bundle exec] fastlane ios upload_metadata
 ```
 
 Upload metadata and screenshots only
 
+### ios update_profiles
+
+```sh
+[bundle exec] fastlane ios update_profiles
+```
+
+Update provisioning profiles
+
 ----
+
 
 ## Android
 
 ### android beta
 
-```
-fastlane android beta
+```sh
+[bundle exec] fastlane android beta
 ```
 
 Build and deploy Android app to internal track
 
 ### android release
 
-```
-fastlane android release
+```sh
+[bundle exec] fastlane android release
 ```
 
 Build and deploy Android app to production
