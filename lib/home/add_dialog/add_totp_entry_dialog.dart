@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folder_authenticator/home/home_page_providers.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class AddTotpEntryDialog extends ConsumerStatefulWidget {
   const AddTotpEntryDialog({super.key, required this.folderId});
@@ -18,22 +19,22 @@ class _AddTotpEntryDialogState extends ConsumerState<AddTotpEntryDialog> {
     final issuerController = TextEditingController();
 
     return AlertDialog(
-      title: const Text('Add TOTP'),
+      title: Text(AppLocalizations.of(context)!.addTotp),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.name),
             ),
             TextField(
               controller: secretController,
-              decoration: const InputDecoration(labelText: 'Secret'),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.secret),
             ),
             TextField(
               controller: issuerController,
-              decoration: const InputDecoration(labelText: 'Issuer (optional)'),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.issuerOptional),
             ),
           ],
         ),
@@ -41,7 +42,7 @@ class _AddTotpEntryDialogState extends ConsumerState<AddTotpEntryDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(AppLocalizations.of(context)!.cancel),
         ),
         TextButton(
           onPressed: () {
@@ -58,7 +59,7 @@ class _AddTotpEntryDialogState extends ConsumerState<AddTotpEntryDialog> {
             );
             Navigator.pop(context);
           },
-          child: const Text('Add'),
+          child: Text(AppLocalizations.of(context)!.add),
         ),
       ],
     );

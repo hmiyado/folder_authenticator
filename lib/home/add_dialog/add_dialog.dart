@@ -4,6 +4,7 @@ import 'package:folder_authenticator/home/add_dialog/add_folder_dialog.dart';
 import 'package:folder_authenticator/home/add_dialog/add_totp_entry_dialog.dart';
 import 'package:folder_authenticator/home/add_dialog/qr_scanner_page.dart';
 import 'package:folder_authenticator/models/folder.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class AddDialog extends ConsumerStatefulWidget {
   final Folder folder;
@@ -17,13 +18,13 @@ class _AddDialogState extends ConsumerState<AddDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add New'),
+      title: Text(AppLocalizations.of(context)!.addNew),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
             leading: const Icon(Icons.key),
-            title: const Text('Add TOTP Manually'),
+            title: Text(AppLocalizations.of(context)!.addTotpManually),
             onTap: () {
               Navigator.pop(context);
               _showAddTotpDialog(context);
@@ -31,7 +32,7 @@ class _AddDialogState extends ConsumerState<AddDialog> {
           ),
           ListTile(
             leading: const Icon(Icons.qr_code_scanner),
-            title: const Text('Scan QR Code'),
+            title: Text(AppLocalizations.of(context)!.scanQrCode),
             onTap: () {
               Navigator.pop(context);
               _openQrScanner(context);
@@ -39,7 +40,7 @@ class _AddDialogState extends ConsumerState<AddDialog> {
           ),
           ListTile(
             leading: const Icon(Icons.folder),
-            title: const Text('Add Folder'),
+            title: Text(AppLocalizations.of(context)!.addFolder),
             onTap: () {
               Navigator.pop(context);
               _showAddFolderDialog(context);

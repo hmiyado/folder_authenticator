@@ -5,6 +5,7 @@ import 'package:folder_authenticator/home/home_page_providers.dart';
 import 'package:folder_authenticator/repositories/totp_entry_repository.dart';
 import 'package:folder_authenticator/services/totp_service.dart';
 import 'package:folder_authenticator/totp_detail/totp_detail_providers.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class QrScannerPage extends ConsumerStatefulWidget {
   final int folderId;
@@ -29,7 +30,7 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scan QR Code'),
+        title: Text(AppLocalizations.of(context)!.scanQrCode),
         actions: [
           IconButton(
             icon: ValueListenableBuilder(
@@ -104,7 +105,7 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
           if (totpData != null) {
             // Validate the secret
             if (!totpService.isValidSecret(totpData['secret'])) {
-              _showErrorAndReset('Invalid TOTP secret');
+              _showErrorAndReset(AppLocalizations.of(context)!.invalidTotpQrCode);
               return;
             }
 
@@ -144,15 +145,15 @@ class _QrScannerPageState extends ConsumerState<QrScannerPage> {
 
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('TOTP entry added successfully')),
+                SnackBar(content: Text(AppLocalizations.of(context)!.totpEntryAddedSuccessfully)),
               );
               Navigator.pop(context);
             }
           } else {
-            _showErrorAndReset('Invalid TOTP QR code');
+            _showErrorAndReset(AppLocalizations.of(context)!.invalidTotpQrCode);
           }
         } catch (e) {
-          _showErrorAndReset('Error processing QR code: $e');
+          _showErrorAndReset(AppLocalizations.of(context)!.errorProcessingQrCode(e.toString()));
         }
       }
     }

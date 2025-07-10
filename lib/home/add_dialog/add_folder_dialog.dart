@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folder_authenticator/home/folder/subfolders_provider.dart';
 import 'package:folder_authenticator/home/home_page_providers.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class AddFolderDialog extends ConsumerStatefulWidget {
   final int folderId;
@@ -18,20 +19,20 @@ class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
     final nameController = TextEditingController();
 
     return AlertDialog(
-      title: const Text('Add Folder'),
+      title: Text(AppLocalizations.of(context)!.addFolder),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: nameController,
-            decoration: const InputDecoration(labelText: 'Folder Name'),
+            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.folderName),
           ),
         ],
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(AppLocalizations.of(context)!.cancel),
         ),
         TextButton(
           onPressed: () async {
@@ -53,7 +54,7 @@ class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
                   // Show success message
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Folder "${nameController.text}" created'),
+                      content: Text(AppLocalizations.of(context)!.folderCreated(nameController.text)),
                     ),
                   );
                 },
@@ -61,14 +62,14 @@ class _AddFolderDialogState extends ConsumerState<AddFolderDialog> {
                 error: (error, stack) {
                   // Show error message
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error creating folder: $error')),
+                    SnackBar(content: Text(AppLocalizations.of(context)!.errorCreatingFolder(error.toString()))),
                   );
                 },
               );
             }
             Navigator.pop(context);
           },
-          child: const Text('Add'),
+          child: Text(AppLocalizations.of(context)!.add),
         ),
       ],
     );
