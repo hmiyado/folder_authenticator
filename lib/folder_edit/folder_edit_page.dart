@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folder_authenticator/folder_edit/folder_edit_providers.dart';
 import 'package:folder_authenticator/home/folder/folder_path_provider.dart';
 import 'package:folder_authenticator/models/folder.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class FolderEditPage extends ConsumerStatefulWidget {
   final Folder folder;
@@ -68,7 +69,7 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Folder'),
+        title: Text(AppLocalizations.of(context)!.editFolder),
         actions: [
           // Hide delete button for root folder
           if (!isRootFolder)
@@ -79,14 +80,14 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
                   context: context,
                   builder:
                       (context) => AlertDialog(
-                        title: const Text('Delete Folder'),
+                        title: Text(AppLocalizations.of(context)!.deleteFolder),
                         content: Text(
-                          'Are you sure you want to delete "${widget.folder.name}"?',
+                          AppLocalizations.of(context)!.deleteFolderConfirmation(widget.folder.name),
                         ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(),
-                            child: const Text('Cancel'),
+                            child: Text(AppLocalizations.of(context)!.cancel),
                           ),
                           TextButton(
                             onPressed: () {
@@ -96,7 +97,7 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
                                 context,
                               ).pop(); // Return to previous screen
                             },
-                            child: const Text('Delete'),
+                            child: Text(AppLocalizations.of(context)!.delete),
                           ),
                         ],
                       ),
@@ -114,8 +115,8 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
             children: [
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Folder Name',
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.folderName,
                 ),
               ),
               // Hide folder path selector for root folder
@@ -130,12 +131,12 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text('Select Folder Path'),
-                            content: const Text('Folder path selection dialog'),
+                            title: Text(AppLocalizations.of(context)!.selectFolderPath),
+                            content: Text(AppLocalizations.of(context)!.folderPathSelectionDialog),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.of(context).pop(),
-                                child: const Text('OK'),
+                                child: Text(AppLocalizations.of(context)!.ok),
                               ),
                             ],
                           );
@@ -143,7 +144,7 @@ class _FolderEditPageState extends ConsumerState<FolderEditPage> {
                       ),
                 ),
               const SizedBox(height: 24),
-              ElevatedButton(onPressed: _saveFolder, child: const Text('Save')),
+              ElevatedButton(onPressed: _saveFolder, child: Text(AppLocalizations.of(context)!.save)),
             ],
           ),
         ),

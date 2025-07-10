@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:folder_authenticator/models/totp_entry.dart';
 import 'package:folder_authenticator/services/totp_service.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class TotpExportDialog extends StatefulWidget {
   final TotpEntry entry;
@@ -30,7 +31,7 @@ class _TotpExportDialogState extends State<TotpExportDialog> {
     final otpauthUri = widget.totpService.generateOtpauthUri(widget.entry);
     
     return AlertDialog(
-      title: const Text('Export TOTP'),
+      title: Text(AppLocalizations.of(context)!.exportTotp),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -57,11 +58,11 @@ class _TotpExportDialogState extends State<TotpExportDialog> {
             // Copy URI button
             ElevatedButton.icon(
               icon: const Icon(Icons.copy),
-              label: const Text('Copy URI'),
+              label: Text(AppLocalizations.of(context)!.copyUri),
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: otpauthUri));
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('URI copied to clipboard')),
+                  SnackBar(content: Text(AppLocalizations.of(context)!.uriCopiedToClipboard)),
                 );
               },
             ),
@@ -70,7 +71,7 @@ class _TotpExportDialogState extends State<TotpExportDialog> {
             
             // Show/Hide Secret Toggle
             SwitchListTile(
-              title: const Text('Show Secret'),
+              title: Text(AppLocalizations.of(context)!.showSecret),
               value: _showSecret,
               onChanged: (value) {
                 setState(() {
@@ -106,8 +107,8 @@ class _TotpExportDialogState extends State<TotpExportDialog> {
                           ClipboardData(text: widget.entry.secret),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Secret copied to clipboard'),
+                          SnackBar(
+                            content: Text(AppLocalizations.of(context)!.secretCopiedToClipboard),
                           ),
                         );
                       },
@@ -116,10 +117,9 @@ class _TotpExportDialogState extends State<TotpExportDialog> {
                 ),
               ),
               const SizedBox(height: 8.0),
-              const Text(
-                'Warning: Keep this secret secure. Anyone with this secret '
-                'can generate your TOTP codes.',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.securityWarning,
+                style: const TextStyle(
                   color: Colors.red,
                   fontSize: 12.0,
                 ),
@@ -131,7 +131,7 @@ class _TotpExportDialogState extends State<TotpExportDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Close'),
+          child: Text(AppLocalizations.of(context)!.close),
         ),
       ],
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folder_authenticator/models/totp_entry.dart';
 import 'package:folder_authenticator/totp_detail/totp_detail_providers.dart';
+import 'package:folder_authenticator/l10n/app_localizations.dart';
 
 class TotpEditPage extends ConsumerStatefulWidget {
   final TotpEntry entry;
@@ -46,7 +47,7 @@ class _TotpEditPageState extends ConsumerState<TotpEditPage> {
       },
       error: (error, stack) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error loading TOTP entry: $error')),
+          SnackBar(content: Text('${AppLocalizations.of(context)!.errorLoadingTotpEntry}: $error')),
         );
       },
       loading: () {
@@ -57,7 +58,7 @@ class _TotpEditPageState extends ConsumerState<TotpEditPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit TOTP'),
+        title: Text(AppLocalizations.of(context)!.editTotp),
         actions: [
           IconButton(icon: const Icon(Icons.save), onPressed: _saveChanges),
         ],
@@ -69,11 +70,11 @@ class _TotpEditPageState extends ConsumerState<TotpEditPage> {
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.name),
             ),
             TextField(
               controller: issuerController,
-              decoration: const InputDecoration(labelText: 'Issuer'),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.issuer),
             ),
           ],
         ),
@@ -93,7 +94,7 @@ class _TotpEditPageState extends ConsumerState<TotpEditPage> {
 
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('TOTP entry updated')));
+    ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.totpEntryUpdated)));
 
     Navigator.pop(context); // Return to detail page
   }
