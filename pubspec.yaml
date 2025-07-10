@@ -66,6 +66,9 @@ dependencies:
   # Package info
   package_info_plus: ^8.0.2
   flutter_launcher_icons: ^0.14.3
+  
+  # Preferences storage
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

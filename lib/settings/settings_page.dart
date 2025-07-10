@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folder_authenticator/settings/settings_page_viewmodel.dart';
 import 'package:folder_authenticator/l10n/app_localizations.dart';
+import 'package:folder_authenticator/settings/locale_provider.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -13,6 +14,14 @@ class SettingsPage extends ConsumerWidget {
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.settings)),
       body: ListView(
         children: [
+          ListTile(
+            leading: const Icon(Icons.language),
+            title: Text(AppLocalizations.of(context)!.language),
+            subtitle: Text(_getLanguageDisplayName(context, ref)),
+            onTap: () {
+              _showLanguageSelectionDialog(context, ref);
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.info),
             title: Text(AppLocalizations.of(context)!.about),
@@ -111,6 +120,68 @@ class SettingsPage extends ConsumerWidget {
           },
         );
       },
+    );
+  }
+
+  String _getLanguageDisplayName(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeNotifierProvider);
+    if (locale == null) {
+      return AppLocalizations.of(context)!.systemDefault;
+    }
+    switch (locale.languageCode) {
+      case 'en':
+        return AppLocalizations.of(context)!.english;
+      case 'ja':
+        return AppLocalizations.of(context)!.japanese;
+      default:
+        return AppLocalizations.of(context)!.systemDefault;
+    }
+  }
+
+  void _showLanguageSelectionDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.selectLanguage),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<Locale?>(
+              title: Text(AppLocalizations.of(context)!.systemDefault),
+              value: null,
+              groupValue: ref.watch(localeNotifierProvider),
+              onChanged: (Locale? value) {
+                ref.read(localeNotifierProvider.notifier).setLocale(value);
+                Navigator.pop(context);
+              },
+            ),
+            RadioListTile<Locale?>(
+              title: Text(AppLocalizations.of(context)!.english),
+              value: const Locale('en'),
+              groupValue: ref.watch(localeNotifierProvider),
+              onChanged: (Locale? value) {
+                ref.read(localeNotifierProvider.notifier).setLocale(value);
+                Navigator.pop(context);
+              },
+            ),
+            RadioListTile<Locale?>(
+              title: Text(AppLocalizations.of(context)!.japanese),
+              value: const Locale('ja'),
+              groupValue: ref.watch(localeNotifierProvider),
+              onChanged: (Locale? value) {
+                ref.read(localeNotifierProvider.notifier).setLocale(value);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.cancel),
+          ),
+        ],
+      ),
     );
   }
 

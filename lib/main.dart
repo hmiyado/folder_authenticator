@@ -5,6 +5,7 @@ import 'package:folder_authenticator/home/home_page.dart';
 import 'package:folder_authenticator/services/config_service.dart';
 import 'package:folder_authenticator/services/encryption_service.dart';
 import 'package:folder_authenticator/l10n/app_localizations.dart';
+import 'package:folder_authenticator/settings/locale_provider.dart';
 
 void main() async {
   // Ensure Flutter is initialized
@@ -26,13 +27,16 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeNotifierProvider);
+    
     return MaterialApp(
       onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
+      locale: locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
